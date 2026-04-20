@@ -84,7 +84,7 @@ export default function Home() {
           team={user?.team}
           tier="Tân binh"
           unreadCount={overdueLeads.length}
-          onBellPress={() => router.push('/(app)/(tabs)/notifications')}
+          onBellPress={() => router.push('/(app)/notifications')}
         />
 
         <View className="px-4 pt-1">

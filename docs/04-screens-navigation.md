@@ -1,6 +1,6 @@
 # Screens & Navigation — K-Agent Mobile
 
-> **Status:** v0.1 — đề xuất, cần user duyệt trước khi mockup
+> **Status:** v0.2 — 2026-04-20 bổ sung Rổ hàng + Thu nhập, bỏ Notifications khỏi tab
 > **Goal:** Đầy đủ screen + navigation tree để build skeleton Expo Router
 
 ## 1. Navigation tree
@@ -14,7 +14,7 @@
   /onboarding                  — 3 slides giới thiệu (chỉ lần đầu)
 
 (app) — đã đăng nhập, tab navigation 5 tab dưới
-  /                            — Tab 1: Home (dashboard sale)
+  /                            — Tab 1: Home (dashboard sale) — bell icon + submenu Thu nhập
   /leads                       — Tab 2: Leads (danh sách lead)
     /leads/[id]                — chi tiết lead
     /leads/[id]/activities/new — tạo activity (call/sms/note)
@@ -22,12 +22,22 @@
     /leads/new                 — tạo lead manual (ít dùng vì AI allocation)
   /chat                        — Tab 3: AI Chat (RAG bot)
     /chat/[conversationId]
-  /notifications               — Tab 4: Thông báo
+  /listings                    — Tab 4: Rổ hàng (NEW)
+    /listings/[id]             — chi tiết sản phẩm ("4 thật", commission)
+    /listings/[id]/request-cooperation — yêu cầu hợp tác
+    /listings/saved            — đã lưu
   /me                          — Tab 5: Tôi (profile + settings)
     /me/profile                — sửa profile
     /me/settings               — settings (biometric, notification, theme)
     /me/sync-status            — pending mutations, conflicts
     /me/about                  — version, ToS, privacy
+
+  (không phải tab — vào qua icon/menu)
+  /notifications               — bell icon ở Home header + menu Me
+  /income                      — submenu Home + menu Me (NEW)
+    /income/transactions       — list khoản thu
+    /income/network            — mạng lưới 4 cấp
+    /income/[transactionId]    — detail 1 khoản
 
 (modal) — present as sheet/modal
   /lead-offer/[offerId]        — popup khi nhận lead allocation (kiểu Grab incoming ride)
@@ -66,10 +76,26 @@
 | 12 | ChatList | Conversations | search, list conversations, fab "+ chat mới" |
 | 13 | ChatDetail | SSE chat | message bubbles, source citations, input bar, voice input (defer) |
 
-### Notifications (1 screen)
+### Rổ hàng — Listings (4 screens, NEW 2026-04-20)
 | # | Screen | Purpose | Key components |
 |---|--------|---------|----------------|
-| 14 | NotificationsList | Push log | tabs: All / Unread, list grouped by date |
+| L1 | ListingsList | Danh mục sản phẩm | SearchBar, FilterChips (dự án, giá, PN, trạng thái, 4 thật), ListingCard grid/list, sort |
+| L2 | ListingDetail | Chi tiết căn | header (mã LST, status "Chờ hợp tác"), banner "Đạt 4/4 thật", agent card (tên + điểm), gallery + VR tour, giá niêm yết/sàn, commission breakdown |
+| L3 | RequestCooperation | Yêu cầu hợp tác với owner | form (ghi chú, khách hàng dự kiến), submit |
+| L4 | SavedListings | Đã lưu / quan tâm | list + unsave action |
+
+### Thu nhập — Income (4 screens, NEW 2026-04-20)
+| # | Screen | Purpose | Key components |
+|---|--------|---------|----------------|
+| I1 | IncomeDashboard | Tổng quan thu nhập | header tổng ròng, % so kỳ trước, đã nhận/chờ, pie cơ cấu (GSM/HHMG/Thưởng), card mạng lưới (4 cấp, QA), CTA sang detail |
+| I2 | IncomeTransactions | Danh sách khoản thu | FilterChips (Loại/Trạng thái/BIC/Người nhận), sort, list row |
+| I3 | IncomeNetwork | Mạng lưới 4 cấp | tree/list (F1-F4), stats per cấp, QA count |
+| I4 | IncomeTransactionDetail | Detail 1 khoản | breakdown tính toán, trạng thái thanh toán, linked lead/listing |
+
+### Notifications (1 screen, KHÔNG phải tab)
+| # | Screen | Purpose | Key components |
+|---|--------|---------|----------------|
+| 14 | NotificationsList | Push log — vào qua bell icon Home hoặc menu Me | tabs: All / Unread, list grouped by date |
 
 ### Me/Settings (5 screens)
 | # | Screen | Purpose | Key components |

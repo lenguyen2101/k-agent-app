@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Bell, Home, MessageSquare, User, Users } from 'lucide-react-native';
+import { Building2, Home, MessageSquare, User, Users } from 'lucide-react-native';
 import { palette, semantic } from '@/theme';
 
 function TabIcon({ Icon, color, focused }: { Icon: React.ComponentType<{ size: number; color: string }>; color: string; focused: boolean }) {
@@ -67,10 +67,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="listings"
         options={{
-          title: 'Thông báo',
-          tabBarIcon: ({ color, focused }) => <TabIcon Icon={Bell} color={color} focused={focused} />,
+          title: 'Rổ hàng',
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={Building2} color={color} focused={focused} />,
         }}
       />
       <Tabs.Screen

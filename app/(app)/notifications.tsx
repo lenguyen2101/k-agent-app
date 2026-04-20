@@ -1,6 +1,5 @@
 import { ScrollView, View } from 'react-native';
 import { Bell, Calendar, UserPlus } from 'lucide-react-native';
-import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
 import { semantic } from '@/theme';
 
@@ -39,11 +38,7 @@ const iconFor = (t: string) => {
 
 export default function Notifications() {
   return (
-    <Screen>
-      <View className="px-4 pb-4">
-        <Text variant="h2" className="text-text-title">Thông báo</Text>
-      </View>
-
+    <View className="flex-1 bg-surface">
       <ScrollView contentContainerClassName="pb-8">
         {notifications.map((n) => (
           <View
@@ -66,6 +61,6 @@ export default function Notifications() {
           </View>
         ))}
       </ScrollView>
-    </Screen>
+    </View>
   );
 }
