@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
+  ArrowDownToLine,
   ArrowLeft,
   ChevronRight,
   ExternalLink,
@@ -10,10 +11,13 @@ import {
   HelpCircle,
   Mail,
   MessageCircle,
+  RotateCw,
   Shield,
   Sparkles,
+  Wrench,
 } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
+import { useAppStatus } from '@/store/appStatus';
 import { palette, semantic } from '@/theme';
 
 const APP_VERSION = '1.0.0';
@@ -23,6 +27,9 @@ const BUNDLE_ID = 'vn.kcity.agent';
 
 export default function About() {
   const insets = useSafeAreaInsets();
+  const setForceUpdate = useAppStatus((s) => s.setForceUpdate);
+  const setMaintenance = useAppStatus((s) => s.setMaintenance);
+  const resetOnboarding = useAppStatus((s) => s.resetOnboarding);
 
   return (
     <View className="flex-1 bg-surface">
@@ -193,6 +200,43 @@ export default function About() {
           </Pressable>
         </View>
 
+        {/* Debug / Test screens — dev-only */}
+        <Section title="Test screens (dev)">
+          <DebugRow
+            icon={<ArrowDownToLine size={18} color={palette.sienna[700]} />}
+            iconBg={palette.sienna[50]}
+            label="Preview Force Update"
+            onPress={() => {
+              setForceUpdate({ required: true, latestVersion: '1.2.0' });
+              router.push('/force-update');
+            }}
+          />
+          <DebugRow
+            icon={<Wrench size={18} color={palette.red[600]} />}
+            iconBg={palette.red[50]}
+            label="Preview Maintenance"
+            onPress={() => {
+              setMaintenance({
+                active: true,
+                message:
+                  'K-Agent đang bảo trì định kỳ từ 23:00 — 02:00. Xin lỗi vì sự bất tiện.',
+                estimatedEndAt: new Date(Date.now() + 90 * 60_000).toISOString(),
+              });
+              router.push('/maintenance');
+            }}
+          />
+          <DebugRow
+            icon={<RotateCw size={18} color={palette.blue[700]} />}
+            iconBg={palette.blue[50]}
+            label="Xem lại Onboarding"
+            onPress={() => {
+              resetOnboarding();
+              router.replace('/splash');
+            }}
+            last
+          />
+        </Section>
+
         <Text variant="caption" className="text-text-tertiary text-center mt-8 px-6">
           © 2026 K-CITY Broker Platform{'\n'}
           Được xây dựng tại Việt Nam
@@ -249,6 +293,46 @@ function InfoRow({ label, value, last }: { label: string; value: string; last?: 
         {value}
       </Text>
     </View>
+  );
+}
+
+function DebugRow({
+  icon,
+  iconBg,
+  label,
+  onPress,
+  last,
+}: {
+  icon: React.ReactNode;
+  iconBg: string;
+  label: string;
+  onPress: () => void;
+  last?: boolean;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      className="flex-row items-center px-4 py-3.5 active:bg-surface-hover"
+      style={{
+        borderBottomWidth: last ? 0 : 1,
+        borderBottomColor: semantic.border.light,
+      }}
+    >
+      <View
+        className="w-9 h-9 rounded-xl items-center justify-center"
+        style={{ backgroundColor: iconBg }}
+      >
+        {icon}
+      </View>
+      <Text
+        variant="body"
+        className="flex-1 ml-3"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_500Medium' }}
+      >
+        {label}
+      </Text>
+      <ChevronRight size={18} color={semantic.text.tertiary} />
+    </Pressable>
   );
 }
 

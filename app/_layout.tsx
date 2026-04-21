@@ -30,8 +30,11 @@ export default function RootLayout() {
   return (
     <>
       <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="splash" options={{ animation: 'fade' }} />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(app)" />
+        <Stack.Screen name="force-update" options={{ animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="maintenance" options={{ animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen
           name="(modal)/lead-offer"
           options={{ presentation: 'transparentModal', animation: 'fade' }}

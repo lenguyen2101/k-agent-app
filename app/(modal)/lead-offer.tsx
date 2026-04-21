@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, Vibration, View } from 'react-native';
+import { Pressable, ScrollView, Vibration, View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Bell,
   Building2,
@@ -13,14 +13,17 @@ import {
   X,
 } from 'lucide-react-native';
 import { incomingOffer } from '@/mock/leads';
+import { useLeads } from '@/store/leads';
 import { Text } from '@/components/ui/Text';
 import { palette, semantic } from '@/theme';
 
 const COUNTDOWN_SECONDS = 60;
 
 export default function LeadOfferModal() {
+  const insets = useSafeAreaInsets();
   const [secondsLeft, setSecondsLeft] = useState(COUNTDOWN_SECONDS);
   const offer = incomingOffer;
+  const acceptOffer = useLeads((s) => s.acceptOffer);
 
   // Countdown + pulse vibration 2s đầu (giả lập "ring" như Grab).
   useEffect(() => {
@@ -51,44 +54,57 @@ export default function LeadOfferModal() {
       end={{ x: 1, y: 1 }}
       style={{ flex: 1 }}
     >
-      <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
-        {/* Top bar: dismiss */}
-        <View className="px-4 pt-2 flex-row items-center justify-between">
-          <View className="flex-row items-center gap-2">
-            <View
-              className="w-8 h-8 rounded-full items-center justify-center"
-              style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
-            >
-              <Bell size={16} color={palette.white} />
-            </View>
-            <Text
-              variant="caption"
-              style={{
-                color: palette.white,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.8,
-              }}
-            >
-              LEAD MỚI · AI PHÂN BỔ
-            </Text>
-          </View>
-          <Pressable
-            onPress={() => router.back()}
-            className="w-9 h-9 rounded-full items-center justify-center"
-            style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
-            hitSlop={8}
-          >
-            <X size={18} color={palette.white} />
-          </Pressable>
-        </View>
-
-        {/* Countdown hero */}
-        <View className="items-center mt-8 mb-4 px-6">
+      {/* Top bar — fixed, sử dụng manual insets.top để chắc chắn không đè notch */}
+      <View
+        className="px-4 flex-row items-center justify-between"
+        style={{ paddingTop: insets.top + 8, paddingBottom: 4 }}
+      >
+        <View className="flex-row items-center gap-2 flex-1">
           <View
-            className="w-36 h-36 rounded-full items-center justify-center"
+            className="w-8 h-8 rounded-full items-center justify-center"
+            style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+          >
+            <Bell size={16} color={palette.white} />
+          </View>
+          <Text
+            variant="caption"
+            style={{
+              color: palette.white,
+              fontFamily: 'BeVietnamPro_700Bold',
+              letterSpacing: 0.8,
+            }}
+            numberOfLines={1}
+          >
+            LEAD MỚI
+          </Text>
+        </View>
+        <Pressable
+          onPress={() => router.back()}
+          className="w-9 h-9 rounded-full items-center justify-center"
+          style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+          hitSlop={8}
+        >
+          <X size={18} color={palette.white} />
+        </Pressable>
+      </View>
+
+      {/* Scrollable middle — countdown + lead card */}
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+          paddingVertical: 16,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Countdown hero */}
+        <View className="items-center px-6">
+          <View
+            className="w-32 h-32 rounded-full items-center justify-center"
             style={{
               backgroundColor: 'rgba(247,243,237,0.14)',
-              borderWidth: 5,
+              borderWidth: 4,
               borderColor: urgent ? palette.red[500] : 'rgba(247,243,237,0.35)',
             }}
           >
@@ -107,15 +123,15 @@ export default function LeadOfferModal() {
               style={{
                 color: palette.white,
                 fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 52,
-                lineHeight: 58,
+                fontSize: 44,
+                lineHeight: 52,
               }}
             >
               {secondsLeft}s
             </Text>
           </View>
 
-          <View className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden mt-6">
+          <View className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden mt-5">
             <View
               className="h-full rounded-full"
               style={{
@@ -128,7 +144,7 @@ export default function LeadOfferModal() {
             variant="caption"
             style={{
               color: 'rgba(247,243,237,0.82)',
-              marginTop: 10,
+              marginTop: 8,
               fontFamily: 'BeVietnamPro_500Medium',
             }}
           >
@@ -137,7 +153,8 @@ export default function LeadOfferModal() {
         </View>
 
         {/* Lead card */}
-        <View className="mx-5 mt-2 rounded-2xl bg-white overflow-hidden"
+        <View
+          className="mx-5 mt-5 rounded-2xl bg-white overflow-hidden"
           style={{
             shadowColor: palette.obsidian[900],
             shadowOpacity: 0.2,
@@ -163,7 +180,14 @@ export default function LeadOfferModal() {
                 </Text>
               </View>
               <View className="flex-1">
-                <Text variant="h2" className="text-text-title">
+                <Text
+                  style={{
+                    color: semantic.text.primary,
+                    fontFamily: 'BeVietnamPro_700Bold',
+                    fontSize: 18,
+                    lineHeight: 24,
+                  }}
+                >
                   {offer.lead.fullName}
                 </Text>
                 <Text variant="body" className="text-text-secondary mt-0.5">
@@ -233,7 +257,7 @@ export default function LeadOfferModal() {
               <Text
                 variant="h3"
                 style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold', flex: 1 }}
-                numberOfLines={1}
+                numberOfLines={2}
               >
                 {offer.lead.primaryProject.name}
               </Text>
@@ -263,55 +287,60 @@ export default function LeadOfferModal() {
             </View>
           </View>
         </View>
+      </ScrollView>
 
-        {/* Sticky CTAs */}
-        <View className="flex-1" />
-        <View className="px-5 pb-2 gap-2.5">
-          <Pressable
-            onPress={() => {
-              router.back();
-              router.push(`/(app)/leads/${offer.lead.id}`);
-            }}
-            className="h-14 rounded-2xl flex-row items-center justify-center gap-2"
+      {/* Sticky bottom CTAs — fixed với manual insets.bottom */}
+      <View
+        className="px-5 gap-2"
+        style={{
+          paddingTop: 8,
+          paddingBottom: (insets.bottom > 0 ? insets.bottom : 12) + 4,
+        }}
+      >
+        <Pressable
+          onPress={() => {
+            const lead = acceptOffer(offer);
+            router.back();
+            router.push(`/(app)/leads/${lead.id}`);
+          }}
+          className="h-14 rounded-2xl flex-row items-center justify-center gap-2"
+          style={{
+            backgroundColor: palette.white,
+            shadowColor: palette.obsidian[900],
+            shadowOpacity: 0.3,
+            shadowRadius: 12,
+            shadowOffset: { width: 0, height: 6 },
+            elevation: 8,
+          }}
+        >
+          <Text
             style={{
-              backgroundColor: palette.white,
-              shadowColor: palette.obsidian[900],
-              shadowOpacity: 0.3,
-              shadowRadius: 12,
-              shadowOffset: { width: 0, height: 6 },
-              elevation: 8,
+              color: semantic.action.primaryDeep,
+              fontFamily: 'BeVietnamPro_700Bold',
+              fontSize: 17,
+              letterSpacing: 0.3,
             }}
           >
-            <Text
-              variant="body"
-              style={{
-                color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 17,
-                letterSpacing: 0.3,
-              }}
-            >
-              NHẬN LEAD
-            </Text>
-            <ChevronRight size={20} color={semantic.action.primaryDeep} strokeWidth={2.5} />
-          </Pressable>
+            NHẬN LEAD
+          </Text>
+          <ChevronRight size={20} color={semantic.action.primaryDeep} strokeWidth={2.5} />
+        </Pressable>
 
-          <Pressable
-            onPress={() => router.back()}
-            className="h-11 rounded-2xl items-center justify-center"
+        <Pressable
+          onPress={() => router.back()}
+          className="h-11 rounded-2xl items-center justify-center"
+        >
+          <Text
+            variant="body"
+            style={{
+              color: 'rgba(247,243,237,0.85)',
+              fontFamily: 'BeVietnamPro_500Medium',
+            }}
           >
-            <Text
-              variant="body"
-              style={{
-                color: 'rgba(247,243,237,0.85)',
-                fontFamily: 'BeVietnamPro_500Medium',
-              }}
-            >
-              Từ chối lead này
-            </Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
+            Từ chối lead này
+          </Text>
+        </Pressable>
+      </View>
     </LinearGradient>
   );
 }

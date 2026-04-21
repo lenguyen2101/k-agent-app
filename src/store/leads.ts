@@ -6,6 +6,7 @@ import type {
   ActivityOutcome,
   ActivityType,
   Lead,
+  LeadOffer,
   LeadSource,
   Project,
 } from '@/types/lead';
@@ -44,6 +45,7 @@ type State = {
   addActivity: (input: AddActivityInput) => void;
   createLead: (input: CreateLeadInput) => Lead;
   updateLead: (id: string, patch: UpdateLeadInput) => void;
+  acceptOffer: (offer: LeadOffer) => Lead;
 };
 
 export const useLeads = create<State>((set, get) => ({
@@ -85,6 +87,25 @@ export const useLeads = create<State>((set, get) => ({
       unitTypeInterests: input.unitTypeInterests,
       nextFollowupAt: input.nextFollowupAt,
       notes: input.notes,
+      activities: [],
+      createdAt: now,
+      updatedAt: now,
+    };
+    set((s) => ({ leads: [lead, ...s.leads] }));
+    return lead;
+  },
+  acceptOffer: (offer) => {
+    const now = new Date().toISOString();
+    const existing = get().leads.find((l) => l.id === offer.lead.id);
+    if (existing) return existing;
+    const lead: Lead = {
+      id: offer.lead.id,
+      phone: offer.lead.phone,
+      fullName: offer.lead.fullName,
+      source: offer.lead.source,
+      status: 'NEW',
+      primaryProject: offer.lead.primaryProject,
+      noxhProfile: offer.lead.noxhProfile,
       activities: [],
       createdAt: now,
       updatedAt: now,

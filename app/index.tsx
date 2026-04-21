@@ -1,7 +1,7 @@
 import { Redirect } from 'expo-router';
-import { useAuth } from '../src/store/auth';
 
+// Root → splash. Splash hydrate appStatus rồi route tới màn phù hợp
+// (onboarding / force-update / maintenance / login / tabs).
 export default function Index() {
-  const user = useAuth((s) => s.user);
-  return <Redirect href={user ? '/(app)/(tabs)' : '/(auth)/login'} />;
+  return <Redirect href="/splash" />;
 }

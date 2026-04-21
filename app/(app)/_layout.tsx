@@ -29,7 +29,7 @@ export default function AppLayout() {
       <Stack.Screen name="me/settings" />
       <Stack.Screen name="me/sync-status" />
       <Stack.Screen name="me/about" />
-      <Stack.Screen name="notifications" options={{ headerShown: true, title: 'Thông báo' }} />
+      <Stack.Screen name="notifications" />
     </Stack>
   );
 }
