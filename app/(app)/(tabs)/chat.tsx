@@ -1,60 +1,249 @@
 import { Pressable, ScrollView, View } from 'react-native';
-import { Plus, Sparkles } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  ChevronRight,
+  FileText,
+  MessageSquare,
+  Plus,
+  Sparkles,
+  Wand2,
+} from 'lucide-react-native';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
+import { formatRelativeTime } from '@/lib/format';
 import { palette, semantic } from '@/theme';
 
+const now = Date.now();
+const hoursAgo = (h: number) => new Date(now - h * 3600_000).toISOString();
+
 const conversations = [
-  { id: 'c1', title: 'Sky Garden Q9 còn căn 2PN nào?', updatedAt: '2 tiếng trước' },
-  { id: 'c2', title: 'Quy trình đặt cọc NOXH cho khách công nhân', updatedAt: 'hôm qua' },
-  { id: 'c3', title: 'Điều kiện mua NOXH theo Luật 2023', updatedAt: '3 ngày trước' },
+  {
+    id: 'c1',
+    title: 'Sky Garden Q9 còn căn 2PN nào?',
+    snippet: 'Theo rổ hàng hiện tại, NOXH Sky Garden Q9 còn 3 căn...',
+    updatedAt: hoursAgo(2),
+    citationCount: 2,
+  },
+  {
+    id: 'c2',
+    title: 'Quy trình đặt cọc NOXH cho khách công nhân',
+    snippet: '1. Khách đủ điều kiện eKYC noxh.net (CCCD + thu nhập...)',
+    updatedAt: hoursAgo(22),
+    citationCount: 3,
+  },
+  {
+    id: 'c3',
+    title: 'Điều kiện mua NOXH theo Luật 2023',
+    snippet: 'Điều kiện mua NOXH theo Luật Nhà ở 2023 (hiệu lực...)',
+    updatedAt: hoursAgo(72),
+    citationCount: 1,
+  },
 ];
 
 const SUGGESTIONS = [
-  'Dự án Tân Bình Garden có chính sách thanh toán nào?',
-  'Khách thu nhập 8tr/tháng có đủ điều kiện mua NOXH không?',
-  'Giá net cho sale dự án Sky Garden là bao nhiêu?',
+  {
+    icon: Wand2,
+    title: 'Tân Bình Garden có chính sách thanh toán nào?',
+    subtitle: 'Tra cứu chính sách bán hàng',
+  },
+  {
+    icon: Wand2,
+    title: 'Khách thu nhập 8tr/tháng có mua NOXH được?',
+    subtitle: 'Điều kiện NOXH theo Luật 2023',
+  },
+  {
+    icon: Wand2,
+    title: 'Giá net cho sale dự án Sky Garden?',
+    subtitle: 'Tính hoa hồng + giá bán sàn',
+  },
 ];
 
 export default function Chat() {
   return (
     <Screen>
-      <View className="px-4 pb-4 flex-row items-center justify-between">
-        <View>
-          <Text variant="h2" className="text-text-title">Chat AI</Text>
-          <Text variant="body" className="text-text-secondary mt-1">
-            Hỏi về dự án, NOXH, quy trình
-          </Text>
-        </View>
-        <Pressable className="w-11 h-11 rounded-full bg-primary items-center justify-center">
-          <Plus size={22} color={palette.white} />
-        </Pressable>
-      </View>
-
-      <ScrollView contentContainerClassName="px-4 gap-3 pb-8">
-        {conversations.map((c) => (
+      <ScrollView contentContainerClassName="pb-8">
+        {/* Hero */}
+        <View className="px-4 pt-1 pb-4 flex-row items-start justify-between">
+          <View className="flex-1">
+            <Text variant="h2" className="text-text-title">
+              K-Agent AI
+            </Text>
+            <Text variant="body" className="text-text-secondary mt-1">
+              Trợ lý RAG — rổ hàng, NOXH, luật, chính sách
+            </Text>
+          </View>
           <Pressable
-            key={c.id}
-            className="bg-white border border-border-light rounded-lg p-4 flex-row items-start gap-3 active:bg-surface-hover"
+            onPress={() => router.push('/(app)/chat/new')}
+            className="w-11 h-11 rounded-full items-center justify-center"
+            style={{
+              backgroundColor: semantic.action.primary,
+              shadowColor: semantic.action.primaryDeep,
+              shadowOpacity: 0.25,
+              shadowRadius: 10,
+              shadowOffset: { width: 0, height: 4 },
+              elevation: 4,
+            }}
           >
-            <View className="w-10 h-10 rounded-lg bg-surface-alt items-center justify-center">
-              <Sparkles size={18} color={semantic.text.primary} />
-            </View>
-            <View className="flex-1">
-              <Text variant="h3" className="text-text-primary" numberOfLines={1}>
-                {c.title}
-              </Text>
-              <Text variant="caption" className="text-text-tertiary mt-1">{c.updatedAt}</Text>
-            </View>
+            <Plus size={22} color={palette.white} strokeWidth={2.4} />
           </Pressable>
-        ))}
+        </View>
 
-        <View className="mt-6 p-4 rounded-lg bg-surface-alt border border-border-light">
-          <Text variant="caption" className="text-text-secondary mb-2">Gợi ý câu hỏi</Text>
-          <View className="gap-2">
-            {SUGGESTIONS.map((q) => (
-              <Pressable key={q} className="bg-white rounded-md p-3 active:opacity-70">
-                <Text variant="body" className="text-text-primary">{q}</Text>
+        {/* Hero CTA — bắt đầu chat mới */}
+        <Pressable
+          onPress={() => router.push('/(app)/chat/new')}
+          className="mx-4 rounded-2xl overflow-hidden"
+          style={{
+            shadowColor: semantic.action.primaryDeep,
+            shadowOpacity: 0.2,
+            shadowRadius: 14,
+            shadowOffset: { width: 0, height: 6 },
+            elevation: 5,
+          }}
+        >
+          <LinearGradient
+            colors={[...semantic.gradient.heroBrand]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ padding: 18 }}
+          >
+            <View className="flex-row items-center gap-3">
+              <View
+                className="w-11 h-11 rounded-full items-center justify-center"
+                style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+              >
+                <Sparkles size={22} color={palette.white} strokeWidth={2.2} />
+              </View>
+              <View className="flex-1">
+                <Text
+                  variant="h3"
+                  style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
+                >
+                  Bắt đầu trò chuyện mới
+                </Text>
+                <Text variant="caption" style={{ color: 'rgba(247,243,237,0.85)', marginTop: 2 }}>
+                  AI trả lời kèm trích dẫn nguồn
+                </Text>
+              </View>
+              <ChevronRight size={20} color={palette.white} />
+            </View>
+          </LinearGradient>
+        </Pressable>
+
+        {/* Suggestions */}
+        <View className="mt-5 px-4">
+          <Text
+            variant="caption"
+            style={{
+              color: semantic.text.secondary,
+              fontFamily: 'BeVietnamPro_700Bold',
+              letterSpacing: 0.5,
+            }}
+          >
+            GỢI Ý CÂU HỎI
+          </Text>
+          <View className="mt-2.5 gap-2.5">
+            {SUGGESTIONS.map((s, idx) => {
+              const Icon = s.icon;
+              return (
+                <Pressable
+                  key={idx}
+                  onPress={() => router.push('/(app)/chat/new')}
+                  className="p-3.5 rounded-2xl flex-row items-center gap-3"
+                  style={{
+                    backgroundColor: palette.white,
+                    borderWidth: 1,
+                    borderColor: semantic.border.light,
+                  }}
+                >
+                  <View
+                    className="w-9 h-9 rounded-xl items-center justify-center"
+                    style={{ backgroundColor: semantic.action.primarySoft }}
+                  >
+                    <Icon size={16} color={semantic.action.primary} strokeWidth={2.2} />
+                  </View>
+                  <View className="flex-1">
+                    <Text
+                      variant="body"
+                      style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
+                      numberOfLines={2}
+                    >
+                      {s.title}
+                    </Text>
+                    <Text variant="caption" className="text-text-tertiary mt-0.5" numberOfLines={1}>
+                      {s.subtitle}
+                    </Text>
+                  </View>
+                  <ChevronRight size={16} color={semantic.text.tertiary} />
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Recent conversations */}
+        <View className="mt-6 px-4">
+          <View className="flex-row items-baseline justify-between mb-3">
+            <Text
+              variant="caption"
+              style={{
+                color: semantic.text.secondary,
+                fontFamily: 'BeVietnamPro_700Bold',
+                letterSpacing: 0.5,
+              }}
+            >
+              CUỘC TRÒ CHUYỆN GẦN ĐÂY
+            </Text>
+            <Text variant="caption" className="text-text-tertiary">
+              {conversations.length} mục
+            </Text>
+          </View>
+          <View className="gap-2.5">
+            {conversations.map((c) => (
+              <Pressable
+                key={c.id}
+                onPress={() => router.push(`/(app)/chat/${c.id}`)}
+                className="p-4 rounded-2xl flex-row items-start gap-3"
+                style={{
+                  backgroundColor: palette.white,
+                  borderWidth: 1,
+                  borderColor: semantic.border.light,
+                  shadowColor: palette.obsidian[900],
+                  shadowOpacity: 0.04,
+                  shadowRadius: 6,
+                  shadowOffset: { width: 0, height: 2 },
+                  elevation: 1,
+                }}
+              >
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center"
+                  style={{
+                    backgroundColor: semantic.action.primarySoft,
+                    borderWidth: 1,
+                    borderColor: palette.sienna[100],
+                  }}
+                >
+                  <MessageSquare size={16} color={semantic.action.primaryDeep} strokeWidth={2.2} />
+                </View>
+                <View className="flex-1">
+                  <Text variant="h3" className="text-text-primary" numberOfLines={1}>
+                    {c.title}
+                  </Text>
+                  <Text variant="caption" className="text-text-secondary mt-0.5" numberOfLines={2}>
+                    {c.snippet}
+                  </Text>
+                  <View className="flex-row items-center gap-3 mt-2">
+                    <Text variant="caption" className="text-text-tertiary">
+                      {formatRelativeTime(c.updatedAt)}
+                    </Text>
+                    <View className="flex-row items-center gap-1">
+                      <FileText size={11} color={semantic.text.tertiary} />
+                      <Text variant="caption" className="text-text-tertiary">
+                        {c.citationCount} nguồn
+                      </Text>
+                    </View>
+                  </View>
+                </View>
               </Pressable>
             ))}
           </View>

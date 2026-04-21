@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { Search, SlidersHorizontal } from 'lucide-react-native';
+import { Heart, Search } from 'lucide-react-native';
 import { ListingCard } from '@/components/ListingCard';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
 import { listings } from '@/mock/listings';
+import { useSavedListings } from '@/store/savedListings';
 import { palette, semantic, typography } from '@/theme';
 import { truthsScore, type Listing } from '@/types/listing';
 
@@ -32,6 +33,7 @@ function matchFilter(ls: Listing, key: FilterKey): boolean {
 export default function Listings() {
   const [filter, setFilter] = useState<FilterKey>('all');
   const [search, setSearch] = useState('');
+  const savedCount = useSavedListings((s) => s.savedIds.size);
 
   const filtered = useMemo(() => {
     let xs = listings.filter((l) => matchFilter(l, filter));
@@ -71,10 +73,32 @@ export default function Listings() {
             />
           </View>
           <Pressable
+            onPress={() => router.push('/(app)/listings/saved')}
             className="w-11 h-11 rounded-md items-center justify-center border border-border-light"
             style={{ backgroundColor: semantic.surface.alt }}
           >
-            <SlidersHorizontal size={18} color={semantic.text.secondary} />
+            <Heart
+              size={18}
+              color={savedCount > 0 ? palette.red[600] : semantic.text.secondary}
+              fill={savedCount > 0 ? palette.red[600] : 'transparent'}
+            />
+            {savedCount > 0 && (
+              <View
+                className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full items-center justify-center"
+                style={{ backgroundColor: semantic.action.primary }}
+              >
+                <Text
+                  style={{
+                    color: palette.white,
+                    fontFamily: 'BeVietnamPro_700Bold',
+                    fontSize: 10,
+                    lineHeight: 12,
+                  }}
+                >
+                  {savedCount}
+                </Text>
+              </View>
+            )}
           </Pressable>
         </View>
       </View>

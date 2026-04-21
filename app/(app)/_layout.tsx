@@ -13,8 +13,22 @@ export default function AppLayout() {
       }}
     >
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="leads/[id]" options={{ headerShown: true, title: 'Chi tiết lead' }} />
+      <Stack.Screen name="leads/[id]" />
+      <Stack.Screen name="leads/[id]/edit" />
+      <Stack.Screen name="leads/[id]/activities/new" />
+      <Stack.Screen name="leads/new" />
       <Stack.Screen name="listings/[id]" />
+      <Stack.Screen name="listings/[id]/request-cooperation" />
+      <Stack.Screen name="listings/saved" />
+      <Stack.Screen name="chat/[conversationId]" />
+      <Stack.Screen name="income/index" />
+      <Stack.Screen name="income/transactions" />
+      <Stack.Screen name="income/network" />
+      <Stack.Screen name="income/[transactionId]" />
+      <Stack.Screen name="me/profile" />
+      <Stack.Screen name="me/settings" />
+      <Stack.Screen name="me/sync-status" />
+      <Stack.Screen name="me/about" />
       <Stack.Screen name="notifications" options={{ headerShown: true, title: 'Thông báo' }} />
     </Stack>
   );

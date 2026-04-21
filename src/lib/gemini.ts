@@ -118,3 +118,56 @@ export async function extractLeadFromAudio(audioUri: string): Promise<ExtractedL
     transcript: parsed.transcript ?? '',
   };
 }
+
+// Simple speech-to-text transcription for chat voice input.
+// Chỉ lấy text, không structured extract như extractLeadFromAudio.
+export async function transcribeAudio(audioUri: string): Promise<string> {
+  if (!API_KEY) {
+    throw new Error('Thiếu EXPO_PUBLIC_GEMINI_API_KEY trong .env');
+  }
+
+  const base64 = await FileSystem.readAsStringAsync(audioUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  const mimeType = audioUri.endsWith('.wav')
+    ? 'audio/wav'
+    : audioUri.endsWith('.mp3')
+      ? 'audio/mp3'
+      : 'audio/mp4';
+
+  const body = {
+    contents: [
+      {
+        parts: [
+          { inlineData: { mimeType, data: base64 } },
+          {
+            text:
+              'Bạn là công cụ chuyển giọng nói tiếng Việt thành văn bản. Hãy nghe đoạn audio và trả về CHÍNH XÁC lời người nói, có dấu tiếng Việt. Không thêm lời dẫn, chỉ trả text thuần. Giữ nguyên câu hỏi/câu cảm của người nói.',
+          },
+        ],
+      },
+    ],
+    generationConfig: {
+      temperature: 0.1,
+    },
+  };
+
+  const res = await fetch(`${ENDPOINT}?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini API ${res.status}: ${errText.slice(0, 200)}`);
+  }
+
+  const json = await res.json();
+  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    throw new Error('Không nghe rõ giọng nói, thử lại nha');
+  }
+  return text.trim();
+}

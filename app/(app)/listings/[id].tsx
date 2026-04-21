@@ -20,6 +20,7 @@ import {
 } from 'lucide-react-native';
 import { FourTruthsBanner } from '@/components/FourTruthsBanner';
 import { Text } from '@/components/ui/Text';
+import { useSavedListings } from '@/store/savedListings';
 import { listings } from '@/mock/listings';
 import { formatPricePerM2, formatVND, formatVNDCompact, formatVNDWords } from '@/lib/format';
 import { palette, semantic } from '@/theme';
@@ -47,6 +48,8 @@ export default function ListingDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const listing = useMemo(() => listings.find((l) => l.id === id), [id]);
+  const isSaved = useSavedListings((s) => (id ? s.isSaved(id) : false));
+  const toggleSave = useSavedListings((s) => s.toggle);
 
   if (!listing) {
     return (
@@ -91,8 +94,16 @@ export default function ListingDetail() {
             </Text>
           </View>
         </View>
-        <Pressable className="w-10 h-10 items-center justify-center" hitSlop={8}>
-          <Heart size={20} color={semantic.text.secondary} />
+        <Pressable
+          className="w-10 h-10 items-center justify-center"
+          hitSlop={8}
+          onPress={() => listing && toggleSave(listing.id)}
+        >
+          <Heart
+            size={20}
+            color={isSaved ? palette.red[600] : semantic.text.secondary}
+            fill={isSaved ? palette.red[600] : 'transparent'}
+          />
         </Pressable>
         <Pressable className="w-10 h-10 items-center justify-center" hitSlop={8}>
           <Share2 size={20} color={semantic.text.secondary} />
@@ -165,7 +176,15 @@ export default function ListingDetail() {
         </View>
 
         {/* Gallery hero */}
-        <View className="mx-4 mt-4 rounded-2xl overflow-hidden">
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: '/(modal)/image-viewer',
+              params: { listingId: listing.id, startIndex: '0' },
+            })
+          }
+          className="mx-4 mt-4 rounded-2xl overflow-hidden"
+        >
           <View style={{ position: 'relative', aspectRatio: 16 / 10 }}>
             <Image
               source={{ uri: listing.coverImage }}
@@ -197,7 +216,15 @@ export default function ListingDetail() {
                 </Text>
               </Pressable>
             )}
-            <Pressable className="flex-1 flex-row items-center justify-center gap-2 py-3">
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: '/(modal)/image-viewer',
+                  params: { listingId: listing.id, startIndex: '0' },
+                })
+              }
+              className="flex-1 flex-row items-center justify-center gap-2 py-3"
+            >
               <ImagesIcon size={16} color={palette.white} strokeWidth={2.2} />
               <Text
                 variant="body"
@@ -207,7 +234,7 @@ export default function ListingDetail() {
               </Text>
             </Pressable>
           </View>
-        </View>
+        </Pressable>
 
         {/* Property quick specs */}
         <View className="mx-4 mt-4 p-4 rounded-2xl bg-surface-card border border-border-light">
@@ -396,6 +423,7 @@ export default function ListingDetail() {
           </Text>
         </Pressable>
         <Pressable
+          onPress={() => router.push(`/(app)/listings/${listing.id}/request-cooperation`)}
           className="flex-[1.6] h-12 rounded-xl items-center justify-center"
           style={{
             backgroundColor: semantic.action.primary,
@@ -437,7 +465,7 @@ function SpecRow({
       <View className="w-7 h-7 rounded-full bg-surface-alt items-center justify-center">
         {icon}
       </View>
-      <Text variant="body" className="text-text-secondary ml-3 w-20">{label}</Text>
+      <Text variant="body" className="text-text-secondary ml-3 mr-4 w-20">{label}</Text>
       <Text variant="body" className="text-text-primary flex-1" numberOfLines={2}>
         {value}
       </Text>

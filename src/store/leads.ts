@@ -28,11 +28,22 @@ export type CreateLeadInput = {
   nextFollowupAt?: string;
 };
 
+export type UpdateLeadInput = {
+  fullName?: string;
+  phone?: string;
+  primaryProject?: Project;
+  unitTypeInterests?: string[];
+  source?: LeadSource;
+  notes?: string;
+  nextFollowupAt?: string | null;
+};
+
 type State = {
   leads: Lead[];
   getById: (id: string) => Lead | undefined;
   addActivity: (input: AddActivityInput) => void;
   createLead: (input: CreateLeadInput) => Lead;
+  updateLead: (id: string, patch: UpdateLeadInput) => void;
 };
 
 export const useLeads = create<State>((set, get) => ({
@@ -80,6 +91,28 @@ export const useLeads = create<State>((set, get) => ({
     };
     set((s) => ({ leads: [lead, ...s.leads] }));
     return lead;
+  },
+  updateLead: (id, patch) => {
+    const now = new Date().toISOString();
+    set((s) => ({
+      leads: s.leads.map((l) => {
+        if (l.id !== id) return l;
+        return {
+          ...l,
+          fullName: patch.fullName ?? l.fullName,
+          phone: patch.phone ?? l.phone,
+          primaryProject: patch.primaryProject ?? l.primaryProject,
+          unitTypeInterests: patch.unitTypeInterests ?? l.unitTypeInterests,
+          source: patch.source ?? l.source,
+          notes: patch.notes !== undefined ? patch.notes : l.notes,
+          nextFollowupAt:
+            patch.nextFollowupAt === null
+              ? undefined
+              : patch.nextFollowupAt ?? l.nextFollowupAt,
+          updatedAt: now,
+        };
+      }),
+    }));
   },
 }));
 

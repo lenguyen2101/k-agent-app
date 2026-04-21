@@ -7,14 +7,14 @@ const daysAgo = (d: number) => new Date(now - d * 86400_000).toISOString();
 // Interior photos from Unsplash (hotlinked, apartment/home themed).
 // Phase backend: thay bằng CDN từ Tech Lead.
 const IMG = {
-  kitchen: 'https://images.unsplash.com/photo-1556909172-89dde75c1b07?w=1200&q=80',
-  living: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80',
-  bedroom: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80',
+  kitchen:  'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1200&q=80',
+  living:   'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80',
+  bedroom:  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80',
   bathroom: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&q=80',
-  balcony: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80',
+  balcony:  'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80',
   exterior: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80',
-  studio: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80',
-  dining: 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&q=80',
+  studio:   'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80',
+  dining:   'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&q=80',
 };
 
 const agents: ListingAgent[] = [

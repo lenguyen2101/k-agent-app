@@ -1,211 +1,661 @@
 import { useState } from 'react';
-import { Linking, Pressable, ScrollView, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Calendar, MapPin, MessageCircle, Phone, ShieldCheck } from 'lucide-react-native';
+import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  ArrowLeft,
+  Banknote,
+  BedDouble,
+  Building2,
+  Calendar,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  MessageSquare,
+  MoreHorizontal,
+  Pencil,
+  Phone,
+  Plus,
+  Share2,
+  ShieldCheck,
+  StickyNote,
+  UserCheck,
+  UserPlus,
+} from 'lucide-react-native';
+import { BottomSheetModal } from '@/components/BottomSheetModal';
 import { useLeads } from '@/store/leads';
 import { StatusBadge } from '@/components/StatusBadge';
-import { Button } from '@/components/Button';
 import { AddActivitySheet } from '@/components/AddActivitySheet';
 import { Text } from '@/components/ui/Text';
 import { formatPhone, formatRelativeTime } from '@/lib/format';
 import { palette, semantic } from '@/theme';
+import { statusToGroup, type ActivityOutcome, type ActivityType } from '@/types/lead';
+
+const sourceLabels: Record<string, string> = {
+  NOXH_PLATFORM: 'noxh.net',
+  FACEBOOK_ADS: 'Facebook Ads',
+  HOTLINE: 'Hotline',
+  WALK_IN: 'Đến trực tiếp',
+  REFERRAL: 'Giới thiệu',
+  EVENT: 'Sự kiện',
+  ZALO: 'Zalo',
+  OTHER: 'Khác',
+};
+
+const activityIconMap: Record<ActivityType, React.ComponentType<{ size: number; color: string; strokeWidth?: number }>> = {
+  CALL: Phone,
+  SMS: MessageCircle,
+  ZALO_MESSAGE: MessageSquare,
+  EMAIL: MessageCircle,
+  MEETING: Building2,
+  NOTE: StickyNote,
+  STATUS_CHANGE: UserCheck,
+  ASSIGNMENT_CHANGE: UserCheck,
+  FOLLOWUP_SCHEDULED: Calendar,
+};
+
+const activityLabels: Record<ActivityType, string> = {
+  CALL: 'Gọi điện',
+  SMS: 'Nhắn tin',
+  ZALO_MESSAGE: 'Zalo',
+  EMAIL: 'Email',
+  MEETING: 'Gặp trực tiếp',
+  NOTE: 'Ghi chú',
+  STATUS_CHANGE: 'Đổi trạng thái',
+  ASSIGNMENT_CHANGE: 'Đổi phụ trách',
+  FOLLOWUP_SCHEDULED: 'Đặt lịch follow up',
+};
+
+const outcomeLabels: Record<ActivityOutcome, { label: string; color: string }> = {
+  REACHED:         { label: 'Liên lạc được',  color: palette.emerald[700] },
+  INTERESTED:      { label: 'Quan tâm',       color: palette.emerald[700] },
+  CALLBACK_LATER:  { label: 'Hẹn gọi lại',    color: palette.blue[700] },
+  NO_ANSWER:       { label: 'Không bắt máy',  color: palette.sienna[700] },
+  NOT_INTERESTED:  { label: 'Không quan tâm', color: palette.red[600] },
+  WRONG_NUMBER:    { label: 'Số sai',         color: palette.red[600] },
+};
 
 export default function LeadDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
   const lead = useLeads((s) => s.leads.find((l) => l.id === id));
   const addActivity = useLeads((s) => s.addActivity);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   if (!lead) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-surface">
         <Text variant="body" className="text-text-secondary">Không tìm thấy lead</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
+  const group = statusToGroup[lead.status];
+  const groupColor = semantic.leadGroup[group].dot;
+
   return (
-    <View className="flex-1 bg-white">
-      <ScrollView className="flex-1" contentContainerClassName="pb-32">
-        <View className="bg-surface-alt px-4 pt-4 pb-5">
-          <View className="flex-row items-start justify-between mb-3">
+    <View className="flex-1 bg-surface">
+      {/* Custom header */}
+      <View
+        className="bg-white border-b border-border-light flex-row items-center px-2"
+        style={{ paddingTop: insets.top + 4, paddingBottom: 10 }}
+      >
+        <Pressable
+          onPress={() => router.back()}
+          className="w-10 h-10 items-center justify-center"
+          hitSlop={8}
+        >
+          <ArrowLeft size={22} color={semantic.text.primary} />
+        </Pressable>
+        <View className="flex-1 items-center">
+          <Text
+            variant="h3"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
+            numberOfLines={1}
+          >
+            {lead.fullName}
+          </Text>
+          <View className="flex-row items-center gap-1.5 mt-0.5">
+            <View className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: groupColor }} />
+            <Text variant="caption" className="text-text-secondary">
+              Lead · cập nhật {formatRelativeTime(lead.updatedAt)}
+            </Text>
+          </View>
+        </View>
+        <Pressable
+          className="w-10 h-10 items-center justify-center"
+          hitSlop={8}
+          onPress={() => router.push(`/(app)/leads/${lead.id}/edit`)}
+        >
+          <Pencil size={19} color={semantic.text.secondary} />
+        </Pressable>
+      </View>
+
+      {/* Sub-action bar — sticky dưới header, 4 action: Gọi/SMS/Zalo/More */}
+      <View
+        className="bg-white border-b border-border-light flex-row px-3 py-2.5"
+      >
+        <SubAction
+          icon={<Phone size={18} color={palette.emerald[700]} strokeWidth={2.2} />}
+          label="Gọi"
+          bg={palette.emerald[50]}
+          onPress={() => Linking.openURL(`tel:${lead.phone}`)}
+        />
+        <SubAction
+          icon={<MessageCircle size={18} color={palette.sienna[700]} strokeWidth={2.2} />}
+          label="SMS"
+          bg={palette.sienna[50]}
+          onPress={() => Linking.openURL(`sms:${lead.phone}`)}
+        />
+        <SubAction
+          icon={<MessageSquare size={18} color={palette.blue[700]} strokeWidth={2.2} />}
+          label="Zalo"
+          bg={palette.blue[50]}
+          onPress={() => Linking.openURL(`https://zalo.me/${lead.phone}`)}
+        />
+        <SubAction
+          icon={<MoreHorizontal size={18} color={palette.slate[600]} strokeWidth={2.4} />}
+          label="Khác"
+          bg={palette.slate[100]}
+          onPress={() => setMoreOpen(true)}
+        />
+      </View>
+
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+        {/* Hero — sienna soft */}
+        <View
+          className="mx-4 mt-4 p-5 rounded-2xl"
+          style={{
+            backgroundColor: semantic.action.primarySoft,
+            borderWidth: 1,
+            borderColor: palette.sienna[100],
+            shadowColor: semantic.action.primaryDeep,
+            shadowOpacity: 0.08,
+            shadowRadius: 14,
+            shadowOffset: { width: 0, height: 6 },
+            elevation: 3,
+          }}
+        >
+          <View className="flex-row items-start justify-between gap-3">
             <View className="flex-1">
-              <Text variant="h2" className="text-text-title">{lead.fullName}</Text>
-              <Text variant="body" className="text-text-secondary mt-1">{formatPhone(lead.phone)}</Text>
+              <Text
+                style={{
+                  color: semantic.action.primaryDeep,
+                  fontFamily: 'BeVietnamPro_700Bold',
+                  fontSize: 18,
+                  lineHeight: 24,
+                }}
+              >
+                {lead.fullName}
+              </Text>
+              <View className="flex-row items-center gap-1.5 mt-1">
+                <Phone size={14} color={semantic.action.primaryDeep} />
+                <Text
+                  variant="body"
+                  style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_600SemiBold' }}
+                >
+                  {formatPhone(lead.phone)}
+                </Text>
+              </View>
             </View>
             <StatusBadge status={lead.status} />
           </View>
 
-          {lead.noxhProfile && (
-            <View className="flex-row items-center gap-1.5 mt-2 bg-status-success-bg self-start px-3 py-1.5 rounded-full">
-              <ShieldCheck size={14} color={semantic.status.success} />
-              <Text variant="caption" className="text-status-success" style={{ fontWeight: '600' }}>
-                eKYC verified · {lead.noxhProfile.cccdMasked}
+          {lead.noxhProfile?.ekycVerified && (
+            <View
+              className="flex-row items-center gap-1.5 mt-3 self-start px-2.5 py-1 rounded-full"
+              style={{ backgroundColor: palette.emerald[50] }}
+            >
+              <ShieldCheck size={13} color={palette.emerald[700]} />
+              <Text
+                variant="caption"
+                style={{
+                  color: palette.emerald[700],
+                  fontFamily: 'BeVietnamPro_600SemiBold',
+                  fontSize: 11,
+                }}
+              >
+                eKYC noxh.net · {lead.noxhProfile.cccdMasked}
               </Text>
             </View>
           )}
-        </View>
 
-        <View className="flex-row mx-4 mt-4 gap-2">
-          <Pressable
-            onPress={() => Linking.openURL(`tel:${lead.phone}`)}
-            className="flex-1 h-12 rounded-md bg-primary flex-row items-center justify-center gap-2 active:bg-primary-hover"
+          {/* Quick chips */}
+          <View
+            className="flex-row flex-wrap gap-2 mt-4 pt-4"
+            style={{ borderTopWidth: 1, borderTopColor: palette.sienna[100] }}
           >
-            <Phone size={18} color={palette.white} />
-            <Text variant="button" className="text-white">Gọi</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => Linking.openURL(`sms:${lead.phone}`)}
-            className="flex-1 h-12 rounded-md bg-white border border-text-primary flex-row items-center justify-center gap-2 active:bg-surface-hover"
-          >
-            <MessageCircle size={18} color={semantic.text.primary} />
-            <Text variant="button" className="text-text-primary">Nhắn tin</Text>
-          </Pressable>
-        </View>
-
-        <View className="mx-4 mt-6">
-          <Text variant="h3" className="text-text-title mb-3">Thông tin lead</Text>
-          <View className="bg-white rounded-lg border border-border-light divide-y divide-border-light">
-            <Row label="Dự án quan tâm" value={lead.primaryProject.name} />
-            <Row
-              label="Địa điểm"
-              value={lead.primaryProject.location}
-              icon={<MapPin size={14} color={semantic.text.tertiary} />}
+            <InfoChip
+              icon={<Building2 size={12} color={semantic.text.secondary} />}
+              label={lead.primaryProject.shortName}
             />
-            <Row label="Loại căn" value={lead.unitTypeInterests?.join(', ') ?? '—'} />
-            <Row label="Giá" value={lead.primaryProject.priceRange} />
-            <Row label="Nguồn lead" value={sourceLabel(lead.source)} />
-            {lead.nextFollowupAt && (
-              <Row
-                label="Follow up tiếp"
-                value={formatRelativeTime(lead.nextFollowupAt)}
-                icon={<Calendar size={14} color={semantic.text.tertiary} />}
-              />
-            )}
+            {lead.unitTypeInterests?.length ? (
+              <InfoChip label={lead.unitTypeInterests.join(' / ')} />
+            ) : null}
+            <InfoChip
+              icon={<UserCheck size={12} color={semantic.text.secondary} />}
+              label={sourceLabels[lead.source] ?? lead.source}
+            />
           </View>
         </View>
 
+        {/* Info card */}
+        <View className="mx-4 mt-4 p-4 rounded-2xl bg-surface-card border border-border-light">
+          <Text variant="h3" className="text-text-primary mb-1">
+            Thông tin lead
+          </Text>
+          <InfoRow
+            icon={<Building2 size={16} color={semantic.text.tertiary} />}
+            label="Dự án"
+            value={lead.primaryProject.name}
+          />
+          <InfoRow
+            icon={<MapPin size={16} color={semantic.text.tertiary} />}
+            label="Địa điểm"
+            value={lead.primaryProject.location}
+          />
+          <InfoRow
+            icon={<Banknote size={16} color={semantic.text.tertiary} />}
+            label="Khoảng giá"
+            value={lead.primaryProject.priceRange}
+          />
+          <InfoRow
+            icon={<BedDouble size={16} color={semantic.text.tertiary} />}
+            label="Loại căn"
+            value={lead.unitTypeInterests?.join(', ') ?? '—'}
+          />
+          {lead.nextFollowupAt && (
+            <InfoRow
+              icon={<Calendar size={16} color={semantic.text.tertiary} />}
+              label="Follow up"
+              value={formatRelativeTime(lead.nextFollowupAt)}
+              last
+            />
+          )}
+        </View>
+
+        {/* Notes */}
         {lead.notes && (
-          <View className="mx-4 mt-6">
-            <Text variant="h3" className="text-text-title mb-2">Ghi chú</Text>
-            <View className="bg-status-warning-bg border border-status-warning rounded-lg p-3">
-              <Text variant="body-lg" className="text-text-primary">{lead.notes}</Text>
+          <View
+            className="mx-4 mt-4 p-4 rounded-2xl"
+            style={{
+              backgroundColor: semantic.status.warningBg,
+              borderWidth: 1,
+              borderColor: palette.sienna[100],
+            }}
+          >
+            <View className="flex-row items-center gap-2 mb-2">
+              <StickyNote size={14} color={semantic.action.primaryDeep} />
+              <Text
+                variant="caption"
+                style={{
+                  color: semantic.action.primaryDeep,
+                  fontFamily: 'BeVietnamPro_700Bold',
+                  letterSpacing: 0.5,
+                }}
+              >
+                GHI CHÚ
+              </Text>
             </View>
+            <Text variant="body" className="text-text-primary">
+              {lead.notes}
+            </Text>
           </View>
         )}
 
-        <View className="mx-4 mt-6">
-          <Text variant="h3" className="text-text-title mb-3">
-            Lịch sử hoạt động · {lead.activities.length}
-          </Text>
+        {/* Activity timeline */}
+        <View className="mx-4 mt-4">
+          <View className="flex-row items-center justify-between mb-3">
+            <Text variant="h3" className="text-text-primary">
+              Lịch sử hoạt động
+            </Text>
+            <View className="flex-row items-center gap-3">
+              <Text variant="caption" className="text-text-tertiary">
+                {lead.activities.length} mục
+              </Text>
+              <Pressable
+                onPress={() => router.push(`/(app)/leads/${lead.id}/activities/new`)}
+                className="flex-row items-center gap-1 px-2.5 py-1 rounded-full"
+                style={{ backgroundColor: semantic.action.primarySoft }}
+                hitSlop={4}
+              >
+                <Plus size={12} color={semantic.action.primary} strokeWidth={2.6} />
+                <Text
+                  variant="caption"
+                  style={{
+                    color: semantic.action.primary,
+                    fontFamily: 'BeVietnamPro_700Bold',
+                    fontSize: 11,
+                  }}
+                >
+                  Chi tiết
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
           {lead.activities.length === 0 ? (
-            <View className="bg-white border border-border-light rounded-lg p-6 items-center">
-              <Text variant="body" className="text-text-secondary">
-                Chưa có hoạt động. Bắt đầu gọi điện cho khách.
+            <View
+              className="p-6 rounded-2xl items-center"
+              style={{
+                backgroundColor: semantic.surface.alt,
+                borderWidth: 1,
+                borderColor: semantic.border.light,
+                borderStyle: 'dashed',
+              }}
+            >
+              <Phone size={22} color={semantic.text.tertiary} strokeWidth={1.8} />
+              <Text variant="body" className="text-text-secondary mt-2 text-center">
+                Chưa có hoạt động.{'\n'}Bắt đầu gọi điện cho khách.
               </Text>
             </View>
           ) : (
-            <View className="gap-3">
-              {lead.activities.map((a) => (
-                <View key={a.id} className="bg-white border border-border-light rounded-lg p-3">
-                  <View className="flex-row items-center justify-between mb-1">
-                    <Text variant="caption" className="text-text-primary">
-                      {activityLabel(a.type)}
-                    </Text>
-                    <Text variant="caption" className="text-text-tertiary">
-                      {formatRelativeTime(a.createdAt)}
-                    </Text>
+            <View>
+              {lead.activities.map((a, idx) => {
+                const Icon = activityIconMap[a.type];
+                const outcomeMeta = a.outcome ? outcomeLabels[a.outcome] : null;
+                const last = idx === lead.activities.length - 1;
+                return (
+                  <View key={a.id} className="flex-row gap-3">
+                    <View className="items-center" style={{ width: 34 }}>
+                      <View
+                        className="w-8 h-8 rounded-full items-center justify-center"
+                        style={{ backgroundColor: semantic.action.primarySoft }}
+                      >
+                        <Icon size={14} color={semantic.action.primaryDeep} strokeWidth={2.2} />
+                      </View>
+                      {!last && (
+                        <View
+                          className="w-0.5 flex-1 mt-1"
+                          style={{ backgroundColor: semantic.border.light, minHeight: 12 }}
+                        />
+                      )}
+                    </View>
+                    <View className="flex-1 pb-4">
+                      <View className="flex-row items-center gap-2">
+                        <Text
+                          variant="body"
+                          style={{
+                            color: semantic.text.primary,
+                            fontFamily: 'BeVietnamPro_600SemiBold',
+                          }}
+                        >
+                          {activityLabels[a.type]}
+                        </Text>
+                        {outcomeMeta && (
+                          <View
+                            className="px-2 py-0.5 rounded-full"
+                            style={{
+                              backgroundColor: `${outcomeMeta.color}15`,
+                            }}
+                          >
+                            <Text
+                              variant="caption"
+                              style={{
+                                color: outcomeMeta.color,
+                                fontFamily: 'BeVietnamPro_600SemiBold',
+                                fontSize: 11,
+                              }}
+                            >
+                              {outcomeMeta.label}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      {a.content && (
+                        <Text variant="body" className="text-text-secondary mt-1">
+                          {a.content}
+                        </Text>
+                      )}
+                      <View className="flex-row items-center gap-1 mt-1.5">
+                        <Clock size={11} color={semantic.text.tertiary} />
+                        <Text variant="caption" className="text-text-tertiary">
+                          {formatRelativeTime(a.createdAt)}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  {a.content && (
-                    <Text variant="body" className="text-text-secondary mt-1">{a.content}</Text>
-                  )}
-                  {a.outcome && (
-                    <Text variant="caption" className="text-status-info mt-1">
-                      → {outcomeLabel(a.outcome)}
-                    </Text>
-                  )}
-                </View>
-              ))}
+                );
+              })}
             </View>
           )}
         </View>
       </ScrollView>
 
-      <SafeAreaView
-        edges={['bottom']}
-        className="absolute left-0 right-0 bottom-0 bg-white border-t border-border-light"
+      {/* Sticky bottom: Add activity */}
+      <View
+        className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 pt-3"
+        style={{ paddingBottom: insets.bottom > 0 ? insets.bottom : 12 }}
       >
-        <View className="px-4 py-3">
-          <Button
-            label="+ Thêm hoạt động"
-            variant="primary"
-            fullWidth
-            onPress={() => setSheetOpen(true)}
-          />
-        </View>
-      </SafeAreaView>
+        <Pressable
+          onPress={() => setSheetOpen(true)}
+          className="h-12 rounded-xl items-center justify-center"
+          style={{
+            backgroundColor: semantic.action.primary,
+            shadowColor: semantic.action.primaryDeep,
+            shadowOpacity: 0.25,
+            shadowRadius: 10,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: 4,
+          }}
+        >
+          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+            + Thêm hoạt động
+          </Text>
+        </Pressable>
+      </View>
 
       <AddActivitySheet
         visible={sheetOpen}
         onClose={() => setSheetOpen(false)}
         onSubmit={(v) => addActivity({ leadId: lead.id, ...v })}
       />
+
+      <BottomSheetModal visible={moreOpen} onClose={() => setMoreOpen(false)}>
+        <View className="px-4 pt-1 pb-6">
+          <Text variant="h3" className="text-text-primary">
+            Hành động khác
+          </Text>
+          <Text variant="caption" className="text-text-secondary mt-1">
+            Lead: {lead.fullName}
+          </Text>
+
+          <View className="mt-4 gap-2">
+            <MoreMenuRow
+              icon={<Mail size={18} color={palette.blue[700]} />}
+              iconBg={palette.blue[50]}
+              label="Gửi email"
+              subtitle="Giới thiệu dự án qua email"
+              onPress={() => {
+                setMoreOpen(false);
+                Linking.openURL(`mailto:?subject=Giới thiệu dự án&to=`);
+              }}
+            />
+            <MoreMenuRow
+              icon={<Share2 size={18} color={palette.sienna[700]} />}
+              iconBg={palette.sienna[50]}
+              label="Chia sẻ lead"
+              subtitle="Gửi info lead cho đồng nghiệp"
+              onPress={() => {
+                setMoreOpen(false);
+                Linking.openURL(
+                  `sms:?body=Lead: ${lead.fullName} - ${lead.phone} - ${lead.primaryProject.shortName}`
+                );
+              }}
+            />
+            <MoreMenuRow
+              icon={<UserPlus size={18} color={palette.emerald[700]} />}
+              iconBg={palette.emerald[50]}
+              label="Chuyển phụ trách"
+              subtitle="Giao lead cho sale khác (cần duyệt)"
+              onPress={() => {
+                setMoreOpen(false);
+                Alert.alert('Sắp ra mắt', 'Chuyển phụ trách lead sẽ có ở phase tiếp.');
+              }}
+              comingSoon
+            />
+          </View>
+        </View>
+      </BottomSheetModal>
     </View>
   );
 }
 
-function Row({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+function SubAction({
+  icon,
+  label,
+  bg,
+  onPress,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  bg: string;
+  onPress?: () => void;
+}) {
   return (
-    <View className="px-4 py-3 flex-row items-center justify-between">
-      <Text variant="caption" className="text-text-secondary">{label}</Text>
-      <View className="flex-row items-center gap-1.5 flex-1 ml-3 justify-end">
+    <Pressable
+      onPress={onPress}
+      className="flex-1 items-center"
+      hitSlop={4}
+    >
+      <View
+        className="w-10 h-10 rounded-xl items-center justify-center"
+        style={{ backgroundColor: bg }}
+      >
         {icon}
-        <Text variant="body" className="text-text-primary" style={{ fontWeight: '500' }} numberOfLines={1}>
-          {value}
+      </View>
+      <Text
+        variant="caption"
+        style={{
+          color: semantic.text.primary,
+          fontFamily: 'BeVietnamPro_600SemiBold',
+          fontSize: 11,
+          marginTop: 4,
+        }}
+      >
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+function MoreMenuRow({
+  icon,
+  iconBg,
+  label,
+  subtitle,
+  onPress,
+  comingSoon,
+}: {
+  icon: React.ReactNode;
+  iconBg: string;
+  label: string;
+  subtitle: string;
+  onPress?: () => void;
+  comingSoon?: boolean;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      className="p-3 rounded-2xl flex-row items-center gap-3"
+      style={{
+        backgroundColor: palette.white,
+        borderWidth: 1,
+        borderColor: semantic.border.light,
+        opacity: comingSoon ? 0.7 : 1,
+      }}
+    >
+      <View
+        className="w-10 h-10 rounded-xl items-center justify-center"
+        style={{ backgroundColor: iconBg }}
+      >
+        {icon}
+      </View>
+      <View className="flex-1">
+        <Text
+          variant="body"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
+        >
+          {label}
+        </Text>
+        <Text variant="caption" className="text-text-secondary mt-0.5" numberOfLines={1}>
+          {subtitle}
         </Text>
       </View>
+      {comingSoon && (
+        <View
+          className="px-2 py-0.5 rounded-full"
+          style={{ backgroundColor: palette.sienna[100] }}
+        >
+          <Text
+            variant="caption"
+            style={{
+              color: palette.sienna[700],
+              fontFamily: 'BeVietnamPro_700Bold',
+              fontSize: 10,
+              letterSpacing: 0.3,
+            }}
+          >
+            SẮP RA MẮT
+          </Text>
+        </View>
+      )}
+    </Pressable>
+  );
+}
+
+function InfoChip({ icon, label }: { icon?: React.ReactNode; label: string }) {
+  return (
+    <View
+      className="flex-row items-center gap-1 px-2.5 py-1 rounded-full"
+      style={{ backgroundColor: palette.white, borderWidth: 1, borderColor: palette.sienna[100] }}
+    >
+      {icon}
+      <Text
+        variant="caption"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_500Medium', fontSize: 12 }}
+      >
+        {label}
+      </Text>
     </View>
   );
 }
 
-function sourceLabel(s: string) {
-  const map: Record<string, string> = {
-    NOXH_PLATFORM: 'noxh.net',
-    FACEBOOK_ADS: 'Facebook Ads',
-    HOTLINE: 'Hotline',
-    WALK_IN: 'Đến trực tiếp',
-    REFERRAL: 'Giới thiệu',
-    EVENT: 'Sự kiện',
-    ZALO: 'Zalo',
-    OTHER: 'Khác',
-  };
-  return map[s] ?? s;
-}
-
-function activityLabel(t: string) {
-  const map: Record<string, string> = {
-    CALL: '📞 Gọi điện',
-    SMS: '💬 Nhắn tin',
-    ZALO_MESSAGE: '💬 Zalo',
-    EMAIL: '📧 Email',
-    MEETING: '🤝 Gặp trực tiếp',
-    NOTE: '📝 Ghi chú',
-    STATUS_CHANGE: 'Đổi trạng thái',
-    ASSIGNMENT_CHANGE: 'Đổi phụ trách',
-    FOLLOWUP_SCHEDULED: 'Đặt lịch follow up',
-  };
-  return map[t] ?? t;
-}
-
-function outcomeLabel(o: string) {
-  const map: Record<string, string> = {
-    REACHED: 'Liên lạc được',
-    NO_ANSWER: 'Không bắt máy',
-    WRONG_NUMBER: 'Số sai',
-    CALLBACK_LATER: 'Hẹn gọi lại',
-    NOT_INTERESTED: 'Không quan tâm',
-    INTERESTED: 'Quan tâm',
-  };
-  return map[o] ?? o;
+function InfoRow({
+  icon,
+  label,
+  value,
+  last,
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  value: string;
+  last?: boolean;
+}) {
+  return (
+    <View
+      className="flex-row items-center py-2.5"
+      style={{
+        borderBottomWidth: last ? 0 : 1,
+        borderBottomColor: semantic.border.light,
+      }}
+    >
+      <View className="w-7 h-7 rounded-full bg-surface-alt items-center justify-center">
+        {icon ?? <View />}
+      </View>
+      <Text variant="body" className="text-text-secondary ml-3 mr-4 w-24">
+        {label}
+      </Text>
+      <Text
+        variant="body"
+        className="text-text-primary flex-1"
+        numberOfLines={2}
+        style={{ fontFamily: 'BeVietnamPro_500Medium' }}
+      >
+        {value}
+      </Text>
+    </View>
+  );
 }

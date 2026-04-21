@@ -36,6 +36,10 @@ export default function RootLayout() {
           name="(modal)/lead-offer"
           options={{ presentation: 'transparentModal', animation: 'fade' }}
         />
+        <Stack.Screen
+          name="(modal)/image-viewer"
+          options={{ presentation: 'fullScreenModal', animation: 'fade' }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>

@@ -72,7 +72,7 @@ export default function Home() {
       key: 'income',
       label: 'Thu nhập',
       icon: TrendingUp,
-      onPress: () => router.push('/(app)/(tabs)/me'),
+      onPress: () => router.push('/(app)/income'),
     },
   ];
 

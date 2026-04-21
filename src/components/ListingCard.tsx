@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Image, Pressable, View } from 'react-native';
-import { ChevronRight, Eye, Images, Orbit, TrendingUp } from 'lucide-react-native';
+import { Building2, ChevronRight, Eye, Images, Orbit, TrendingUp } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
 import { formatPricePerM2, formatVNDCompact } from '@/lib/format';
 import { palette, semantic } from '@/theme';
@@ -42,6 +43,7 @@ function StatusPill({ status }: { status: ListingStatus }) {
 export function ListingCard({ listing, onPress }: { listing: Listing; onPress?: () => void }) {
   const pricePerM2 = listing.listPricePerM2 ?? listing.listPrice / listing.areaM2;
   const isSold = listing.status === 'SOLD';
+  const [imgFailed, setImgFailed] = useState(false);
 
   return (
     <Pressable
@@ -60,11 +62,21 @@ export function ListingCard({ listing, onPress }: { listing: Listing; onPress?: 
     >
       {/* Cover image 16:10 + overlays */}
       <View className="relative" style={{ aspectRatio: 16 / 10 }}>
-        <Image
-          source={{ uri: listing.coverImage }}
-          style={{ width: '100%', height: '100%' }}
-          resizeMode="cover"
-        />
+        {imgFailed ? (
+          <View
+            className="w-full h-full items-center justify-center"
+            style={{ backgroundColor: semantic.action.primarySoft }}
+          >
+            <Building2 size={44} color={palette.sienna[300]} strokeWidth={1.5} />
+          </View>
+        ) : (
+          <Image
+            source={{ uri: listing.coverImage }}
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="cover"
+            onError={() => setImgFailed(true)}
+          />
+        )}
 
         {/* Top row: status + 4/4 */}
         <View className="absolute top-3 left-3 right-3 flex-row items-start justify-between">

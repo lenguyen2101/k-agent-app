@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, Pressable, TextInput, View } from 'react-native';
+import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { Plus, Search } from 'lucide-react-native';
 import { useLeads } from '@/store/leads';
@@ -120,9 +120,7 @@ export default function LeadsList() {
         visible={menuOpen}
         onClose={() => setMenuOpen(false)}
         onPickVoice={() => setVoiceOpen(true)}
-        onPickForm={() =>
-          Alert.alert('Điền form', 'Form thủ công sẽ ra mắt ở bản kế tiếp. Hiện tại hãy dùng voice.')
-        }
+        onPickForm={() => router.push('/(app)/leads/new')}
       />
 
       <VoiceLeadModal
