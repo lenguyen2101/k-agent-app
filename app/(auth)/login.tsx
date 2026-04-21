@@ -1,23 +1,54 @@
-import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Fingerprint } from 'lucide-react-native';
+import { Fingerprint, ScanFace } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { Text } from '@/components/ui/Text';
 import { useAuth } from '@/store/auth';
+import { authenticateBiometric, getBiometricCapability, type BiometricCapability } from '@/lib/biometric';
 import { palette, semantic, typography } from '@/theme';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [biometric, setBiometric] = useState<BiometricCapability | null>(null);
+  const [authing, setAuthing] = useState(false);
   const signIn = useAuth((s) => s.signIn);
+  const settings = useAuth((s) => s.settings);
+
+  useEffect(() => {
+    getBiometricCapability().then(setBiometric);
+  }, []);
+
+  const biometricAvailable =
+    biometric?.supported && biometric?.enrolled && settings.biometric;
 
   const onLogin = () => {
     signIn(phone || '0901234999');
     router.replace('/(app)/(tabs)');
   };
+
+  const onBiometric = async () => {
+    if (!biometric) return;
+    setAuthing(true);
+    const result = await authenticateBiometric(`Dùng ${biometric.labelVi} để đăng nhập K-Agent`);
+    setAuthing(false);
+    if (result.success) {
+      signIn('0901234999');
+      router.replace('/(app)/(tabs)');
+      return;
+    }
+    if (result.error && result.error !== 'cancelled' && result.error !== 'user_cancel') {
+      Alert.alert(
+        `${biometric.labelVi} không thành công`,
+        'Vui lòng thử lại hoặc dùng mật khẩu.'
+      );
+    }
+  };
+
+  const BioIcon = biometric?.kind === 'face' ? ScanFace : Fingerprint;
 
   return (
     <LinearGradient
@@ -93,13 +124,16 @@ export default function Login() {
 
               <Button label="Đăng nhập" onPress={onLogin} fullWidth />
 
-              <Button
-                label="Đăng nhập bằng vân tay"
-                variant="secondary"
-                onPress={onLogin}
-                fullWidth
-                leftIcon={<Fingerprint size={18} color={semantic.text.primary} />}
-              />
+              {biometricAvailable && (
+                <Button
+                  label={authing ? 'Đang xác thực...' : `Đăng nhập bằng ${biometric!.labelVi}`}
+                  variant="secondary"
+                  onPress={onBiometric}
+                  disabled={authing}
+                  fullWidth
+                  leftIcon={<BioIcon size={18} color={semantic.text.primary} />}
+                />
+              )}
 
               <Button
                 label="Quên mật khẩu?"

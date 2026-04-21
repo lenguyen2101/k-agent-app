@@ -1,4 +1,5 @@
-import { Alert, Pressable, ScrollView, Switch, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, Linking, Pressable, ScrollView, Switch, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -8,11 +9,18 @@ import {
   Globe,
   KeyRound,
   Moon,
+  ScanFace,
   Sun,
   Volume2,
   Wifi,
 } from 'lucide-react-native';
 import { useAuth, type LanguageCode, type ThemeMode } from '@/store/auth';
+import { getBiometricCapability, type BiometricCapability } from '@/lib/biometric';
+import {
+  getPushPermission,
+  requestPushPermission,
+  type PushPermissionStatus,
+} from '@/lib/notifications';
 import { Text } from '@/components/ui/Text';
 import { palette, semantic } from '@/theme';
 
@@ -20,6 +28,64 @@ export default function AppSettingsScreen() {
   const insets = useSafeAreaInsets();
   const settings = useAuth((s) => s.settings);
   const updateSettings = useAuth((s) => s.updateSettings);
+  const [biometric, setBiometric] = useState<BiometricCapability | null>(null);
+  const [pushStatus, setPushStatus] = useState<PushPermissionStatus>('undetermined');
+
+  useEffect(() => {
+    getBiometricCapability().then(setBiometric);
+    getPushPermission().then(setPushStatus);
+  }, []);
+
+  const handleBiometricToggle = async (next: boolean) => {
+    if (!next) {
+      updateSettings({ biometric: false });
+      return;
+    }
+    if (!biometric?.supported) {
+      Alert.alert('Không hỗ trợ', 'Thiết bị này không có cảm biến sinh trắc.');
+      return;
+    }
+    if (!biometric.enrolled) {
+      Alert.alert(
+        `${biometric.labelVi} chưa setup`,
+        `Vào Cài đặt hệ thống để thiết lập ${biometric.labelVi} trước khi bật trên K-Agent.`,
+        [
+          { text: 'Huỷ', style: 'cancel' },
+          { text: 'Mở Settings', onPress: () => Linking.openSettings() },
+        ]
+      );
+      return;
+    }
+    updateSettings({ biometric: true });
+  };
+
+  const handlePushToggle = async (next: boolean) => {
+    if (!next) {
+      updateSettings({ pushEnabled: false });
+      return;
+    }
+    const status = await requestPushPermission();
+    setPushStatus(status);
+    if (status === 'granted') {
+      updateSettings({ pushEnabled: true });
+    } else {
+      Alert.alert(
+        'Chưa cấp quyền thông báo',
+        'Vào Cài đặt hệ thống để bật Thông báo cho K-Agent.',
+        [
+          { text: 'Huỷ', style: 'cancel' },
+          { text: 'Mở Settings', onPress: () => Linking.openSettings() },
+        ]
+      );
+    }
+  };
+
+  const biometricLabel = biometric?.kind === 'face'
+    ? 'Đăng nhập bằng Face ID'
+    : biometric?.kind === 'fingerprint'
+      ? 'Đăng nhập bằng Touch ID'
+      : 'Đăng nhập sinh trắc';
+  const BiometricIcon = biometric?.kind === 'face' ? ScanFace : Fingerprint;
 
   const themeOptions: { key: ThemeMode; label: string; icon: React.ReactNode }[] = [
     { key: 'light', label: 'Sáng', icon: <Sun size={14} color={semantic.text.primary} /> },
@@ -62,12 +128,19 @@ export default function AppSettingsScreen() {
       <ScrollView contentContainerStyle={{ paddingVertical: 16, paddingBottom: 40 }}>
         <Section title="Bảo mật">
           <ToggleRow
-            icon={<Fingerprint size={18} color={semantic.action.primaryDeep} />}
+            icon={<BiometricIcon size={18} color={semantic.action.primaryDeep} />}
             iconBg={semantic.action.primarySoft}
-            label="Đăng nhập bằng Face ID"
-            subtitle="Xác thực sinh trắc khi mở app"
-            value={settings.biometric}
-            onValueChange={(v) => updateSettings({ biometric: v })}
+            label={biometricLabel}
+            subtitle={
+              biometric?.supported === false
+                ? 'Thiết bị không hỗ trợ sinh trắc'
+                : biometric?.enrolled === false
+                  ? `Chưa setup ${biometric.labelVi} trên device`
+                  : 'Xác thực sinh trắc khi mở app'
+            }
+            value={settings.biometric && biometric?.supported === true && biometric.enrolled === true}
+            disabled={biometric?.supported === false}
+            onValueChange={handleBiometricToggle}
           />
           <ActionRow
             icon={<KeyRound size={18} color={palette.blue[700]} />}
@@ -85,9 +158,13 @@ export default function AppSettingsScreen() {
             icon={<Bell size={18} color={palette.sienna[700]} />}
             iconBg={palette.sienna[50]}
             label="Push notification"
-            subtitle="Lead mới, follow-up, deal update"
-            value={settings.pushEnabled}
-            onValueChange={(v) => updateSettings({ pushEnabled: v })}
+            subtitle={
+              pushStatus === 'denied'
+                ? 'Đã tắt ở Settings hệ thống'
+                : 'Lead mới, follow-up, deal update'
+            }
+            value={settings.pushEnabled && pushStatus === 'granted'}
+            onValueChange={handlePushToggle}
           />
           <ToggleRow
             icon={<Volume2 size={18} color={palette.sienna[700]} />}

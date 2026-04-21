@@ -11,7 +11,6 @@ type Stat = {
 
 type Props = {
   title: string;
-  subtitle?: string;
   stats: [Stat, Stat, Stat] | [Stat, Stat, Stat, Stat];
   pipeline?: PipelineSegment[];
 };
@@ -30,7 +29,7 @@ const toneColor = {
   success: palette.emerald[600],
 } as const;
 
-export function HeroStatsCard({ title, subtitle, stats, pipeline }: Props) {
+export function HeroStatsCard({ title, stats, pipeline }: Props) {
   const total = pipeline?.reduce((s, p) => s + p.count, 0) ?? 0;
 
   return (
@@ -52,19 +51,12 @@ export function HeroStatsCard({ title, subtitle, stats, pipeline }: Props) {
         end={{ x: 1, y: 1 }}
         style={{ padding: 20 }}
       >
-        <View>
-          <Text
-            variant="caption"
-            style={{ color: semantic.action.primaryDeep, letterSpacing: 1, fontFamily: 'BeVietnamPro_600SemiBold' }}
-          >
-            {title.toUpperCase()}
-          </Text>
-          {subtitle && (
-            <Text variant="body" className="text-text-primary" style={{ marginTop: 4 }}>
-              {subtitle}
-            </Text>
-          )}
-        </View>
+        <Text
+          variant="h3"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
+        >
+          {title}
+        </Text>
 
         {pipeline && pipeline.length > 0 && (
           <View className="mt-4">
@@ -93,7 +85,7 @@ export function HeroStatsCard({ title, subtitle, stats, pipeline }: Props) {
               ))}
             </View>
             <Text variant="caption" className="text-text-tertiary" style={{ marginTop: 8 }}>
-              Tổng pipeline: {total} lead
+              Tổng cộng {total} lead
             </Text>
           </View>
         )}

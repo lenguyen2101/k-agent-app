@@ -3,8 +3,8 @@ import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   ChevronRight,
+  MessageSquare,
   PhoneCall,
-  Share2,
   Sparkles,
   TrendingUp,
   Users,
@@ -64,9 +64,10 @@ export default function Home() {
       onPress: () => router.push('/(app)/(tabs)/leads'),
     },
     {
-      key: 'share',
-      label: 'Giới thiệu',
-      icon: Share2,
+      key: 'chat',
+      label: 'AI Chat',
+      icon: MessageSquare,
+      onPress: () => router.push('/(app)/chat/new'),
     },
     {
       key: 'income',
@@ -93,8 +94,7 @@ export default function Home() {
 
         <View className="px-4 pt-5">
           <HeroStatsCard
-            title="Trung tâm điều khiển"
-            subtitle="Tổng quan hoạt động hôm nay"
+            title="Tổng quan hoạt động hôm nay"
             pipeline={pipeline}
             stats={[
               { label: 'Lead mới', value: newLeads.length, tone: 'accent' },
@@ -104,8 +104,22 @@ export default function Home() {
           />
         </View>
 
-        <View className="mx-4 mt-4 p-4 rounded-2xl bg-surface-card border border-border-light flex-row items-center justify-between">
-          <View className="flex-row items-center gap-3 flex-1">
+        {/* Combined receiving-lead card — toggle + demo offer banner trong 1 section */}
+        <View
+          className="mx-4 mt-4 rounded-2xl overflow-hidden"
+          style={{
+            backgroundColor: palette.white,
+            borderWidth: 1,
+            borderColor: semantic.border.light,
+            shadowColor: palette.obsidian[900],
+            shadowOpacity: 0.04,
+            shadowRadius: 8,
+            shadowOffset: { width: 0, height: 2 },
+            elevation: 2,
+          }}
+        >
+          {/* Top row — status + toggle */}
+          <View className="p-4 flex-row items-center gap-3">
             <View
               className="w-10 h-10 rounded-full items-center justify-center"
               style={{ backgroundColor: isOnline ? palette.emerald[100] : semantic.surface.alt }}
@@ -123,51 +137,49 @@ export default function Home() {
                 {isOnline ? 'AI sẽ gửi lead mới cho bạn' : 'Bật để bắt đầu nhận lead'}
               </Text>
             </View>
+            <Switch
+              value={isOnline}
+              onValueChange={toggleOnline}
+              trackColor={{ true: palette.emerald[100], false: semantic.border.default }}
+              thumbColor={isOnline ? palette.emerald[500] : palette.white}
+              ios_backgroundColor={semantic.border.default}
+            />
           </View>
-          <Switch
-            value={isOnline}
-            onValueChange={toggleOnline}
-            trackColor={{ true: palette.emerald[100], false: semantic.border.default }}
-            thumbColor={isOnline ? palette.emerald[500] : palette.white}
-            ios_backgroundColor={semantic.border.default}
-          />
-        </View>
 
-        <Pressable onPress={() => router.push('/(modal)/lead-offer')} className="mx-4 mt-4">
-          <View
-            className="rounded-2xl overflow-hidden"
-            style={{
-              shadowColor: semantic.action.primaryDeep,
-              shadowOpacity: 0.25,
-              shadowRadius: 16,
-              shadowOffset: { width: 0, height: 8 },
-              elevation: 6,
-            }}
-          >
-            <LinearGradient
-              colors={[...semantic.gradient.heroBrand]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}
-            >
-              <View
-                className="w-11 h-11 rounded-full items-center justify-center"
-                style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+          {/* Bottom row — demo offer, chỉ hiện khi online */}
+          {isOnline && (
+            <Pressable onPress={() => router.push('/(modal)/lead-offer')}>
+              <LinearGradient
+                colors={[...semantic.gradient.heroBrand]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}
               >
-                <Sparkles size={22} color={palette.white} strokeWidth={2} />
-              </View>
-              <View className="flex-1">
-                <Text variant="h3" style={{ color: palette.white }}>
-                  Demo: Lead mới đến!
-                </Text>
-                <Text variant="caption" style={{ color: 'rgba(247,243,237,0.85)', marginTop: 2 }}>
-                  Tap để xem màn hình nhận lead
-                </Text>
-              </View>
-              <ChevronRight size={20} color={palette.white} />
-            </LinearGradient>
-          </View>
-        </Pressable>
+                <View
+                  className="w-10 h-10 rounded-full items-center justify-center"
+                  style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+                >
+                  <Sparkles size={20} color={palette.white} strokeWidth={2} />
+                </View>
+                <View className="flex-1">
+                  <Text
+                    variant="body"
+                    style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
+                  >
+                    Demo: Lead mới đến!
+                  </Text>
+                  <Text
+                    variant="caption"
+                    style={{ color: 'rgba(247,243,237,0.85)', marginTop: 2, fontSize: 11 }}
+                  >
+                    Tap để xem màn hình nhận lead
+                  </Text>
+                </View>
+                <ChevronRight size={18} color={palette.white} />
+              </LinearGradient>
+            </Pressable>
+          )}
+        </View>
 
         <View className="mt-6 px-4">
           <View className="flex-row items-center justify-between mb-3">

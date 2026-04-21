@@ -1,10 +1,11 @@
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   ArrowDownToLine,
   ArrowLeft,
+  BellRing,
   ChevronRight,
   ExternalLink,
   FileText,
@@ -18,6 +19,10 @@ import {
 } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
 import { useAppStatus } from '@/store/appStatus';
+import {
+  requestPushPermission,
+  scheduleDemoLeadOfferPush,
+} from '@/lib/notifications';
 import { palette, semantic } from '@/theme';
 
 const APP_VERSION = '1.0.0';
@@ -232,6 +237,26 @@ export default function About() {
             onPress={() => {
               resetOnboarding();
               router.replace('/splash');
+            }}
+          />
+          <DebugRow
+            icon={<BellRing size={18} color={palette.emerald[700]} />}
+            iconBg={palette.emerald[50]}
+            label="Mô phỏng push Lead mới"
+            onPress={async () => {
+              const status = await requestPushPermission();
+              if (status !== 'granted') {
+                Alert.alert(
+                  'Chưa cấp quyền thông báo',
+                  'Vào Settings cấp quyền Notification cho K-Agent.'
+                );
+                return;
+              }
+              await scheduleDemoLeadOfferPush(3);
+              Alert.alert(
+                'Đã lên lịch',
+                'Push sẽ đến sau 3 giây. Đóng app hoặc khoá màn hình để xem banner trên lock screen.'
+              );
             }}
             last
           />
