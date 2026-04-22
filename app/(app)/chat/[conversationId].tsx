@@ -122,7 +122,7 @@ function streamText(
 }
 
 export default function ChatConversation() {
-  const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
+  const { conversationId, prompt } = useLocalSearchParams<{ conversationId: string; prompt?: string }>();
   const insets = useSafeAreaInsets();
   const [messages, setMessages] = useState<ChatMessage[]>(
     INITIAL_MESSAGES[conversationId ?? ''] ?? []
@@ -133,6 +133,7 @@ export default function ChatConversation() {
   const [actionsOpen, setActionsOpen] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const cancelRef = useRef<(() => void) | null>(null);
+  const promptConsumedRef = useRef(false);
 
   useEffect(() => {
     scrollRef.current?.scrollToEnd({ animated: true });
@@ -141,6 +142,15 @@ export default function ChatConversation() {
   useEffect(() => {
     return () => cancelRef.current?.();
   }, []);
+
+  // Auto-send prompt đến từ suggestion tap — chỉ fire 1 lần sau mount
+  useEffect(() => {
+    if (prompt && !promptConsumedRef.current) {
+      promptConsumedRef.current = true;
+      sendMessage(prompt);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prompt]);
 
   const sendMessage = (rawText: string) => {
     const text = rawText.trim();

@@ -175,10 +175,12 @@ export default function Me() {
               Thu nhập của tôi
             </Text>
             <Text
-              variant="h3"
               style={{
                 color: palette.obsidian[50],
                 fontFamily: 'BeVietnamPro_700Bold',
+                fontSize: 16,
+                lineHeight: 22,
+                marginTop: 1,
               }}
             >
               Tổng kết thu nhập & hoa hồng

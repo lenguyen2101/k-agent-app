@@ -77,6 +77,8 @@ export default function ListingDetail() {
         >
           <ArrowLeft size={22} color={semantic.text.primary} />
         </Pressable>
+        {/* Spacer để cân với 2 action icon bên phải (heart + share) */}
+        <View className="w-10" />
         <View className="flex-1 items-center">
           <Text
             variant="h3"
@@ -118,7 +120,14 @@ export default function ListingDetail() {
 
         {/* Title + meta */}
         <View className="px-4 pt-4">
-          <Text variant="h1" className="text-text-title" numberOfLines={2}>
+          <Text
+            style={{
+              color: semantic.text.primary,
+              fontFamily: 'BeVietnamPro_700Bold',
+              fontSize: 18,
+              lineHeight: 24,
+            }}
+          >
             {listing.title}
           </Text>
           <View className="flex-row items-center gap-3 mt-2">

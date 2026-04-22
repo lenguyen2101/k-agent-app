@@ -50,13 +50,24 @@ export default function Scanner() {
     if (cooldownRef.current || scanned) return;
     const data = parseCccd(raw);
     if (!data) {
-      // QR không phải CCCD — rung nhẹ + hiện toast, cho scan tiếp
+      // QR detect được nhưng parser không hiểu → show raw để debug.
       cooldownRef.current = true;
       Vibration.vibrate(80);
+      const preview = raw.length > 200 ? `${raw.slice(0, 200)}...` : raw;
       Alert.alert(
-        'Không phải QR CCCD',
-        'Mã này không đúng format Căn cước công dân. Vui lòng quét mặt sau thẻ CCCD.',
-        [{ text: 'OK', onPress: () => (cooldownRef.current = false) }]
+        'QR không đúng format CCCD',
+        `Camera đọc được QR nhưng không khớp spec chuẩn (7 field ngăn "|"). Vui lòng quét QR ở mặt trước thẻ CCCD.\n\nNội dung raw:\n${preview}`,
+        [
+          { text: 'Thử lại', onPress: () => (cooldownRef.current = false) },
+          {
+            text: 'Copy raw',
+            onPress: () => {
+              // Dev có thể share raw string này để mình chỉnh parser
+              console.log('[CCCD raw QR]', raw);
+              cooldownRef.current = false;
+            },
+          },
+        ]
       );
       return;
     }
@@ -219,7 +230,7 @@ export default function Scanner() {
               variant="caption"
               style={{ color: palette.white, flex: 1, lineHeight: 18 }}
             >
-              Đưa QR mặt sau CCCD vào khung. Camera sẽ tự động nhận diện.
+              Đưa mã QR tại mặt trước CCCD vào khung để quét thông tin.
             </Text>
           </View>
 

@@ -5,7 +5,6 @@ import {
   ChevronRight,
   FileText,
   MessageSquare,
-  Plus,
   Sparkles,
   Wand2,
 } from 'lucide-react-native';
@@ -64,29 +63,10 @@ export default function Chat() {
     <Screen>
       <ScrollView contentContainerClassName="pb-8">
         {/* Hero */}
-        <View className="px-4 pt-1 pb-4 flex-row items-start justify-between">
-          <View className="flex-1">
-            <Text variant="h2" className="text-text-title">
-              K-Agent AI
-            </Text>
-            <Text variant="body" className="text-text-secondary mt-1">
-              Trợ lý RAG — rổ hàng, NOXH, luật, chính sách
-            </Text>
-          </View>
-          <Pressable
-            onPress={() => router.push('/(app)/chat/new')}
-            className="w-11 h-11 rounded-full items-center justify-center"
-            style={{
-              backgroundColor: semantic.action.primary,
-              shadowColor: semantic.action.primaryDeep,
-              shadowOpacity: 0.25,
-              shadowRadius: 10,
-              shadowOffset: { width: 0, height: 4 },
-              elevation: 4,
-            }}
-          >
-            <Plus size={22} color={palette.white} strokeWidth={2.4} />
-          </Pressable>
+        <View className="px-4 pt-1 pb-4">
+          <Text variant="h2" className="text-text-title">
+            K-Agent AI
+          </Text>
         </View>
 
         {/* Hero CTA — bắt đầu chat mới */}
@@ -148,7 +128,12 @@ export default function Chat() {
               return (
                 <Pressable
                   key={idx}
-                  onPress={() => router.push('/(app)/chat/new')}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(app)/chat/[conversationId]',
+                      params: { conversationId: 'new', prompt: s.title },
+                    })
+                  }
                   className="p-3.5 rounded-2xl flex-row items-center gap-3"
                   style={{
                     backgroundColor: palette.white,
@@ -226,10 +211,14 @@ export default function Chat() {
                   <MessageSquare size={16} color={semantic.action.primaryDeep} strokeWidth={2.2} />
                 </View>
                 <View className="flex-1">
-                  <Text variant="h3" className="text-text-primary" numberOfLines={1}>
+                  <Text
+                    variant="body"
+                    style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
+                    numberOfLines={2}
+                  >
                     {c.title}
                   </Text>
-                  <Text variant="caption" className="text-text-secondary mt-0.5" numberOfLines={2}>
+                  <Text variant="caption" className="text-text-tertiary mt-0.5" numberOfLines={2}>
                     {c.snippet}
                   </Text>
                   <View className="flex-row items-center gap-3 mt-2">

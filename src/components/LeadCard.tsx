@@ -5,6 +5,7 @@ import { formatPhone, formatRelativeTime, isOverdue } from '@/lib/format';
 import { palette, semantic } from '@/theme';
 import { StatusBadge } from './StatusBadge';
 import { ActionChip } from './ActionChip';
+import { PriorityFrame, type FrameVariant } from './PriorityFrame';
 import { Text } from '@/components/ui/Text';
 
 function leadInitials(name: string) {
@@ -27,20 +28,33 @@ function actionChipFor(lead: Lead): { kind: 'priority' | 'offer' | 'deal'; label
 export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }) {
   const overdue = isOverdue(lead.nextFollowupAt);
   const chip = actionChipFor(lead);
+  const frameVariant: FrameVariant | null = chip
+    ? chip.kind === 'priority'
+      ? 'priority'
+      : chip.kind === 'offer'
+        ? 'offer'
+        : chip.kind === 'deal'
+          ? 'deal'
+          : null
+    : null;
+  const wrapped = frameVariant !== null;
 
-  return (
+  // Khi wrap PriorityFrame → frame tạo border gradient + shadow đậm. Inner
+  // card bỏ border, shadow để tránh chồng lớp; rounded-2xl giữ cho visual
+  // continuity với frame rounded 16.
+  const cardContent = (
     <Pressable
       onPress={onPress}
       className="rounded-2xl p-4"
       style={{
         backgroundColor: semantic.surface.card,
-        borderWidth: 1,
+        borderWidth: wrapped ? 0 : 1,
         borderColor: overdue ? semantic.urgency.bg : semantic.border.light,
         shadowColor: palette.obsidian[900],
-        shadowOpacity: 0.04,
+        shadowOpacity: wrapped ? 0 : 0.04,
         shadowRadius: 8,
         shadowOffset: { width: 0, height: 2 },
-        elevation: 2,
+        elevation: wrapped ? 0 : 2,
       }}
     >
       <View className="flex-row items-start gap-3">
@@ -100,10 +114,15 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
                 </>
               )}
             </View>
-            {chip && <ActionChip kind={chip.kind} label={chip.label} size="sm" />}
+            {chip && !wrapped && (
+              <ActionChip kind={chip.kind} label={chip.label} size="sm" />
+            )}
           </View>
         </View>
       </View>
     </Pressable>
   );
+
+  if (frameVariant) return <PriorityFrame variant={frameVariant}>{cardContent}</PriorityFrame>;
+  return cardContent;
 }
