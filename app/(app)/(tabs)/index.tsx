@@ -108,7 +108,7 @@ export default function Home() {
         <View
           className="mx-4 mt-4 rounded-2xl overflow-hidden"
           style={{
-            backgroundColor: palette.white,
+            backgroundColor: semantic.surface.card,
             borderWidth: 1,
             borderColor: semantic.border.light,
             shadowColor: palette.obsidian[900],
@@ -130,10 +130,10 @@ export default function Home() {
               />
             </View>
             <View className="flex-1">
-              <Text variant="h3" className="text-text-primary">
+              <Text variant="h3" style={{ color: semantic.text.primary }}>
                 {isOnline ? 'Đang nhận lead' : 'Tạm tắt nhận lead'}
               </Text>
-              <Text variant="caption" className="text-text-secondary mt-0.5">
+              <Text variant="caption" style={{ color: semantic.text.secondary, marginTop: 2 }}>
                 {isOnline ? 'AI sẽ gửi lead mới cho bạn' : 'Bật để bắt đầu nhận lead'}
               </Text>
             </View>
@@ -183,7 +183,7 @@ export default function Home() {
 
         <View className="mt-6 px-4">
           <View className="flex-row items-center justify-between mb-3">
-            <Text variant="h3" className="text-text-primary">
+            <Text variant="h3" style={{ color: semantic.text.primary }}>
               Cần follow up hôm nay
             </Text>
             {overdueLeads.length > 0 && (
@@ -196,8 +196,15 @@ export default function Home() {
           </View>
           <View className="gap-3">
             {overdueLeads.length === 0 ? (
-              <View className="bg-surface-card rounded-2xl border border-border-light p-6 items-center">
-                <Text variant="body" className="text-text-secondary">
+              <View
+                className="rounded-2xl p-6 items-center"
+                style={{
+                  backgroundColor: semantic.surface.card,
+                  borderWidth: 1,
+                  borderColor: semantic.border.light,
+                }}
+              >
+                <Text variant="body" style={{ color: semantic.text.secondary }}>
                   Chưa có lead nào quá hạn
                 </Text>
               </View>

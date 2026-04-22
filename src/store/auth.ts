@@ -11,14 +11,12 @@ type AuthUser = {
   noxhCertified?: boolean;
 };
 
-export type ThemeMode = 'light' | 'dark' | 'auto';
 export type LanguageCode = 'vi' | 'en';
 
 export type AppSettings = {
   biometric: boolean;           // Face ID / Touch ID khi mở app
   pushEnabled: boolean;         // nhận push notification
   pushSound: boolean;           // âm báo khi có lead mới
-  theme: ThemeMode;
   language: LanguageCode;
   syncOnCellular: boolean;      // sync qua 4G hay chỉ WiFi
 };
@@ -27,7 +25,6 @@ const defaultSettings: AppSettings = {
   biometric: true,
   pushEnabled: true,
   pushSound: true,
-  theme: 'light',
   language: 'vi',
   syncOnCellular: true,
 };

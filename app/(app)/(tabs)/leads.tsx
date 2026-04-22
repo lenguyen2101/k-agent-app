@@ -40,28 +40,43 @@ export default function LeadsList() {
 
   return (
     <Screen bg="surface">
-      <View className="px-4 pt-2 pb-3 bg-white border-b border-border-light">
+      <View
+        className="px-4 pt-2 pb-3"
+        style={{
+          backgroundColor: semantic.surface.card,
+          borderBottomWidth: 1,
+          borderBottomColor: semantic.border.light,
+        }}
+      >
         <View className="flex-row items-baseline justify-between mb-3">
-          <Text variant="h2" className="text-text-title">Lead của tôi</Text>
-          <Text variant="caption" className="text-text-tertiary">
+          <Text variant="h2" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}>
+            Lead của tôi
+          </Text>
+          <Text variant="caption" style={{ color: semantic.text.tertiary }}>
             {filtered.length} kết quả
           </Text>
         </View>
 
-        <View className="flex-row items-center bg-surface-alt rounded-md h-11 px-3 gap-2 border border-border-light">
+        <View
+          className="flex-row items-center rounded-md h-11 px-3 gap-2"
+          style={{
+            backgroundColor: semantic.surface.alt,
+            borderWidth: 1,
+            borderColor: semantic.border.light,
+          }}
+        >
           <Search size={18} color={semantic.text.tertiary} />
           <TextInput
             value={search}
             onChangeText={setSearch}
             placeholder="Tìm theo tên hoặc SĐT"
             placeholderTextColor={semantic.text.tertiary}
-            style={typography.body}
-            className="flex-1 text-text-primary"
+            style={[typography.body, { flex: 1, color: semantic.text.primary }]}
           />
         </View>
       </View>
 
-      <View className="py-3 bg-white">
+      <View className="py-3" style={{ backgroundColor: semantic.surface.card }}>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -73,11 +88,20 @@ export default function LeadsList() {
             return (
               <Pressable
                 onPress={() => setFilter(item.key)}
-                className={`px-3.5 h-9 rounded-full items-center justify-center border ${
-                  active ? 'bg-text-primary border-text-primary' : 'bg-white border-border'
-                }`}
+                className="px-3.5 h-9 rounded-full items-center justify-center"
+                style={{
+                  backgroundColor: active ? semantic.text.primary : semantic.surface.card,
+                  borderWidth: 1,
+                  borderColor: active ? semantic.text.primary : semantic.border.default,
+                }}
               >
-                <Text variant="body" className={active ? 'text-white' : 'text-text-secondary'} style={{ fontWeight: '600' }}>
+                <Text
+                  variant="body"
+                  style={{
+                    color: active ? semantic.surface.card : semantic.text.secondary,
+                    fontWeight: '600',
+                  }}
+                >
                   {item.label}
                 </Text>
               </Pressable>
@@ -95,7 +119,7 @@ export default function LeadsList() {
         )}
         ListEmptyComponent={
           <View className="items-center py-12">
-            <Text variant="body" className="text-text-secondary">
+            <Text variant="body" style={{ color: semantic.text.secondary }}>
               Không tìm thấy lead phù hợp
             </Text>
           </View>
@@ -104,8 +128,9 @@ export default function LeadsList() {
 
       <Pressable
         onPress={() => setMenuOpen(true)}
-        className="absolute bottom-6 right-6 w-14 h-14 rounded-full bg-primary items-center justify-center"
+        className="absolute bottom-6 right-6 w-14 h-14 rounded-full items-center justify-center"
         style={{
+          backgroundColor: semantic.action.primary,
           shadowColor: palette.slate[900],
           shadowOpacity: 0.15,
           shadowRadius: 12,

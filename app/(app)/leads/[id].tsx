@@ -86,8 +86,11 @@ export default function LeadDetail() {
 
   if (!lead) {
     return (
-      <View className="flex-1 items-center justify-center bg-surface">
-        <Text variant="body" className="text-text-secondary">Không tìm thấy lead</Text>
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: semantic.surface.background }}
+      >
+        <Text variant="body" style={{ color: semantic.text.secondary }}>Không tìm thấy lead</Text>
       </View>
     );
   }
@@ -96,11 +99,17 @@ export default function LeadDetail() {
   const groupColor = semantic.leadGroup[group].dot;
 
   return (
-    <View className="flex-1 bg-surface">
+    <View className="flex-1" style={{ backgroundColor: semantic.surface.background }}>
       {/* Custom header */}
       <View
-        className="bg-white border-b border-border-light flex-row items-center px-2"
-        style={{ paddingTop: insets.top + 4, paddingBottom: 10 }}
+        className="flex-row items-center px-2"
+        style={{
+          backgroundColor: semantic.surface.card,
+          borderBottomWidth: 1,
+          borderBottomColor: semantic.border.light,
+          paddingTop: insets.top + 4,
+          paddingBottom: 10,
+        }}
       >
         <Pressable
           onPress={() => router.back()}
@@ -135,7 +144,12 @@ export default function LeadDetail() {
 
       {/* Sub-action bar — sticky dưới header, 4 action: Gọi/SMS/Zalo/More */}
       <View
-        className="bg-white border-b border-border-light flex-row px-3 py-2.5"
+        className="flex-row px-3 py-2.5"
+        style={{
+          backgroundColor: semantic.surface.card,
+          borderBottomWidth: 1,
+          borderBottomColor: semantic.border.light,
+        }}
       >
         <SubAction
           icon={<Phone size={18} color={palette.emerald[700]} strokeWidth={2.2} />}
@@ -242,7 +256,14 @@ export default function LeadDetail() {
         </View>
 
         {/* Info card */}
-        <View className="mx-4 mt-4 p-4 rounded-2xl bg-surface-card border border-border-light">
+        <View
+          className="mx-4 mt-4 p-4 rounded-2xl"
+          style={{
+            backgroundColor: semantic.surface.card,
+            borderWidth: 1,
+            borderColor: semantic.border.light,
+          }}
+        >
           <Text variant="h3" className="text-text-primary mb-1">
             Thông tin lead
           </Text>
@@ -426,8 +447,13 @@ export default function LeadDetail() {
 
       {/* Sticky bottom: Add activity */}
       <View
-        className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 pt-3"
-        style={{ paddingBottom: insets.bottom > 0 ? insets.bottom : 12 }}
+        className="absolute bottom-0 left-0 right-0 px-4 pt-3"
+        style={{
+          backgroundColor: semantic.surface.card,
+          borderTopWidth: 1,
+          borderTopColor: semantic.border.light,
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 12,
+        }}
       >
         <Pressable
           onPress={() => setSheetOpen(true)}

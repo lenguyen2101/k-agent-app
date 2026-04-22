@@ -71,8 +71,6 @@ export const semantic = {
     dot: palette.red[500],
   },
 
-  // Lead status — 6 group color tokens. Map LeadStatus → group ở types/lead.ts.
-  // NEW = urgency crimson (decouple khỏi brand sienna).
   leadGroup: {
     new:       { bg: palette.red[50],      fg: palette.red[600],     dot: palette.red[500] },
     engaged:   { bg: palette.blue[50],     fg: palette.blue[700],    dot: palette.blue[600] },
@@ -82,8 +80,6 @@ export const semantic = {
     ended:     { bg: palette.slate[100],   fg: palette.slate[600],   dot: palette.slate[400] },
   },
 
-  // Action chip — OneHub-style task priority chips.
-  // Ưu tiên (red), Đề nghị mua (green), Giao dịch (violet).
   actionChip: {
     priority:  { bg: palette.red[50],     fg: palette.red[600] },
     offer:     { bg: palette.green[50],   fg: palette.emerald[700] },
@@ -91,12 +87,6 @@ export const semantic = {
     network:   { bg: palette.blue[50],    fg: palette.blue[700] },
   },
 
-  // Gradient tokens — array of color stops cho LinearGradient.
-  // heroBrand: sienna immersive (Login, LeadOffer, premium CTA) — mahogany → sienna → warm glow.
-  // heroDark: obsidian dark immersive (future dark-first screens).
-  // statCardSoft: sienna light tint → white, diagonal — "Trung tâm điều khiển" card clean light bg.
-  // cta: 2-stop subtle sienna cho primary button depth touch.
-  // ctaDark: obsidian depth cho dark button variant (future).
   gradient: {
     heroBrand:    [palette.sienna[900], palette.sienna[700], palette.sienna[500], palette.sienna[400]] as readonly [string, string, string, string],
     heroDark:     [palette.obsidian[900], palette.obsidian[700], palette.obsidian[500]] as readonly [string, string, string],

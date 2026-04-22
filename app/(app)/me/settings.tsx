@@ -8,13 +8,11 @@ import {
   Fingerprint,
   Globe,
   KeyRound,
-  Moon,
   ScanFace,
-  Sun,
   Volume2,
   Wifi,
 } from 'lucide-react-native';
-import { useAuth, type LanguageCode, type ThemeMode } from '@/store/auth';
+import { useAuth, type LanguageCode } from '@/store/auth';
 import { getBiometricCapability, type BiometricCapability } from '@/lib/biometric';
 import {
   getPushPermission,
@@ -86,12 +84,6 @@ export default function AppSettingsScreen() {
       ? 'Đăng nhập bằng Touch ID'
       : 'Đăng nhập sinh trắc';
   const BiometricIcon = biometric?.kind === 'face' ? ScanFace : Fingerprint;
-
-  const themeOptions: { key: ThemeMode; label: string; icon: React.ReactNode }[] = [
-    { key: 'light', label: 'Sáng', icon: <Sun size={14} color={semantic.text.primary} /> },
-    { key: 'dark',  label: 'Tối',  icon: <Moon size={14} color={semantic.text.primary} /> },
-    { key: 'auto', label: 'Tự động', icon: <Sun size={14} color={semantic.text.primary} /> },
-  ];
 
   const langOptions: { key: LanguageCode; label: string }[] = [
     { key: 'vi', label: 'Tiếng Việt' },
@@ -178,23 +170,6 @@ export default function AppSettingsScreen() {
         </Section>
 
         <Section title="Hiển thị">
-          <OptionGroupRow
-            icon={<Sun size={18} color={palette.sienna[700]} />}
-            iconBg={palette.sienna[50]}
-            label="Giao diện"
-            options={themeOptions.map((o) => ({
-              key: o.key,
-              label: o.label,
-              active: settings.theme === o.key,
-              onPress: () => {
-                if (o.key === 'dark' || o.key === 'auto') {
-                  Alert.alert('Sắp ra mắt', 'Dark mode sẽ ra mắt ở phase tiếp.');
-                  return;
-                }
-                updateSettings({ theme: o.key });
-              },
-            }))}
-          />
           <OptionGroupRow
             icon={<Globe size={18} color={palette.emerald[700]} />}
             iconBg={palette.emerald[50]}

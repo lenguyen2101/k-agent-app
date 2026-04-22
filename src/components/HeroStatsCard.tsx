@@ -78,13 +78,16 @@ export function HeroStatsCard({ title, stats, pipeline }: Props) {
               {pipeline.map((seg) => (
                 <View key={seg.key} className="flex-row items-center gap-1.5">
                   <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: seg.color }} />
-                  <Text variant="caption" className="text-text-secondary">
+                  <Text variant="caption" style={{ color: semantic.text.secondary }}>
                     {seg.label} · {seg.count}
                   </Text>
                 </View>
               ))}
             </View>
-            <Text variant="caption" className="text-text-tertiary" style={{ marginTop: 8 }}>
+            <Text
+              variant="caption"
+              style={{ color: semantic.text.tertiary, marginTop: 8 }}
+            >
               Tổng cộng {total} lead
             </Text>
           </View>
@@ -104,7 +107,10 @@ export function HeroStatsCard({ title, stats, pipeline }: Props) {
               >
                 {s.value}
               </Text>
-              <Text variant="caption" className="text-text-secondary" style={{ marginTop: 2 }}>
+              <Text
+                variant="caption"
+                style={{ color: semantic.text.secondary, marginTop: 2 }}
+              >
                 {s.label}
               </Text>
             </View>

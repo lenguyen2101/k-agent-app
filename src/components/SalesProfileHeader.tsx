@@ -37,14 +37,17 @@ export function SalesProfileHeader({ name, team, unreadCount = 0, onBellPress }:
         <View className="flex-1">
           <Text
             variant="h3"
-            className="text-text-primary"
-            style={{ fontFamily: 'BeVietnamPro_700Bold' }}
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
             numberOfLines={1}
           >
             {name}
           </Text>
           {team && (
-            <Text variant="caption" className="text-text-secondary mt-0.5" numberOfLines={1}>
+            <Text
+              variant="caption"
+              style={{ color: semantic.text.secondary, marginTop: 2 }}
+              numberOfLines={1}
+            >
               {team}
             </Text>
           )}

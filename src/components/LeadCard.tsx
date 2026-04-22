@@ -31,8 +31,9 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
   return (
     <Pressable
       onPress={onPress}
-      className="bg-surface-card rounded-2xl p-4 active:bg-surface-hover"
+      className="rounded-2xl p-4"
       style={{
+        backgroundColor: semantic.surface.card,
         borderWidth: 1,
         borderColor: overdue ? semantic.urgency.bg : semantic.border.light,
         shadowColor: palette.obsidian[900],
@@ -55,12 +56,12 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
         <View className="flex-1">
           <View className="flex-row items-start justify-between gap-2">
             <View className="flex-1">
-              <Text variant="h3" className="text-text-primary" numberOfLines={1}>
+              <Text variant="h3" style={{ color: semantic.text.primary }} numberOfLines={1}>
                 {lead.fullName}
               </Text>
               <View className="flex-row items-center mt-0.5 gap-1.5">
                 <Phone size={13} color={semantic.text.tertiary} />
-                <Text variant="body" className="text-text-secondary">
+                <Text variant="body" style={{ color: semantic.text.secondary }}>
                   {formatPhone(lead.phone)}
                 </Text>
               </View>
@@ -70,7 +71,11 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
 
           <View className="flex-row items-center mt-2 gap-1.5">
             <Building2 size={13} color={semantic.text.tertiary} />
-            <Text variant="caption" className="text-text-secondary flex-1" numberOfLines={1}>
+            <Text
+              variant="caption"
+              style={{ color: semantic.text.secondary, flex: 1 }}
+              numberOfLines={1}
+            >
               {lead.primaryProject.shortName}
               {lead.unitTypeInterests?.length ? ` · ${lead.unitTypeInterests.join('/')}` : ''}
             </Text>
