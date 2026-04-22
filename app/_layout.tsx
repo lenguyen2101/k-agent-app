@@ -63,6 +63,10 @@ export default function RootLayout() {
           options={{ presentation: 'fullScreenModal', animation: 'fade' }}
         />
         <Stack.Screen
+          name="(modal)/project-gallery"
+          options={{ presentation: 'fullScreenModal', animation: 'fade' }}
+        />
+        <Stack.Screen
           name="(modal)/scanner"
           options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}
         />
