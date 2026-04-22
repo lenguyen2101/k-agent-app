@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Calendar } from 'lucide-react-native';
+import { Calendar, ChevronRight, ScanLine, ShieldCheck } from 'lucide-react-native';
 import { projects } from '@/mock/projects';
 import type { LeadSource, Project } from '@/types/lead';
 import { Text } from '@/components/ui/Text';
+import { useScanResult } from '@/store/scanResult';
 import { palette, semantic, typography } from '@/theme';
 
 export type LeadFormValue = {
@@ -84,6 +86,29 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
   const [followupKey, setFollowupKey] = useState<string>(
     presetKeyFrom(initial?.nextFollowupAt)
   );
+  const [cccdMasked, setCccdMasked] = useState<string | null>(null);
+
+  const pendingScan = useScanResult((s) => s.pending);
+  const consumeScan = useScanResult((s) => s.consume);
+
+  // Khi user scan CCCD xong + router.back về form → fill fullName + notes (CCCD, địa chỉ).
+  // Phone giữ nguyên để user tự nhập (CCCD không có phone).
+  useEffect(() => {
+    if (!pendingScan) return;
+    const data = consumeScan();
+    if (!data) return;
+    setFullName(data.fullName);
+    const scanNote = [
+      `CCCD: ${data.idNumber}`,
+      `Giới tính: ${data.gender}`,
+      `Sinh: ${data.birthDate}`,
+      data.address ? `Địa chỉ: ${data.address}` : null,
+    ]
+      .filter(Boolean)
+      .join(' · ');
+    setNotes((prev) => (prev.trim() ? `${prev}\n\n${scanNote}` : scanNote));
+    setCccdMasked(`****${data.idNumber.slice(-4)}`);
+  }, [pendingScan, consumeScan]);
 
   const canSave = useMemo(
     () => fullName.trim().length > 0 && /^0\d{9}$/.test(phone.trim()) && !!project,
@@ -132,6 +157,52 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
         contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Scan CCCD CTA — fill nhanh họ tên + địa chỉ + CCCD */}
+        <Pressable
+          onPress={() => router.push('/(modal)/scanner')}
+          className="flex-row items-center gap-3 p-4 rounded-2xl mb-5"
+          style={{
+            backgroundColor: cccdMasked ? palette.emerald[50] : semantic.action.primarySoft,
+            borderWidth: 1,
+            borderColor: cccdMasked ? palette.emerald[50] : palette.sienna[100],
+          }}
+        >
+          <View
+            className="w-11 h-11 rounded-xl items-center justify-center"
+            style={{
+              backgroundColor: cccdMasked ? palette.emerald[700] : semantic.action.primary,
+            }}
+          >
+            {cccdMasked ? (
+              <ShieldCheck size={22} color={palette.white} strokeWidth={2.2} />
+            ) : (
+              <ScanLine size={22} color={palette.white} strokeWidth={2.2} />
+            )}
+          </View>
+          <View className="flex-1">
+            <Text
+              variant="body"
+              style={{
+                color: cccdMasked ? palette.emerald[700] : semantic.action.primaryDeep,
+                fontFamily: 'BeVietnamPro_700Bold',
+              }}
+            >
+              {cccdMasked ? `Đã quét CCCD · ${cccdMasked}` : 'Quét CCCD khách'}
+            </Text>
+            <Text
+              variant="caption"
+              style={{
+                color: cccdMasked ? palette.emerald[700] : semantic.action.primaryDeep,
+                opacity: 0.8,
+                marginTop: 1,
+              }}
+            >
+              {cccdMasked ? 'Tap để quét lại nếu sai' : 'Tự động điền họ tên + địa chỉ'}
+            </Text>
+          </View>
+          <ChevronRight size={18} color={cccdMasked ? palette.emerald[700] : semantic.action.primary} />
+        </Pressable>
+
         <SectionLabel>Thông tin khách</SectionLabel>
         <FieldWrap label="Họ và tên" required>
           <TextInput

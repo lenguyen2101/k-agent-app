@@ -62,6 +62,10 @@ export default function RootLayout() {
           name="(modal)/image-viewer"
           options={{ presentation: 'fullScreenModal', animation: 'fade' }}
         />
+        <Stack.Screen
+          name="(modal)/scanner"
+          options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}
+        />
       </Stack>
       <OfflineBanner />
       <StatusBar style="dark" />
