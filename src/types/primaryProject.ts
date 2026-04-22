@@ -23,15 +23,46 @@ export const towerStatusLabels: Record<TowerStatus, string> = {
   PLANNED: 'Đang lên kế hoạch',
 };
 
+export type ProgressMilestone = {
+  label: string;                // "Đổ móng", "Xây thô tầng 10", "Hoàn thiện"
+  date: string;                 // "Q2/2025"
+  done: boolean;
+};
+
 export type Tower = {
   id: string;
-  name: string;              // "Tòa The Gateway"
+  name: string;                 // "Tòa The Gateway"
   thumbnail: string;
   status: TowerStatus;
   floors: number;
   units: number;
-  pricePerM2Min?: number;    // "Giá đang cập nhật" nếu null
+  unitsPerFloor?: number;
+  pricePerM2Min?: number;       // "Giá đang cập nhật" nếu null
   pricePerM2Max?: number;
+  // Detail-only fields (hiện ở Tower Detail screen)
+  description?: string;
+  progressPct?: number;         // 0-100 cho tòa CONSTRUCTING
+  progressMilestones?: ProgressMilestone[];
+  gallery?: string[];           // progress photos, exterior
+  handoverDate?: string;
+  unitTypeIds?: string[];       // reference project.unitTypes có trong tòa này
+};
+
+export type AvailableUnitStatus = 'AVAILABLE' | 'RESERVED' | 'SOLD';
+
+export const availableUnitStatusLabels: Record<AvailableUnitStatus, string> = {
+  AVAILABLE: 'Sẵn hàng',
+  RESERVED: 'Giữ chỗ',
+  SOLD: 'Đã bán',
+};
+
+export type AvailableUnit = {
+  code: string;              // "A-12-05"
+  floor: number;
+  direction?: string;        // "Đông Nam"
+  areaM2: number;
+  priceVnd: number;
+  status: AvailableUnitStatus;
 };
 
 export type UnitType = {
@@ -47,6 +78,13 @@ export type UnitType = {
   pricePerM2Max: number;
   floorplanImage: string;    // sơ đồ
   photoCount: number;        // đếm ảnh gallery
+  // Detail-only
+  description?: string;
+  interiorImages?: string[]; // ảnh nội thất mẫu
+  directions?: string[];     // ["Đông Nam", "Tây Bắc"]
+  balconyArea?: number;      // m² ban công
+  commissionPct?: number;    // % hoa hồng sale
+  availableUnits?: AvailableUnit[];
 };
 
 // Icon key — map tới lucide-react-native icon trong AmenitySection component.

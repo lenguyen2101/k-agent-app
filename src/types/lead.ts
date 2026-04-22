@@ -61,7 +61,8 @@ export type ActivityType =
   | 'NOTE'
   | 'STATUS_CHANGE'
   | 'ASSIGNMENT_CHANGE'
-  | 'FOLLOWUP_SCHEDULED';
+  | 'FOLLOWUP_SCHEDULED'
+  | 'BOOKING_CREATED';
 
 export type ActivityOutcome =
   | 'REACHED'

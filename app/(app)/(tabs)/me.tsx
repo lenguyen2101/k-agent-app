@@ -136,7 +136,7 @@ export default function Me() {
             className="flex-row mt-4 pt-4 gap-3"
             style={{ borderTopWidth: 1, borderTopColor: palette.sienna[100] }}
           >
-            <StatCell label="Lead đang chăm" value={activeLeads} />
+            <StatCell label="Active Lead" value={activeLeads} />
             <StatDivider />
             <StatCell label="Deal chốt" value={wonLeads} accent="emerald" />
             <StatDivider />

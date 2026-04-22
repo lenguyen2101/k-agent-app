@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,15 +16,16 @@ import {
   MoreHorizontal,
   Pencil,
   Phone,
-  Plus,
   Share2,
   ShieldCheck,
   StickyNote,
   UserCheck,
   UserPlus,
+  Wallet,
 } from 'lucide-react-native';
 import { BottomSheetModal } from '@/components/BottomSheetModal';
 import { useLeads } from '@/store/leads';
+import { useBookings } from '@/store/bookings';
 import { StatusBadge } from '@/components/StatusBadge';
 import { AddActivitySheet } from '@/components/AddActivitySheet';
 import { Text } from '@/components/ui/Text';
@@ -53,6 +54,7 @@ const activityIconMap: Record<ActivityType, React.ComponentType<{ size: number; 
   STATUS_CHANGE: UserCheck,
   ASSIGNMENT_CHANGE: UserCheck,
   FOLLOWUP_SCHEDULED: Calendar,
+  BOOKING_CREATED: Wallet,
 };
 
 const activityLabels: Record<ActivityType, string> = {
@@ -65,6 +67,7 @@ const activityLabels: Record<ActivityType, string> = {
   STATUS_CHANGE: 'Đổi trạng thái',
   ASSIGNMENT_CHANGE: 'Đổi phụ trách',
   FOLLOWUP_SCHEDULED: 'Đặt lịch follow up',
+  BOOKING_CREATED: 'Booking giữ chỗ',
 };
 
 const outcomeLabels: Record<ActivityOutcome, { label: string; color: string }> = {
@@ -81,6 +84,14 @@ export default function LeadDetail() {
   const insets = useSafeAreaInsets();
   const lead = useLeads((s) => s.leads.find((l) => l.id === id));
   const addActivity = useLeads((s) => s.addActivity);
+  // Subscribe stable `bookings` array ref + filter qua useMemo.
+  // Không dùng selector .filter() inline — tạo array mới mỗi render →
+  // React 18 useSyncExternalStore warn "getSnapshot should be cached" → render loop.
+  const allBookings = useBookings((s) => s.bookings);
+  const leadBookings = useMemo(
+    () => (id ? allBookings.filter((b) => b.leadId === id) : []),
+    [allBookings, id]
+  );
   const [sheetOpen, setSheetOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
@@ -326,35 +337,141 @@ export default function LeadDetail() {
           </View>
         )}
 
+        {/* Sản phẩm & Booking */}
+        <View className="mx-4 mt-4">
+          <View className="flex-row items-center justify-between mb-3">
+            <Text variant="h3" className="text-text-primary">
+              Sản phẩm & Booking
+            </Text>
+            {leadBookings.length > 0 && (
+              <Text variant="caption" className="text-text-tertiary">
+                {leadBookings.length} booking
+              </Text>
+            )}
+          </View>
+
+          {leadBookings.length === 0 ? (
+            <View
+              className="p-4 rounded-2xl"
+              style={{
+                backgroundColor: semantic.surface.alt,
+                borderWidth: 1,
+                borderColor: semantic.border.light,
+                borderStyle: 'dashed',
+              }}
+            >
+              <View className="flex-row items-center gap-2">
+                <Wallet size={16} color={semantic.text.tertiary} strokeWidth={2} />
+                <Text variant="body" className="text-text-secondary">
+                  Chưa có booking cho khách này
+                </Text>
+              </View>
+              <Text variant="caption" className="text-text-tertiary mt-1">
+                Khi khách chốt sản phẩm, tạo booking để tự động cập nhật funnel.
+              </Text>
+            </View>
+          ) : (
+            <View className="gap-2">
+              {leadBookings.map((b) => (
+                <View
+                  key={b.id}
+                  className="p-3 rounded-2xl"
+                  style={{
+                    backgroundColor: palette.white,
+                    borderWidth: 1,
+                    borderColor: semantic.border.light,
+                  }}
+                >
+                  <View className="flex-row items-start gap-3">
+                    <View
+                      className="w-9 h-9 rounded-xl items-center justify-center"
+                      style={{ backgroundColor: palette.emerald[50] }}
+                    >
+                      <Wallet size={16} color={palette.emerald[700]} strokeWidth={2.2} />
+                    </View>
+                    <View className="flex-1">
+                      <Text
+                        style={{
+                          color: semantic.text.primary,
+                          fontFamily: 'BeVietnamPro_700Bold',
+                          fontSize: 14,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {b.projectName}
+                        {b.unitTypeName ? ` · ${b.unitTypeName}` : ''}
+                        {b.unitCode ? ` · ${b.unitCode}` : ''}
+                      </Text>
+                      <View className="flex-row items-center gap-2 mt-1">
+                        <View className="flex-row items-center gap-1">
+                          <Banknote size={11} color={semantic.text.tertiary} />
+                          <Text
+                            variant="caption"
+                            style={{
+                              color: palette.emerald[700],
+                              fontFamily: 'BeVietnamPro_700Bold',
+                            }}
+                          >
+                            Cọc {(b.depositVnd / 1_000_000).toLocaleString('vi-VN')}tr
+                          </Text>
+                        </View>
+                        <Text variant="caption" className="text-text-tertiary">
+                          ·
+                        </Text>
+                        <Text variant="caption" className="text-text-tertiary">
+                          {formatRelativeTime(b.createdAt)}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      className="px-2 py-0.5 rounded-full"
+                      style={{
+                        backgroundColor:
+                          b.status === 'CONFIRMED'
+                            ? palette.emerald[50]
+                            : b.status === 'PENDING'
+                            ? palette.sienna[50]
+                            : palette.slate[100],
+                      }}
+                    >
+                      <Text
+                        variant="caption"
+                        style={{
+                          color:
+                            b.status === 'CONFIRMED'
+                              ? palette.emerald[700]
+                              : b.status === 'PENDING'
+                              ? palette.sienna[700]
+                              : palette.slate[600],
+                          fontFamily: 'BeVietnamPro_700Bold',
+                          fontSize: 10,
+                          letterSpacing: 0.3,
+                        }}
+                      >
+                        {b.status === 'CONFIRMED'
+                          ? 'Đã xác nhận'
+                          : b.status === 'PENDING'
+                          ? 'Chờ CĐT'
+                          : 'Đã huỷ'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+
+        </View>
+
         {/* Activity timeline */}
         <View className="mx-4 mt-4">
           <View className="flex-row items-center justify-between mb-3">
             <Text variant="h3" className="text-text-primary">
               Lịch sử hoạt động
             </Text>
-            <View className="flex-row items-center gap-3">
-              <Text variant="caption" className="text-text-tertiary">
-                {lead.activities.length} mục
-              </Text>
-              <Pressable
-                onPress={() => router.push(`/(app)/leads/${lead.id}/activities/new`)}
-                className="flex-row items-center gap-1 px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: semantic.action.primarySoft }}
-                hitSlop={4}
-              >
-                <Plus size={12} color={semantic.action.primary} strokeWidth={2.6} />
-                <Text
-                  variant="caption"
-                  style={{
-                    color: semantic.action.primary,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 11,
-                  }}
-                >
-                  Chi tiết
-                </Text>
-              </Pressable>
-            </View>
+            <Text variant="caption" className="text-text-tertiary">
+              {lead.activities.length} mục
+            </Text>
           </View>
 
           {lead.activities.length === 0 ? (
@@ -489,6 +606,19 @@ export default function LeadDetail() {
           </Text>
 
           <View className="mt-4 gap-2">
+            <MoreMenuRow
+              icon={<Wallet size={18} color={palette.sienna[700]} />}
+              iconBg={palette.sienna[50]}
+              label="Tạo booking cho khách"
+              subtitle="Đặt chỗ dự án, sản phẩm"
+              onPress={() => {
+                setMoreOpen(false);
+                router.push({
+                  pathname: '/(app)/booking',
+                  params: { leadId: lead.id },
+                });
+              }}
+            />
             <MoreMenuRow
               icon={<Mail size={18} color={palette.blue[700]} />}
               iconBg={palette.blue[50]}

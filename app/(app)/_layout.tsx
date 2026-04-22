@@ -21,6 +21,9 @@ export default function AppLayout() {
       <Stack.Screen name="listings/[id]/request-cooperation" />
       <Stack.Screen name="listings/saved" />
       <Stack.Screen name="listings/primary/[projectId]" />
+      <Stack.Screen name="listings/primary/[projectId]/tower/[towerId]" />
+      <Stack.Screen name="listings/primary/[projectId]/unit/[unitId]" />
+      <Stack.Screen name="booking" />
       <Stack.Screen name="chat/[conversationId]" />
       <Stack.Screen name="income/index" />
       <Stack.Screen name="income/transactions" />

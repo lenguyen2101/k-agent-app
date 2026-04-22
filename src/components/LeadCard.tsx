@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 import { Building2, Clock, Phone } from 'lucide-react-native';
-import type { Lead } from '@/types/lead';
+import { statusToGroup, type Lead } from '@/types/lead';
 import { formatPhone, formatRelativeTime, isOverdue } from '@/lib/format';
 import { palette, semantic } from '@/theme';
 import { StatusBadge } from './StatusBadge';
@@ -38,6 +38,7 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
           : null
     : null;
   const wrapped = frameVariant !== null;
+  const groupTint = semantic.leadGroup[statusToGroup[lead.status]];
 
   // Khi wrap PriorityFrame → frame tạo border gradient + shadow đậm. Inner
   // card bỏ border, shadow để tránh chồng lớp; rounded-2xl giữ cho visual
@@ -60,9 +61,9 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
       <View className="flex-row items-start gap-3">
         <View
           className="w-11 h-11 rounded-full items-center justify-center"
-          style={{ backgroundColor: semantic.surface.brandSoft }}
+          style={{ backgroundColor: groupTint.bg }}
         >
-          <Text variant="body" style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_600SemiBold' }}>
+          <Text variant="body" style={{ color: groupTint.fg, fontFamily: 'BeVietnamPro_700Bold' }}>
             {leadInitials(lead.fullName)}
           </Text>
         </View>

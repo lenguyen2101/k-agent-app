@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, Switch, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, Switch, View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -17,6 +17,7 @@ import { QuickActionRow, type QuickAction } from '@/components/QuickActionRow';
 import { SalesProfileHeader } from '@/components/SalesProfileHeader';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { isOverdue } from '@/lib/format';
 import { statusToGroup } from '@/types/lead';
 import { palette, semantic } from '@/theme';
@@ -25,6 +26,7 @@ export default function Home() {
   const user = useAuth((s) => s.user);
   const isOnline = useAuth((s) => s.isOnline);
   const toggleOnline = useAuth((s) => s.toggleOnline);
+  const refresh = usePullToRefresh();
 
   const overdueLeads = leads.filter(
     (l) => isOverdue(l.nextFollowupAt) && l.status !== 'CLOSED_WON' && l.status !== 'CLOSED_LOST'
@@ -79,7 +81,18 @@ export default function Home() {
 
   return (
     <Screen>
-      <ScrollView className="flex-1" contentContainerClassName="pb-8">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="pb-8"
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh.refreshing}
+            onRefresh={refresh.onRefresh}
+            tintColor={refresh.tintColor}
+            colors={[...refresh.colors]}
+          />
+        }
+      >
         <SalesProfileHeader
           name={user?.fullName ?? ''}
           team={user?.team}

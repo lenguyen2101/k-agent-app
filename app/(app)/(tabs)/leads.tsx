@@ -9,6 +9,7 @@ import { CreateLeadMenu } from '@/components/CreateLeadMenu';
 import { VoiceLeadModal } from '@/components/VoiceLeadModal';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { palette, semantic, typography } from '@/theme';
 
 const FILTERS: { key: 'all' | LeadStatus; label: string }[] = [
@@ -27,6 +28,7 @@ export default function LeadsList() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const allLeads = useLeads((s) => s.leads);
+  const refresh = usePullToRefresh();
 
   const filtered = useMemo(() => {
     let xs = allLeads;
@@ -114,6 +116,8 @@ export default function LeadsList() {
         data={filtered}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 100 }}
+        refreshing={refresh.refreshing}
+        onRefresh={refresh.onRefresh}
         renderItem={({ item }) => (
           <LeadCard lead={item} onPress={() => router.push(`/(app)/leads/${item.id}`)} />
         )}

@@ -6,6 +6,7 @@ import { ListingCard } from '@/components/ListingCard';
 import { PrimaryProjectCard } from '@/components/PrimaryProjectCard';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { listings } from '@/mock/listings';
 import { primaryProjects } from '@/mock/primaryProjects';
 import { useSavedListings } from '@/store/savedListings';
@@ -39,6 +40,7 @@ export default function Listings() {
   const [filter, setFilter] = useState<FilterKey>('all');
   const [search, setSearch] = useState('');
   const savedCount = useSavedListings((s) => s.savedIds.size);
+  const refresh = usePullToRefresh();
 
   const secondaryFiltered = useMemo(() => {
     let xs = listings.filter((l) => matchFilter(l, filter));
@@ -201,6 +203,8 @@ export default function Listings() {
           data={primaryFiltered}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 32, gap: 22 }}
+          refreshing={refresh.refreshing}
+          onRefresh={refresh.onRefresh}
           renderItem={({ item }) => (
             <PrimaryProjectCard
               project={item}
@@ -220,6 +224,8 @@ export default function Listings() {
           data={secondaryFiltered}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 32, gap: 22 }}
+          refreshing={refresh.refreshing}
+          onRefresh={refresh.onRefresh}
           renderItem={({ item }) => (
             <ListingCard
               listing={item}

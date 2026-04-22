@@ -414,7 +414,7 @@ export default function PrimaryProjectDetail() {
         <View
           onLayout={registerSection('interior')}
           className="bg-surface"
-          style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: semantic.surface.alt }}
+          style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: palette.white }}
         >
           <AmenitySection
             data={project.interiorAmenities}
@@ -425,7 +425,7 @@ export default function PrimaryProjectDetail() {
         <View
           onLayout={registerSection('exterior')}
           className="bg-surface"
-          style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: semantic.surface.alt }}
+          style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: palette.white }}
         >
           <AmenitySection
             data={project.exteriorAmenities}
@@ -449,6 +449,12 @@ export default function PrimaryProjectDetail() {
           </Text>
         </Pressable>
         <Pressable
+          onPress={() =>
+            router.push({
+              pathname: '/(app)/booking',
+              params: { projectId: project.id },
+            })
+          }
           className="flex-[1.6] h-12 rounded-xl items-center justify-center"
           style={{
             backgroundColor: semantic.action.primary,
@@ -488,8 +494,9 @@ function OverviewSection({ project }: { project: PrimaryProject }) {
 
       {/* Info table */}
       <View
-        className="rounded-2xl mt-2"
+        className="rounded-2xl"
         style={{
+          marginTop: 32,
           backgroundColor: palette.white,
           borderWidth: 1,
           borderColor: semantic.border.light,
@@ -677,18 +684,18 @@ function HighlightCard({ highlight }: { highlight: OverviewHighlight }) {
 
 function TowersSection({ project }: { project: PrimaryProject }) {
   return (
-    <View className="px-4 py-5" style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: semantic.surface.alt }}>
+    <View className="px-4 py-5" style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: palette.white }}>
       <SectionTitle title={`Danh sách toà (${project.towers.length})`} />
       <View className="mt-3 gap-3">
         {project.towers.map((t) => (
-          <TowerRow key={t.id} tower={t} />
+          <TowerRow key={t.id} tower={t} projectId={project.id} />
         ))}
       </View>
     </View>
   );
 }
 
-function TowerRow({ tower }: { tower: Tower }) {
+function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
   const badge = towerStatusBadge[tower.status];
   const priceText =
     tower.pricePerM2Min && tower.pricePerM2Max
@@ -696,6 +703,12 @@ function TowerRow({ tower }: { tower: Tower }) {
       : 'Giá đang cập nhật';
   return (
     <Pressable
+      onPress={() =>
+        router.push({
+          pathname: '/(app)/listings/primary/[projectId]/tower/[towerId]',
+          params: { projectId, towerId: tower.id },
+        })
+      }
       className="flex-row items-center gap-3 p-3 rounded-2xl"
       style={{
         backgroundColor: palette.white,
@@ -775,7 +788,7 @@ function UnitsSection({ project }: { project: PrimaryProject }) {
   }, [filter, project.unitTypes]);
 
   return (
-    <View className="px-4 py-5" style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: semantic.surface.alt }}>
+    <View className="px-4 py-5" style={{ borderTopWidth: SECTION_DIVIDER, borderTopColor: palette.white }}>
       <SectionTitle title={`Danh sách căn (${project.unitTypes.length})`} />
       <View className="flex-row flex-wrap gap-2 mt-3 mb-3">
         {filters.map((f) => {
@@ -806,16 +819,22 @@ function UnitsSection({ project }: { project: PrimaryProject }) {
       </View>
       <View className="gap-3">
         {shown.map((u) => (
-          <UnitTypeCard key={u.id} unit={u} />
+          <UnitTypeCard key={u.id} unit={u} projectId={project.id} />
         ))}
       </View>
     </View>
   );
 }
 
-function UnitTypeCard({ unit }: { unit: UnitType }) {
+function UnitTypeCard({ unit, projectId }: { unit: UnitType; projectId: string }) {
   return (
     <Pressable
+      onPress={() =>
+        router.push({
+          pathname: '/(app)/listings/primary/[projectId]/unit/[unitId]',
+          params: { projectId, unitId: unit.id },
+        })
+      }
       className="rounded-2xl overflow-hidden"
       style={{
         backgroundColor: palette.white,
@@ -998,15 +1017,21 @@ function InfoRow({
 }) {
   return (
     <View
-      className="flex-row items-start px-4 py-3"
+      className="flex-row items-start px-4"
       style={{
+        paddingVertical: 16,
         borderBottomWidth: last ? 0 : 1,
         borderBottomColor: semantic.border.light,
       }}
     >
       <Text
         variant="body"
-        style={{ color: semantic.text.secondary, width: 140, flexShrink: 0 }}
+        style={{
+          color: semantic.text.secondary,
+          width: 140,
+          flexShrink: 0,
+          marginRight: 16,
+        }}
       >
         {label}
       </Text>

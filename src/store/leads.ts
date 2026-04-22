@@ -8,6 +8,7 @@ import type {
   Lead,
   LeadOffer,
   LeadSource,
+  LeadStatus,
   Project,
 } from '@/types/lead';
 
@@ -45,6 +46,7 @@ type State = {
   addActivity: (input: AddActivityInput) => void;
   createLead: (input: CreateLeadInput) => Lead;
   updateLead: (id: string, patch: UpdateLeadInput) => void;
+  setStatus: (id: string, status: LeadStatus) => void;
   acceptOffer: (offer: LeadOffer) => Lead;
 };
 
@@ -112,6 +114,14 @@ export const useLeads = create<State>((set, get) => ({
     };
     set((s) => ({ leads: [lead, ...s.leads] }));
     return lead;
+  },
+  setStatus: (id, status) => {
+    const now = new Date().toISOString();
+    set((s) => ({
+      leads: s.leads.map((l) =>
+        l.id === id ? { ...l, status, updatedAt: now } : l
+      ),
+    }));
   },
   updateLead: (id, patch) => {
     const now = new Date().toISOString();

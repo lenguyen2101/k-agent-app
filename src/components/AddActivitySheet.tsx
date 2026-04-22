@@ -17,7 +17,12 @@ export function AddActivitySheet({ visible, onClose, onSubmit }: Props) {
   };
 
   return (
-    <BottomSheetModal visible={visible} onClose={onClose} heightPercent={0.85}>
+    <BottomSheetModal
+      visible={visible}
+      onClose={onClose}
+      heightPercent={0.85}
+      dismissOnBackdrop={false}
+    >
       <View className="px-4 pt-2 pb-1">
         <Text variant="h3" className="text-text-primary">
           Thêm hoạt động

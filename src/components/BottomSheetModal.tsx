@@ -81,9 +81,13 @@ export function BottomSheetModal({
           onPress={dismissOnBackdrop ? onClose : undefined}
         >
           <Animated.View entering={SlideInDown.duration(280)} exiting={SlideOutDown.duration(220)}>
-            <Pressable
-              onPress={(e) => e.stopPropagation()}
-              className="bg-surface rounded-t-2xl"
+            {/* KHÔNG dùng Pressable hoặc onStartShouldSetResponder ở sheet wrapper —
+                sẽ steal touch responder từ ScrollView bên trong (user bấm empty/gap
+                area → wrapper claim → ScrollView mất cơ hội capture Move gesture →
+                scroll bị stuck). Backdrop-tap dismiss vẫn hoạt động cho empty area
+                vì Pressable children bên trong chỉ claim khi tap trúng actual control. */}
+            <View
+              className="bg-surface rounded-t-2xl overflow-hidden"
               style={{
                 height: fixedHeight,
                 maxHeight: fixedHeight ?? autoMaxHeight,
@@ -105,7 +109,7 @@ export function BottomSheetModal({
                 />
               </View>
               {children}
-            </Pressable>
+            </View>
           </Animated.View>
         </Pressable>
       </KeyboardAvoidingView>

@@ -210,7 +210,7 @@ function CategoryBlock({ category }: { category: AmenityCategory }) {
       >
         <View className="gap-3 pl-4">
           {category.items.map((item) => (
-            <ItemRow key={item.id} item={item} />
+            <ItemRow key={item.id} item={item} icon={Icon} tint={tint} />
           ))}
         </View>
       </View>
@@ -218,7 +218,15 @@ function CategoryBlock({ category }: { category: AmenityCategory }) {
   );
 }
 
-function ItemRow({ item }: { item: AmenityItem }) {
+function ItemRow({
+  item,
+  icon: Icon,
+  tint,
+}: {
+  item: AmenityItem;
+  icon: LucideIcon;
+  tint: { bg: string; fg: string };
+}) {
   return (
     <View
       className="flex-row gap-3 p-3 rounded-2xl"
@@ -228,11 +236,31 @@ function ItemRow({ item }: { item: AmenityItem }) {
         borderColor: semantic.border.light,
       }}
     >
-      <Image
-        source={{ uri: item.image }}
-        style={{ width: 96, height: 96, borderRadius: 14 }}
-        resizeMode="cover"
-      />
+      {/* Placeholder icon + tint bg phía sau — khi Image fail/slow load, vẫn thấy category icon thay vì trắng kì. */}
+      <View
+        style={{
+          width: 96,
+          height: 96,
+          borderRadius: 14,
+          backgroundColor: tint.bg,
+          overflow: 'hidden',
+        }}
+      >
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Icon size={32} color={tint.fg} strokeWidth={1.8} />
+        </View>
+        <Image
+          source={{ uri: item.image }}
+          style={StyleSheet.absoluteFillObject}
+          resizeMode="cover"
+        />
+      </View>
       <View className="flex-1">
         <Text
           style={{
