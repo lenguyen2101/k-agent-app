@@ -1,7 +1,6 @@
 import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
   ArrowDownToLine,
   ArrowLeft,
@@ -14,9 +13,9 @@ import {
   MessageCircle,
   RotateCw,
   Shield,
-  Sparkles,
   Wrench,
 } from 'lucide-react-native';
+import { KAgentLogo } from '@/components/KAgentLogo';
 import { Text } from '@/components/ui/Text';
 import { useAppStatus } from '@/store/appStatus';
 import {
@@ -67,29 +66,16 @@ export default function About() {
         {/* App hero */}
         <View className="items-center pt-8 pb-6">
           <View
-            className="rounded-3xl overflow-hidden"
             style={{
               shadowColor: semantic.action.primaryDeep,
               shadowOpacity: 0.3,
               shadowRadius: 20,
               shadowOffset: { width: 0, height: 10 },
               elevation: 8,
+              borderRadius: 24,
             }}
           >
-            <LinearGradient
-              colors={[...semantic.gradient.heroBrand]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{
-                width: 96,
-                height: 96,
-                borderRadius: 28,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Sparkles size={46} color={palette.white} strokeWidth={2} />
-            </LinearGradient>
+            <KAgentLogo size={96} />
           </View>
           <Text
             variant="h1"

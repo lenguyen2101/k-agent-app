@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Fingerprint, ScanFace } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
+import { KAgentLogo } from '@/components/KAgentLogo';
 import { Text } from '@/components/ui/Text';
 import { useAuth } from '@/store/auth';
 import { authenticateBiometric, getBiometricCapability, type BiometricCapability } from '@/lib/biometric';
@@ -65,16 +66,17 @@ export default function Login() {
           <View className="flex-1 px-6 justify-center">
             <View className="items-center mb-8">
               <View
-                className="w-20 h-20 rounded-2xl bg-white items-center justify-center mb-4"
+                className="mb-4"
                 style={{
                   shadowColor: palette.black,
-                  shadowOpacity: 0.25,
-                  shadowRadius: 16,
-                  shadowOffset: { width: 0, height: 6 },
-                  elevation: 8,
+                  shadowOpacity: 0.3,
+                  shadowRadius: 20,
+                  shadowOffset: { width: 0, height: 8 },
+                  elevation: 10,
+                  borderRadius: 20,
                 }}
               >
-                <Text variant="display" style={{ color: semantic.action.primary }}>KA</Text>
+                <KAgentLogo size={80} />
               </View>
               <Text variant="h1" className="text-white">K-Agent</Text>
               <Text variant="body-lg" className="text-white/85 mt-1">

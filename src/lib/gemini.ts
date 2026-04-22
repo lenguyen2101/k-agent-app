@@ -1,12 +1,13 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { projects } from '@/mock/projects';
 
-// Gemini 2.5 Flash — 1 call: audio inline → structured JSON lead extraction.
-// Audio recorded bằng expo-audio (iOS m4a/AAC default) → base64 → inline request.
+// Gemini 3 Flash — 1 call: audio inline → structured JSON lead extraction.
+// Audio recorded bằng expo-audio (iOS m4a/AAC, LOW_QUALITY preset → file nhỏ
+// hơn để upload nhanh) → base64 → inline request.
 // responseSchema đảm bảo JSON output, không cần parse markdown fences.
 
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-const MODEL = process.env.EXPO_PUBLIC_GEMINI_MODEL ?? 'gemini-2.5-flash';
+const MODEL = process.env.EXPO_PUBLIC_GEMINI_MODEL ?? 'gemini-3-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 export type ExtractedLead = {

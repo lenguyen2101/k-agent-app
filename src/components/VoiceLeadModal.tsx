@@ -67,7 +67,9 @@ function formatDuration(ms: number) {
 }
 
 export function VoiceLeadModal({ visible, onClose, onCreated }: Props) {
-  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  // LOW_QUALITY preset cho voice-to-text — file nhỏ (~32kbps vs ~128kbps) →
+  // upload nhanh hơn, Gemini vẫn transcribe tốt kể cả audio nén.
+  const recorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
   const createLead = useLeads((s) => s.createLead);
 
   const [phase, setPhase] = useState<Phase>('permission');
@@ -288,10 +290,10 @@ export function VoiceLeadModal({ visible, onClose, onCreated }: Props) {
           <View className="flex-1 items-center justify-center px-6">
             <ActivityIndicator size="large" color={semantic.action.primary} />
             <Text variant="h3" className="text-text-primary mt-4">
-              Đang xử lý
+              AI đang nghe...
             </Text>
             <Text variant="body" className="text-text-secondary mt-1 text-center">
-              Vài giây thôi, bạn nhé...
+              Đang trích xuất thông tin — thường 3-5 giây
             </Text>
           </View>
         )}

@@ -44,7 +44,9 @@ export function VoicePromptSheet({
   title = 'Nói câu hỏi của bạn',
   hint = 'AI sẽ chuyển giọng nói thành text tự động',
 }: Props) {
-  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  // LOW_QUALITY preset cho voice-to-text — file nhỏ (~32kbps vs ~128kbps) →
+  // upload nhanh hơn, Gemini vẫn transcribe tốt kể cả audio nén.
+  const recorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
   const [phase, setPhase] = useState<Phase>('idle');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -231,8 +233,15 @@ export function VoicePromptSheet({
                 >
                   <ActivityIndicator size="large" color={semantic.action.primary} />
                 </View>
-                <Text variant="body" className="text-text-primary mt-4" style={{ fontFamily: 'BeVietnamPro_600SemiBold' }}>
-                  Đang chuyển văn bản...
+                <Text
+                  variant="body"
+                  className="text-text-primary mt-4"
+                  style={{ fontFamily: 'BeVietnamPro_600SemiBold' }}
+                >
+                  AI đang nghe...
+                </Text>
+                <Text variant="caption" className="text-text-secondary mt-1">
+                  Thường 2-3 giây
                 </Text>
               </>
             )}

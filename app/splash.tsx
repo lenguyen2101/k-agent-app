@@ -10,7 +10,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { Sparkles } from 'lucide-react-native';
+import { KAgentLogo } from '@/components/KAgentLogo';
 import { Text } from '@/components/ui/Text';
 import { useAppStatus } from '@/store/appStatus';
 import { useAuth } from '@/store/auth';
@@ -67,20 +67,20 @@ export default function Splash() {
         className="flex-1 items-center justify-center px-6"
         style={{ paddingBottom: insets.bottom + 40 }}
       >
-        <Animated.View style={pulseStyle}>
-          <View
-            className="w-28 h-28 rounded-3xl items-center justify-center"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.95)',
+        <Animated.View
+          style={[
+            pulseStyle,
+            {
               shadowColor: palette.obsidian[900],
-              shadowOpacity: 0.3,
-              shadowRadius: 20,
-              shadowOffset: { width: 0, height: 12 },
-              elevation: 8,
-            }}
-          >
-            <Sparkles size={52} color={semantic.action.primary} strokeWidth={2} />
-          </View>
+              shadowOpacity: 0.35,
+              shadowRadius: 24,
+              shadowOffset: { width: 0, height: 14 },
+              elevation: 10,
+              borderRadius: 28,
+            },
+          ]}
+        >
+          <KAgentLogo size={112} />
         </Animated.View>
 
         <Text
