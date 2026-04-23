@@ -9,6 +9,8 @@ import {
   Bath,
   Bed,
   Building2,
+  Calculator,
+  ChevronRight,
   Compass,
   Images as ImagesIcon,
   Layers,
@@ -339,6 +341,44 @@ export default function UnitTypeDetail() {
           >
             Mức hoa hồng thực nhận có thể thay đổi theo đợt bán và chính sách CĐT. Liên hệ sale leader để xác nhận.
           </Text>
+
+          {/* Loan calculator CTA — tính vay cho căn này */}
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(app)/tools/loan-calculator',
+                params: { price: String(Math.round(avgPrice)) },
+              })
+            }
+            className="mt-3 flex-row items-center gap-3 p-3.5 rounded-2xl"
+            style={{
+              backgroundColor: palette.white,
+              borderWidth: 1,
+              borderColor: semantic.border.light,
+            }}
+          >
+            <View
+              className="w-10 h-10 rounded-xl items-center justify-center"
+              style={{ backgroundColor: palette.blue[50] }}
+            >
+              <Calculator size={18} color={palette.blue[700]} strokeWidth={2.2} />
+            </View>
+            <View className="flex-1">
+              <Text
+                style={{
+                  color: semantic.text.primary,
+                  fontFamily: 'BeVietnamPro_700Bold',
+                  fontSize: 14,
+                }}
+              >
+                Tính vay cho căn này
+              </Text>
+              <Text variant="caption" className="text-text-secondary mt-0.5" numberOfLines={1}>
+                Dư nợ giảm dần · trả hàng tháng · lãi suất VN
+              </Text>
+            </View>
+            <ChevronRight size={18} color={semantic.text.tertiary} strokeWidth={2} />
+          </Pressable>
         </View>
 
         {/* Interior gallery */}

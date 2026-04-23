@@ -27,6 +27,7 @@ export default function AppLayout() {
       <Stack.Screen name="bookings/index" />
       <Stack.Screen name="bookings/[id]" />
       <Stack.Screen name="calendar" />
+      <Stack.Screen name="tools/loan-calculator" />
       <Stack.Screen name="chat/[conversationId]" />
       <Stack.Screen name="income/index" />
       <Stack.Screen name="income/transactions" />

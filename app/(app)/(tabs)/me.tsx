@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import {
   Award,
   Bell,
+  Calculator,
   CheckCircle2,
   ChevronRight,
   Fingerprint,
@@ -222,6 +223,14 @@ export default function Me() {
             }
             urgent={activeBookings > 0}
             onPress={() => router.push('/(app)/bookings')}
+          />
+        </MenuSection>
+
+        <MenuSection title="Công cụ">
+          <MenuItem
+            icon={<Calculator size={18} color={semantic.text.primary} />}
+            label="Tính vay ngân hàng"
+            onPress={() => router.push('/(app)/tools/loan-calculator')}
           />
         </MenuSection>
 
