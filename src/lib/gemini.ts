@@ -120,6 +120,130 @@ export async function extractLeadFromAudio(audioUri: string): Promise<ExtractedL
   };
 }
 
+// --- Voice-to-todo: extract task ("Gọi chăm anh Bình 11h") → structured data +
+// lead match hint. Sale dictate task rảnh tay, AI parse + prefill form.
+
+export type ExtractedTaskAction = 'CALL' | 'MEETING' | 'NOTE';
+
+export type ExtractedTask = {
+  action: ExtractedTaskAction;
+  /** Tên lead user nhắc (raw, nguyên văn) — dùng cho fuzzy match client-side. */
+  leadHint: string | null;
+  /** Nếu Gemini tự tin match đúng 1 lead trong list → trả id. Ambiguous → null. */
+  leadId: string | null;
+  /** ISO 8601 timestamp nếu user nói thời gian ("trưa nay 11h", "chiều mai 3h", "thứ 7"). */
+  scheduledAt: string | null;
+  /** Nội dung/lý do task, tóm tắt ngắn gọn tiếng Việt. */
+  notes: string | null;
+  transcript: string;
+};
+
+type LeadHint = {
+  id: string;
+  fullName: string;
+  phone: string;
+  projectShortName: string;
+};
+
+export async function extractTaskFromAudio(
+  audioUri: string,
+  leadHints: LeadHint[]
+): Promise<ExtractedTask> {
+  if (!API_KEY) {
+    throw new Error('Thiếu EXPO_PUBLIC_GEMINI_API_KEY trong .env');
+  }
+
+  const base64 = await FileSystem.readAsStringAsync(audioUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  const mimeType = audioUri.endsWith('.wav')
+    ? 'audio/wav'
+    : audioUri.endsWith('.mp3')
+      ? 'audio/mp3'
+      : 'audio/mp4';
+
+  const nowIso = new Date().toISOString();
+  const leadList = leadHints
+    .map((l) => `${l.id}|${l.fullName}|${l.projectShortName}`)
+    .join('\n');
+
+  // Prompt rút gọn — chỉ giữ rule cốt lõi, bỏ examples thừa. Output schema
+  // đã enforce format → không cần nhắc lại nhiều. Shorter prompt = fewer
+  // input tokens = faster inference (~15-20% improvement).
+  const prompt = `Extract voice task BĐS Việt Nam → JSON. Now: ${nowIso} (UTC+7).
+Leads (id|name|project):
+${leadList}
+
+Rules:
+- action: CALL (gọi/follow-up) / MEETING (hẹn/xem nhà) / NOTE (ghi chú không thời gian)
+- leadHint: tên nguyên văn user nói ("anh Bình") hoặc null
+- leadId: id chỉ khi match CHẮC CHẮN 1 lead; tên riêng chung cho nhiều lead → null
+- scheduledAt: ISO +07:00. "trưa nay"=12:00, "chiều nay"=15:00, "sáng mai"=9:00, "chiều mai"=15:00, "thứ 7"=thứ 7 tới 9:00. Không nói → null
+- notes: tóm tắt VN <150 ký tự hoặc null
+- transcript: user nói nguyên văn có dấu
+
+KHÔNG bịa lead. Null nếu không rõ.`;
+
+  // Dùng gemini-2.5-flash-lite cho task extraction — nhanh hơn flash
+  // ~30-40% với audio ngắn, vẫn đủ tốt cho structured JSON. Override
+  // global MODEL để lead extract (câu dài, complex) vẫn dùng flash.
+  const taskModel = process.env.EXPO_PUBLIC_GEMINI_TASK_MODEL ?? 'gemini-2.5-flash-lite';
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${taskModel}:generateContent`;
+
+  const body = {
+    contents: [
+      {
+        parts: [
+          { inlineData: { mimeType, data: base64 } },
+          { text: prompt },
+        ],
+      },
+    ],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['CALL', 'MEETING', 'NOTE'] },
+          leadHint: { type: 'string', nullable: true },
+          leadId: { type: 'string', nullable: true },
+          scheduledAt: { type: 'string', nullable: true },
+          notes: { type: 'string', nullable: true },
+          transcript: { type: 'string' },
+        },
+        required: ['action', 'transcript'],
+      },
+      temperature: 0.1,
+    },
+  };
+
+  const res = await fetch(`${endpoint}?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini API ${res.status}: ${errText.slice(0, 200)}`);
+  }
+
+  const json = await res.json();
+  const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini không trả về nội dung');
+
+  const parsed = JSON.parse(text) as ExtractedTask;
+  return {
+    action: parsed.action ?? 'NOTE',
+    leadHint: parsed.leadHint ?? null,
+    leadId: parsed.leadId ?? null,
+    scheduledAt: parsed.scheduledAt ?? null,
+    notes: parsed.notes ?? null,
+    transcript: parsed.transcript ?? '',
+  };
+}
+
 // Simple speech-to-text transcription for chat voice input.
 // Chỉ lấy text, không structured extract như extractLeadFromAudio.
 export async function transcribeAudio(audioUri: string): Promise<string> {

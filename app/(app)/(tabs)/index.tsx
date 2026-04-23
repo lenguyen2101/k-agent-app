@@ -1,21 +1,25 @@
+import { useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, Switch, View } from 'react-native';
 import { router } from 'expo-router';
 import {
   CalendarDays,
   ChevronRight,
   MessageSquare,
+  Mic,
   PhoneCall,
   Sparkles,
   TrendingUp,
   Users,
 } from 'lucide-react-native';
 import { useAuth } from '@/store/auth';
-import { leads } from '@/mock/leads';
+import { useLeads } from '@/store/leads';
+import { FAB } from '@/components/FAB';
 import { HeroStatsCard, type PipelineSegment } from '@/components/HeroStatsCard';
 import { QuickActionRow, type QuickAction } from '@/components/QuickActionRow';
 import { SalesProfileHeader } from '@/components/SalesProfileHeader';
 import { Screen } from '@/components/Screen';
 import { TodoistEventCard } from '@/components/TodoistEventCard';
+import { VoiceTodoSheet } from '@/components/VoiceTodoSheet';
 import { Text } from '@/components/ui/Text';
 import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { collectEvents, eventsToday } from '@/lib/calendar';
@@ -28,6 +32,8 @@ export default function Home() {
   const isOnline = useAuth((s) => s.isOnline);
   const toggleOnline = useAuth((s) => s.toggleOnline);
   const refresh = usePullToRefresh();
+  const leads = useLeads((s) => s.leads);
+  const [voiceTodoOpen, setVoiceTodoOpen] = useState(false);
 
   const overdueLeads = leads.filter(
     (l) => isOverdue(l.nextFollowupAt) && l.status !== 'CLOSED_WON' && l.status !== 'CLOSED_LOST'
@@ -302,6 +308,10 @@ export default function Home() {
           )}
         </View>
       </ScrollView>
+
+      <FAB icon={Mic} onPress={() => setVoiceTodoOpen(true)} />
+
+      <VoiceTodoSheet visible={voiceTodoOpen} onClose={() => setVoiceTodoOpen(false)} />
     </Screen>
   );
 }

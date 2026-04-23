@@ -1,13 +1,13 @@
 import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
   ChevronRight,
   FileText,
   MessageSquare,
-  Sparkles,
+  MessageSquarePlus,
   Wand2,
 } from 'lucide-react-native';
+import { FAB } from '@/components/FAB';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
 import { formatRelativeTime } from '@/lib/format';
@@ -69,49 +69,8 @@ export default function Chat() {
           </Text>
         </View>
 
-        {/* Hero CTA — bắt đầu chat mới */}
-        <Pressable
-          onPress={() => router.push('/(app)/chat/new')}
-          className="mx-4 rounded-2xl overflow-hidden"
-          style={{
-            shadowColor: semantic.action.primaryDeep,
-            shadowOpacity: 0.2,
-            shadowRadius: 14,
-            shadowOffset: { width: 0, height: 6 },
-            elevation: 5,
-          }}
-        >
-          <LinearGradient
-            colors={[...semantic.gradient.heroBrand]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ padding: 18 }}
-          >
-            <View className="flex-row items-center gap-3">
-              <View
-                className="w-11 h-11 rounded-full items-center justify-center"
-                style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
-              >
-                <Sparkles size={22} color={palette.white} strokeWidth={2.2} />
-              </View>
-              <View className="flex-1">
-                <Text
-                  variant="h3"
-                  style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-                >
-                  Bắt đầu trò chuyện mới
-                </Text>
-                <Text variant="caption" style={{ color: 'rgba(247,243,237,0.85)', marginTop: 2 }}>
-                  AI trả lời kèm trích dẫn nguồn
-                </Text>
-              </View>
-              <ChevronRight size={20} color={palette.white} />
-            </View>
-          </LinearGradient>
-        </Pressable>
-
         {/* Suggestions */}
-        <View className="mt-5 px-4">
+        <View className="px-4">
           <Text
             variant="caption"
             style={{
@@ -238,6 +197,11 @@ export default function Chat() {
           </View>
         </View>
       </ScrollView>
+
+      <FAB
+        icon={MessageSquarePlus}
+        onPress={() => router.push('/(app)/chat/new')}
+      />
     </Screen>
   );
 }

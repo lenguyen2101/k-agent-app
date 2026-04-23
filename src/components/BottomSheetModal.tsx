@@ -9,7 +9,8 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
+import { X } from 'lucide-react-native';
 import { palette, semantic } from '@/theme';
 
 // Bottom sheet với overlay fade + sheet slide riêng biệt.
@@ -36,6 +37,10 @@ type Props = {
   heightPercent?: number;
 };
 
+// Exit animation duration — match với Reanimated SlideOutDown để Modal không
+// unmount sớm trước khi sheet slide xuống xong.
+const EXIT_DURATION_MS = 260;
+
 export function BottomSheetModal({
   visible,
   onClose,
@@ -45,6 +50,18 @@ export function BottomSheetModal({
   const { height: screenHeight } = useWindowDimensions();
   const { top: safeTop } = useSafeAreaInsets();
   const [kbHeight, setKbHeight] = useState(0);
+
+  // Delayed unmount — khi visible=false, giữ Modal mounted đủ lâu để Reanimated
+  // SlideOutDown chạy xong. Nếu unmount ngay → exit animation bị cut.
+  const [mounted, setMounted] = useState(visible);
+  useEffect(() => {
+    if (visible) {
+      setMounted(true);
+    } else if (mounted) {
+      const t = setTimeout(() => setMounted(false), EXIT_DURATION_MS);
+      return () => clearTimeout(t);
+    }
+  }, [visible, mounted]);
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -67,9 +84,9 @@ export function BottomSheetModal({
 
   return (
     <Modal
-      visible={visible}
+      visible={mounted}
       transparent
-      animationType="fade"
+      animationType="none"
       onRequestClose={onClose}
       statusBarTranslucent
     >
@@ -77,14 +94,21 @@ export function BottomSheetModal({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        {/* Backdrop = View thường (không Pressable) → tap vùng ngoài sheet không
-            dismiss. User phải chủ động tap handle bar hoặc CTA trong content để
-            đóng. An toàn hơn khi đang điền form dở. */}
-        <View
-          className="flex-1 justify-end"
-          style={{ backgroundColor: semantic.surface.overlay }}
-        >
-          <Animated.View entering={SlideInDown.duration(280)} exiting={SlideOutDown.duration(220)}>
+        {/* Backdrop fade + sheet slide điều khiển hoàn toàn bằng Reanimated.
+            Modal animationType="none" để RN không can thiệp. `visible && ...`
+            trigger Animated.View unmount → exit animation chạy. Modal giữ
+            mounted thêm EXIT_DURATION_MS trước khi thật sự tháo khỏi tree. */}
+        {visible && (
+          <Animated.View
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(EXIT_DURATION_MS)}
+            className="flex-1 justify-end"
+            style={{ backgroundColor: semantic.surface.overlay }}
+          >
+            <Animated.View
+              entering={SlideInDown.duration(280)}
+              exiting={SlideOutDown.duration(EXIT_DURATION_MS)}
+            >
             {/* KHÔNG dùng Pressable hoặc onStartShouldSetResponder ở sheet wrapper —
                 sẽ steal touch responder từ ScrollView bên trong, gây scroll stuck. */}
             <View
@@ -99,26 +123,47 @@ export function BottomSheetModal({
                 elevation: 12,
               }}
             >
-              {/* Handle bar = Pressable → tap để đóng. Hit area nới rộng qua
-                  padding top/bottom + hitSlop cho dễ chạm. */}
-              <Pressable
-                onPress={onClose}
-                hitSlop={10}
-                className="items-center pt-3 pb-2"
-              >
-                <View
+              {/* Top chrome — handle bar center + X button absolute right.
+                  Both tap → close. User có 2 affordance rõ ràng: drag handle
+                  bar (iOS native feel) + X button (explicit close). */}
+              <View className="pt-3 pb-2">
+                <Pressable
+                  onPress={onClose}
+                  hitSlop={10}
+                  className="items-center"
+                >
+                  <View
+                    style={{
+                      width: 44,
+                      height: 5,
+                      borderRadius: 3,
+                      backgroundColor: semantic.border.strong,
+                    }}
+                  />
+                </Pressable>
+                <Pressable
+                  onPress={onClose}
+                  hitSlop={8}
                   style={{
-                    width: 44,
-                    height: 5,
-                    borderRadius: 3,
-                    backgroundColor: semantic.border.strong,
+                    position: 'absolute',
+                    right: 14,
+                    top: 10,
+                    width: 30,
+                    height: 30,
+                    borderRadius: 15,
+                    backgroundColor: semantic.surface.alt,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                />
-              </Pressable>
+                >
+                  <X size={15} color={semantic.text.secondary} strokeWidth={2.4} />
+                </Pressable>
+              </View>
               {children}
             </View>
+            </Animated.View>
           </Animated.View>
-        </View>
+        )}
       </KeyboardAvoidingView>
     </Modal>
   );

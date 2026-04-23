@@ -491,18 +491,10 @@ function CitationSheet({
 
   return (
     <View className="px-4 pt-1 pb-4" style={{ flex: 1 }}>
-      <View className="flex-row items-center justify-between">
+      <View>
         <Text variant="h3" className="text-text-primary">
           Trích dẫn
         </Text>
-        <Pressable
-          onPress={onClose}
-          hitSlop={8}
-          className="w-8 h-8 items-center justify-center rounded-full"
-          style={{ backgroundColor: semantic.surface.alt }}
-        >
-          <X size={14} color={semantic.text.secondary} strokeWidth={2.4} />
-        </Pressable>
       </View>
 
       <ScrollView

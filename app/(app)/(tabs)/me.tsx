@@ -13,8 +13,10 @@ import {
   ShieldCheck,
   TrendingUp,
   UserCog,
+  Wallet,
 } from 'lucide-react-native';
 import { useAuth } from '@/store/auth';
+import { useBookings } from '@/store/bookings';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
 import { leads } from '@/mock/leads';
@@ -40,6 +42,11 @@ export default function Me() {
 
   const pendingSyncTotal =
     syncSummary.pendingCount + syncSummary.failedCount + syncSummary.conflictCount;
+
+  const bookings = useBookings((s) => s.bookings);
+  const activeBookings = bookings.filter(
+    (b) => b.status !== 'COMPLETED' && b.status !== 'CANCELLED'
+  ).length;
 
   return (
     <Screen>
@@ -201,6 +208,20 @@ export default function Me() {
             label="Thông báo"
             badge={settings.pushEnabled ? undefined : 'Đã tắt'}
             onPress={() => router.push('/(app)/notifications')}
+          />
+        </MenuSection>
+
+        <MenuSection title="Giao dịch">
+          <MenuItem
+            icon={<Wallet size={18} color={semantic.text.primary} />}
+            label="Booking của tôi"
+            detail={
+              activeBookings > 0
+                ? `${activeBookings} đang xử lý`
+                : `${bookings.length} booking`
+            }
+            urgent={activeBookings > 0}
+            onPress={() => router.push('/(app)/bookings')}
           />
         </MenuSection>
 

@@ -7,6 +7,7 @@ import type { LeadStatus } from '@/types/lead';
 import { LeadCard } from '@/components/LeadCard';
 import { CreateLeadMenu } from '@/components/CreateLeadMenu';
 import { EmptyState } from '@/components/EmptyState';
+import { FAB } from '@/components/FAB';
 import { VoiceLeadModal } from '@/components/VoiceLeadModal';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
@@ -145,20 +146,7 @@ export default function LeadsList() {
         }
       />
 
-      <Pressable
-        onPress={() => setMenuOpen(true)}
-        className="absolute bottom-6 right-6 w-14 h-14 rounded-full items-center justify-center"
-        style={{
-          backgroundColor: semantic.action.primary,
-          shadowColor: palette.slate[900],
-          shadowOpacity: 0.15,
-          shadowRadius: 12,
-          shadowOffset: { width: 0, height: 4 },
-          elevation: 8,
-        }}
-      >
-        <Plus size={28} color={palette.white} />
-      </Pressable>
+      <FAB icon={Plus} onPress={() => setMenuOpen(true)} />
 
       <CreateLeadMenu
         visible={menuOpen}

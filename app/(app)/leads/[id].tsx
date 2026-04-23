@@ -23,6 +23,7 @@ import {
   UserPlus,
   Wallet,
 } from 'lucide-react-native';
+import { BookingStatusBadge } from '@/components/BookingStatusBadge';
 import { BottomSheetModal } from '@/components/BottomSheetModal';
 import { useLeads } from '@/store/leads';
 import { useBookings } from '@/store/bookings';
@@ -373,8 +374,9 @@ export default function LeadDetail() {
           ) : (
             <View className="gap-2">
               {leadBookings.map((b) => (
-                <View
+                <Pressable
                   key={b.id}
+                  onPress={() => router.push(`/(app)/bookings/${b.id}`)}
                   className="p-3 rounded-2xl"
                   style={{
                     backgroundColor: palette.white,
@@ -423,40 +425,9 @@ export default function LeadDetail() {
                         </Text>
                       </View>
                     </View>
-                    <View
-                      className="px-2 py-0.5 rounded-full"
-                      style={{
-                        backgroundColor:
-                          b.status === 'CONFIRMED'
-                            ? palette.emerald[50]
-                            : b.status === 'PENDING'
-                            ? palette.sienna[50]
-                            : palette.slate[100],
-                      }}
-                    >
-                      <Text
-                        variant="caption"
-                        style={{
-                          color:
-                            b.status === 'CONFIRMED'
-                              ? palette.emerald[700]
-                              : b.status === 'PENDING'
-                              ? palette.sienna[700]
-                              : palette.slate[600],
-                          fontFamily: 'BeVietnamPro_700Bold',
-                          fontSize: 10,
-                          letterSpacing: 0.3,
-                        }}
-                      >
-                        {b.status === 'CONFIRMED'
-                          ? 'Đã xác nhận'
-                          : b.status === 'PENDING'
-                          ? 'Chờ CĐT'
-                          : 'Đã huỷ'}
-                      </Text>
-                    </View>
+                    <BookingStatusBadge status={b.status} />
                   </View>
-                </View>
+                </Pressable>
               ))}
             </View>
           )}
