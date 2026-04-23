@@ -226,15 +226,10 @@ export function VoiceTodoSheet({ visible, onClose }: Props) {
         <View className="flex-row items-center gap-1.5">
           <Sparkles size={14} color={semantic.action.primary} strokeWidth={2.4} />
           <Text
-            variant="caption"
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.5,
-              fontSize: 11,
-            }}
+            variant="badge"
+            style={{ color: semantic.action.primaryDeep }}
           >
-            VOICE TASK
+            Voice task
           </Text>
         </View>
         <Text variant="h3" className="text-text-primary mt-0.5">
@@ -340,7 +335,6 @@ function RecordingView({
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_600SemiBold',
-          fontSize: 15,
           marginBottom: 4,
         }}
       >
@@ -356,10 +350,7 @@ function RecordingView({
         style={{ backgroundColor: semantic.text.primary }}
       >
         <Square size={16} color={palette.white} fill={palette.white} />
-        <Text
-          variant="body"
-          style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-        >
+        <Text variant="button" style={{ color: palette.white }}>
           Dừng & xử lý
         </Text>
       </Pressable>
@@ -421,10 +412,7 @@ function ErrorView({ message, onRetry }: { message: string; onRetry: () => void 
         style={{ backgroundColor: semantic.action.primary }}
       >
         <RotateCcw size={15} color={palette.white} strokeWidth={2.4} />
-        <Text
-          variant="body"
-          style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-        >
+        <Text variant="button" style={{ color: palette.white }}>
           Thử lại
         </Text>
       </Pressable>
@@ -521,22 +509,15 @@ function ConfirmCard({
         }}
       >
         <Text
-          variant="caption"
-          style={{
-            color: semantic.text.tertiary,
-            fontFamily: 'BeVietnamPro_600SemiBold',
-            letterSpacing: 0.4,
-            fontSize: 10,
-          }}
+          variant="badge"
+          style={{ color: semantic.text.tertiary, fontFamily: 'BeVietnamPro_600SemiBold' }}
         >
-          BẠN VỪA NÓI
+          Bạn vừa nói
         </Text>
         <Text
-          variant="body"
+          variant="caption"
           style={{
             color: semantic.text.secondary,
-            fontSize: 13,
-            lineHeight: 19,
             marginTop: 4,
             fontStyle: 'italic',
           }}
@@ -559,11 +540,8 @@ function ConfirmCard({
           style={{ backgroundColor: tint.bg }}
         >
           <Text
-            style={{
-              color: tint.fg,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
-            }}
+            variant="body"
+            style={{ color: tint.fg, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {initials(lead.fullName)}
           </Text>
@@ -571,10 +549,10 @@ function ConfirmCard({
         <View className="flex-1">
           <View className="flex-row items-center gap-2">
             <Text
+              variant="body"
               style={{
                 color: semantic.text.primary,
                 fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 15,
                 flex: 1,
               }}
               numberOfLines={1}
@@ -606,23 +584,12 @@ function ConfirmCard({
             <ActionIcon size={16} color={actionFg} strokeWidth={2.4} />
           </View>
           <View className="flex-1">
-            <Text
-              variant="caption"
-              style={{
-                color: actionFg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 10,
-                letterSpacing: 0.4,
-              }}
-            >
-              LOẠI TASK
+            <Text variant="badge" style={{ color: actionFg }}>
+              Loại task
             </Text>
             <Text
-              style={{
-                color: semantic.text.primary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 14,
-              }}
+              variant="subtitle"
+              style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
             >
               {actionLabel}
             </Text>
@@ -645,23 +612,12 @@ function ConfirmCard({
               <CalendarClock size={16} color={palette.emerald[700]} strokeWidth={2.4} />
             </View>
             <View className="flex-1">
-              <Text
-                variant="caption"
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 10,
-                  letterSpacing: 0.4,
-                }}
-              >
-                LÚC
+              <Text variant="badge" style={{ color: palette.emerald[700] }}>
+                Lúc
               </Text>
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                }}
+                variant="subtitle"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 {formatScheduledVN(extracted.scheduledAt)}
               </Text>
@@ -678,23 +634,13 @@ function ConfirmCard({
               borderColor: semantic.border.light,
             }}
           >
+            <Text variant="badge" style={{ color: semantic.text.tertiary }}>
+              Nội dung
+            </Text>
             <Text
               variant="caption"
               style={{
-                color: semantic.text.tertiary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 10,
-                letterSpacing: 0.4,
-              }}
-            >
-              NỘI DUNG
-            </Text>
-            <Text
-              variant="body"
-              style={{
                 color: semantic.text.primary,
-                fontSize: 13,
-                lineHeight: 18,
                 marginTop: 3,
               }}
             >
@@ -716,11 +662,8 @@ function ConfirmCard({
         >
           <RotateCcw size={15} color={semantic.text.secondary} strokeWidth={2.2} />
           <Text
-            variant="body"
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_600SemiBold',
-            }}
+            variant="button"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
           >
             Thử lại
           </Text>
@@ -738,10 +681,7 @@ function ConfirmCard({
           }}
         >
           <CircleCheck size={16} color={palette.white} strokeWidth={2.4} />
-          <Text
-            variant="body"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-          >
+          <Text variant="button" style={{ color: palette.white }}>
             Lưu vào lead
           </Text>
         </Pressable>
@@ -774,12 +714,8 @@ function DisambiguationView({
         }}
       >
         <Text
-          variant="body"
-          style={{
-            color: semantic.action.primaryDeep,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 14,
-          }}
+          variant="subtitle"
+          style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
         >
           Bạn đang nói về "{hint}" nào?
         </Text>
@@ -807,11 +743,8 @@ function DisambiguationView({
                 style={{ backgroundColor: tint.bg }}
               >
                 <Text
-                  style={{
-                    color: tint.fg,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 14,
-                  }}
+                  variant="subtitle"
+                  style={{ color: tint.fg, fontFamily: 'BeVietnamPro_700Bold' }}
                 >
                   {initials(lead.fullName)}
                 </Text>
@@ -819,10 +752,10 @@ function DisambiguationView({
               <View className="flex-1">
                 <View className="flex-row items-center gap-2">
                   <Text
+                    variant="subtitle"
                     style={{
                       color: semantic.text.primary,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
                       flex: 1,
                     }}
                     numberOfLines={1}
@@ -854,7 +787,7 @@ function DisambiguationView({
       >
         <RotateCcw size={15} color={semantic.text.secondary} strokeWidth={2.2} />
         <Text
-          variant="body"
+          variant="button"
           style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
         >
           Thử lại
@@ -886,7 +819,6 @@ function NoMatchView({
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 15,
           textAlign: 'center',
           marginBottom: 6,
         }}
@@ -909,10 +841,7 @@ function NoMatchView({
         style={{ backgroundColor: semantic.action.primary }}
       >
         <RotateCcw size={15} color={palette.white} strokeWidth={2.4} />
-        <Text
-          variant="body"
-          style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-        >
+        <Text variant="button" style={{ color: palette.white }}>
           Nói lại
         </Text>
       </Pressable>

@@ -89,13 +89,8 @@ function ErrorFallback({
         </View>
 
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 24,
-            lineHeight: 32,
-            textAlign: 'center',
-          }}
+          variant="display"
+          style={{ color: semantic.text.primary, textAlign: 'center' }}
         >
           Có lỗi xảy ra
         </Text>
@@ -118,37 +113,20 @@ function ErrorFallback({
           >
             <View className="flex-row items-center gap-2 mb-2">
               <SquareStack size={13} color={palette.obsidian[200]} />
-              <Text
-                variant="caption"
-                style={{
-                  color: palette.obsidian[200],
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.5,
-                  fontSize: 10,
-                }}
-              >
-                CHI TIẾT LỖI (DEV)
+              <Text variant="badge" style={{ color: palette.obsidian[200] }}>
+                Chi tiết lỗi (dev)
               </Text>
             </View>
             <Text
-              style={{
-                color: palette.red[100],
-                fontFamily: 'BeVietnamPro_500Medium',
-                fontSize: 13,
-                lineHeight: 18,
-              }}
+              variant="caption"
+              style={{ color: palette.red[100], fontFamily: 'BeVietnamPro_500Medium' }}
             >
               {error.message}
             </Text>
             {errorInfo?.componentStack && (
               <Text
-                style={{
-                  color: palette.obsidian[200],
-                  fontFamily: 'BeVietnamPro_400Regular',
-                  fontSize: 10,
-                  lineHeight: 14,
-                  marginTop: 8,
-                }}
+                variant="caption"
+                style={{ color: palette.obsidian[200], marginTop: 8 }}
                 numberOfLines={6}
               >
                 {errorInfo.componentStack.trim()}
@@ -174,12 +152,8 @@ function ErrorFallback({
         >
           <RefreshCw size={18} color={palette.white} strokeWidth={2.4} />
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-              letterSpacing: 0.3,
-            }}
+            variant="button"
+            style={{ color: palette.white, letterSpacing: 0.3 }}
           >
             Thử lại
           </Text>
@@ -196,11 +170,8 @@ function ErrorFallback({
         >
           <Send size={15} color={semantic.text.primary} strokeWidth={2.2} />
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_600SemiBold',
-              fontSize: 14,
-            }}
+            variant="subtitle"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
           >
             Gửi log chi tiết cho team
           </Text>

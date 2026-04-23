@@ -103,12 +103,8 @@ export default function Scanner() {
             <CameraIcon size={36} color={palette.obsidian[50]} strokeWidth={1.8} />
           </View>
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 22,
-              textAlign: 'center',
-            }}
+            variant="h1"
+            style={{ color: palette.white, textAlign: 'center' }}
           >
             Cần quyền Camera
           </Text>
@@ -129,7 +125,7 @@ export default function Scanner() {
               className="h-12 rounded-2xl items-center justify-center"
               style={{ backgroundColor: semantic.action.primary }}
             >
-              <Text style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+              <Text variant="button" style={{ color: palette.white }}>
                 {permission.canAskAgain ? 'Cấp quyền Camera' : 'Mở Settings hệ thống'}
               </Text>
             </Pressable>
@@ -138,7 +134,7 @@ export default function Scanner() {
               className="h-12 rounded-2xl items-center justify-center"
               style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >
-              <Text style={{ color: palette.obsidian[50], fontFamily: 'BeVietnamPro_600SemiBold' }}>
+              <Text variant="button" style={{ color: palette.obsidian[50], fontFamily: 'BeVietnamPro_600SemiBold' }}>
                 Đóng
               </Text>
             </Pressable>
@@ -175,11 +171,8 @@ export default function Scanner() {
             <X size={20} color={palette.white} />
           </Pressable>
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-            }}
+            variant="button"
+            style={{ color: palette.white }}
           >
             Quét CCCD
           </Text>
@@ -246,7 +239,6 @@ export default function Scanner() {
                 style={{
                   color: palette.obsidian[50],
                   fontFamily: 'BeVietnamPro_600SemiBold',
-                  fontSize: 12,
                 }}
               >
                 DEV: Quét mẫu (Bùi Thị Hương)
@@ -279,14 +271,10 @@ export default function Scanner() {
                 <CheckCircle2 size={18} color={palette.emerald[700]} strokeWidth={2.4} />
               </View>
               <Text
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.5,
-                  fontSize: 11,
-                }}
+                variant="badge"
+                style={{ color: palette.emerald[700] }}
               >
-                QUÉT THÀNH CÔNG
+                Quét thành công
               </Text>
             </View>
 
@@ -309,10 +297,8 @@ export default function Scanner() {
                 }}
               >
                 <Text
-                  style={{
-                    color: semantic.text.primary,
-                    fontFamily: 'BeVietnamPro_600SemiBold',
-                  }}
+                  variant="button"
+                  style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
                 >
                   Quét lại
                 </Text>
@@ -330,10 +316,8 @@ export default function Scanner() {
                 }}
               >
                 <Text
-                  style={{
-                    color: palette.white,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                  }}
+                  variant="button"
+                  style={{ color: palette.white }}
                 >
                   Dùng thông tin này
                 </Text>
@@ -401,7 +385,7 @@ function InfoRow({
     >
       <Text
         variant="caption"
-        style={{ color: semantic.text.secondary, width: 80, flexShrink: 0, fontSize: 12 }}
+        style={{ color: semantic.text.secondary, width: 80, flexShrink: 0 }}
       >
         {label}
       </Text>

@@ -114,14 +114,10 @@ export default function IncomeTransactionDetail() {
               <TrendingUp size={14} color={srcColor} strokeWidth={2.6} />
             </View>
             <Text
-              variant="caption"
-              style={{
-                color: srcColor,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 12,
-              }}
+              variant="badge"
+              style={{ color: srcColor }}
             >
-              {incomeSourceLabels[tx.source].toUpperCase()}
+              {incomeSourceLabels[tx.source]}
             </Text>
           </View>
 
@@ -129,12 +125,9 @@ export default function IncomeTransactionDetail() {
             Thực nhận
           </Text>
           <Text
-            variant="h1"
+            variant="display"
             style={{
               color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 30,
-              lineHeight: 36,
               marginTop: 2,
             }}
           >

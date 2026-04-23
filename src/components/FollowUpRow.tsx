@@ -45,13 +45,7 @@ export const FollowUpRow = memo(function FollowUpRow({ lead, onPress, showDivide
         className="w-10 h-10 rounded-full items-center justify-center"
         style={{ backgroundColor: groupTint.bg }}
       >
-        <Text
-          style={{
-            color: groupTint.fg,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 13,
-          }}
-        >
+        <Text variant="caption" style={{ color: groupTint.fg, fontFamily: 'BeVietnamPro_700Bold' }}>
           {leadInitials(lead.fullName)}
         </Text>
       </View>
@@ -59,26 +53,14 @@ export const FollowUpRow = memo(function FollowUpRow({ lead, onPress, showDivide
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 14,
-              flex: 1,
-            }}
+            variant="subtitle"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold', flex: 1 }}
             numberOfLines={1}
           >
             {lead.fullName}
           </Text>
-          <Text
-            variant="caption"
-            style={{
-              color: groupTint.fg,
-              fontFamily: 'BeVietnamPro_600SemiBold',
-              fontSize: 10,
-              letterSpacing: 0.3,
-            }}
-          >
-            {statusLabels[lead.status].toUpperCase()}
+          <Text variant="badge" style={{ color: groupTint.fg }}>
+            {statusLabels[lead.status]}
           </Text>
         </View>
 
@@ -95,7 +77,6 @@ export const FollowUpRow = memo(function FollowUpRow({ lead, onPress, showDivide
                 style={{
                   color: overdue ? semantic.urgency.fg : semantic.text.tertiary,
                   fontFamily: overdue ? 'BeVietnamPro_600SemiBold' : 'BeVietnamPro_500Medium',
-                  fontSize: 11,
                 }}
                 numberOfLines={1}
               >
@@ -109,7 +90,7 @@ export const FollowUpRow = memo(function FollowUpRow({ lead, onPress, showDivide
             <Building2 size={11} color={semantic.text.tertiary} />
             <Text
               variant="caption"
-              style={{ color: semantic.text.secondary, fontSize: 11, flex: 1 }}
+              style={{ color: semantic.text.secondary, flex: 1 }}
               numberOfLines={1}
             >
               {lead.primaryProject.shortName}

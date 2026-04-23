@@ -82,11 +82,10 @@ export default function ProfileEdit() {
           hitSlop={4}
         >
           <Text
-            variant="body"
+            variant="subtitle"
             style={{
               color: isDirty ? palette.white : semantic.text.tertiary,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 14,
             }}
           >
             Lưu
@@ -113,6 +112,7 @@ export default function ProfileEdit() {
                   elevation: 6,
                 }}
               >
+                {/* Avatar initials — 40px intentional hero size for profile screen avatar. */}
                 <Text
                   style={{
                     color: palette.white,

@@ -71,15 +71,10 @@ export function AmenitySection({ data, title, subtitle }: Props) {
 
       <View className="px-4 pt-6 pb-4">
         <Text
-          variant="caption"
-          style={{
-            color: semantic.text.secondary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            letterSpacing: 0.5,
-            marginBottom: 16,
-          }}
+          variant="label"
+          style={{ color: semantic.text.secondary, marginBottom: 16 }}
         >
-          DANH SÁCH TIỆN ÍCH
+          Danh sách tiện ích
         </Text>
 
         <View className="gap-6">
@@ -130,7 +125,6 @@ function HeroBlock({
           style={{
             color: semantic.action.primaryDeep,
             fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 12,
           }}
         >
           {totalCount} tiện ích
@@ -139,13 +133,8 @@ function HeroBlock({
 
       <View style={{ position: 'absolute', bottom: 18, left: 18, right: 18 }}>
         <Text
-          style={{
-            color: palette.white,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 26,
-            lineHeight: 32,
-            letterSpacing: 0.2,
-          }}
+          variant="display"
+          style={{ color: palette.white, letterSpacing: 0.2 }}
         >
           {title}
         </Text>
@@ -191,11 +180,7 @@ function CategoryBlock({ category }: { category: AmenityCategory }) {
         >
           <Text
             variant="caption"
-            style={{
-              color: semantic.text.secondary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 11,
-            }}
+            style={{ color: semantic.text.secondary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {category.items.length}
           </Text>
@@ -269,12 +254,8 @@ function ItemRow({
       </View>
       <View className="flex-1">
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 15,
-            lineHeight: 20,
-          }}
+          variant="body"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           numberOfLines={2}
         >
           {item.title}
@@ -288,11 +269,7 @@ function ItemRow({
             <MapPin size={10} color={semantic.action.primary} strokeWidth={2.4} />
             <Text
               variant="caption"
-              style={{
-                color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-              }}
+              style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
             >
               {item.distance}
             </Text>
@@ -301,12 +278,7 @@ function ItemRow({
 
         <Text
           variant="caption"
-          style={{
-            color: semantic.text.secondary,
-            marginTop: item.distance ? 6 : 4,
-            lineHeight: 16,
-            fontSize: 12,
-          }}
+          style={{ color: semantic.text.secondary, marginTop: item.distance ? 6 : 4 }}
           numberOfLines={3}
         >
           {item.description}

@@ -98,11 +98,7 @@ export default function About() {
             >
               <Text
                 variant="caption"
-                style={{
-                  color: semantic.action.primaryDeep,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 11,
-                }}
+                style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 v{APP_VERSION}
               </Text>

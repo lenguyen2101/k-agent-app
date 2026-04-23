@@ -126,16 +126,10 @@ export function LoanCalculator({ initialPrincipal }: Props) {
       {/* Section: Vốn tự có — slider 20%..80% step 10 */}
       <Section title="Vốn tự có" icon={Wallet}>
         <View className="flex-row items-baseline justify-between mb-1">
-          <Text
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 24,
-            }}
-          >
+          <Text variant="stat" style={{ color: semantic.action.primaryDeep }}>
             {downPct}%
           </Text>
-          <Text variant="caption" className="text-text-tertiary" style={{ fontSize: 11 }}>
+          <Text variant="caption" className="text-text-tertiary">
             {DOWN_MIN}% – {DOWN_MAX}%
           </Text>
         </View>
@@ -159,7 +153,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
                 color: v === downPct ? semantic.action.primaryDeep : semantic.text.tertiary,
                 fontFamily:
                   v === downPct ? 'BeVietnamPro_700Bold' : 'BeVietnamPro_500Medium',
-                fontSize: 10,
               }}
             >
               {v}
@@ -180,16 +173,10 @@ export function LoanCalculator({ initialPrincipal }: Props) {
       {/* Section: Kỳ hạn vay — slider 5..30 năm step 5 */}
       <Section title="Kỳ hạn vay" icon={Calendar}>
         <View className="flex-row items-baseline justify-between mb-1">
-          <Text
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 24,
-            }}
-          >
+          <Text variant="stat" style={{ color: semantic.action.primaryDeep }}>
             {termYears} năm
           </Text>
-          <Text variant="caption" className="text-text-tertiary" style={{ fontSize: 11 }}>
+          <Text variant="caption" className="text-text-tertiary">
             {TERM_MIN} – {TERM_MAX} năm
           </Text>
         </View>
@@ -214,7 +201,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
                   y === termYears ? semantic.action.primaryDeep : semantic.text.tertiary,
                 fontFamily:
                   y === termYears ? 'BeVietnamPro_700Bold' : 'BeVietnamPro_500Medium',
-                fontSize: 10,
               }}
             >
               {y}
@@ -247,13 +233,7 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               color: semantic.text.primary,
             }}
           />
-          <Text
-            style={{
-              color: semantic.text.secondary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-            }}
-          >
+          <Text variant="button" style={{ color: semantic.text.secondary, fontFamily: 'BeVietnamPro_700Bold' }}>
             %/năm
           </Text>
         </View>
@@ -272,14 +252,13 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               }}
             >
               <Text
-                variant="body"
+                variant="caption"
                 style={{
                   color:
                     ratePct === r.value
                       ? semantic.action.primaryDeep
                       : semantic.text.primary,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 13,
                 }}
               >
                 {r.label}
@@ -291,7 +270,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
                     ratePct === r.value
                       ? semantic.action.primaryDeep
                       : semantic.text.tertiary,
-                  fontSize: 10,
                   marginTop: 1,
                 }}
               >
@@ -333,25 +311,12 @@ export function LoanCalculator({ initialPrincipal }: Props) {
             elevation: 6,
           }}
         >
-          <Text
-            variant="caption"
-            style={{
-              color: palette.sienna[100],
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.5,
-              fontSize: 11,
-            }}
-          >
-            {method === 'annuity' ? 'TRẢ HÀNG THÁNG (CỐ ĐỊNH)' : 'TRẢ THÁNG ĐẦU'}
+          <Text variant="label" style={{ color: palette.sienna[100] }}>
+            {method === 'annuity' ? 'Trả hàng tháng (cố định)' : 'Trả tháng đầu'}
           </Text>
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 30,
-              lineHeight: 36,
-              marginTop: 4,
-            }}
+            variant="display"
+            style={{ color: palette.white, marginTop: 4 }}
           >
             {formatVND(Math.round(result.firstPayment))}
           </Text>
@@ -360,7 +325,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               variant="caption"
               style={{
                 color: palette.sienna[100],
-                fontSize: 12,
                 marginTop: 4,
                 opacity: 0.9,
               }}
@@ -374,17 +338,14 @@ export function LoanCalculator({ initialPrincipal }: Props) {
             style={{ borderTopWidth: 1, borderTopColor: 'rgba(247,243,237,0.2)' }}
           >
             <View className="flex-1">
-              <Text
-                variant="caption"
-                style={{ color: palette.sienna[100], fontSize: 11 }}
-              >
+              <Text variant="caption" style={{ color: palette.sienna[100] }}>
                 Tổng lãi
               </Text>
               <Text
+                variant="subtitle"
                 style={{
                   color: palette.white,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 15,
                   marginTop: 2,
                 }}
               >
@@ -392,17 +353,14 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               </Text>
             </View>
             <View className="flex-1">
-              <Text
-                variant="caption"
-                style={{ color: palette.sienna[100], fontSize: 11 }}
-              >
+              <Text variant="caption" style={{ color: palette.sienna[100] }}>
                 Tổng phải trả
               </Text>
               <Text
+                variant="subtitle"
                 style={{
                   color: palette.white,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 15,
                   marginTop: 2,
                 }}
               >
@@ -416,10 +374,10 @@ export function LoanCalculator({ initialPrincipal }: Props) {
       {/* Amortization schedule */}
       <View className="mx-4 mt-5">
         <Text
+          variant="body"
           style={{
             color: semantic.text.primary,
             fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 15,
             marginBottom: 8,
           }}
         >
@@ -444,29 +402,19 @@ export function LoanCalculator({ initialPrincipal }: Props) {
           >
             <Text
               variant="caption"
-              style={{ width: 28, color: semantic.text.tertiary, fontSize: 11 }}
+              style={{ width: 28, color: semantic.text.tertiary }}
             >
               Th
             </Text>
             <Text
               variant="caption"
-              style={{
-                flex: 1,
-                color: semantic.text.tertiary,
-                fontSize: 11,
-                textAlign: 'right',
-              }}
+              style={{ flex: 1, color: semantic.text.tertiary, textAlign: 'right' }}
             >
               Gốc (tr)
             </Text>
             <Text
               variant="caption"
-              style={{
-                flex: 1,
-                color: semantic.text.tertiary,
-                fontSize: 11,
-                textAlign: 'right',
-              }}
+              style={{ flex: 1, color: semantic.text.tertiary, textAlign: 'right' }}
             >
               Lãi (tr)
             </Text>
@@ -475,7 +423,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               style={{
                 flex: 1,
                 color: semantic.text.tertiary,
-                fontSize: 11,
                 textAlign: 'right',
                 fontFamily: 'BeVietnamPro_600SemiBold',
               }}
@@ -497,7 +444,7 @@ export function LoanCalculator({ initialPrincipal }: Props) {
                   >
                     <Text
                       variant="caption"
-                      style={{ color: semantic.text.tertiary, fontSize: 11 }}
+                      style={{ color: semantic.text.tertiary }}
                     >
                       ... còn {result.schedule.length - 15} tháng ...
                     </Text>
@@ -527,11 +474,10 @@ export function LoanCalculator({ initialPrincipal }: Props) {
               style={{ borderTopWidth: 1, borderTopColor: semantic.border.light }}
             >
               <Text
-                variant="body"
+                variant="caption"
                 style={{
                   color: semantic.action.primary,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 13,
                 }}
               >
                 {isCollapsed
@@ -559,8 +505,6 @@ export function LoanCalculator({ initialPrincipal }: Props) {
           textAlign: 'center',
           marginTop: 14,
           marginHorizontal: 24,
-          fontSize: 11,
-          lineHeight: 16,
         }}
       >
         * Kết quả tính toán chỉ mang tính tham khảo. Lãi suất thực tế phụ thuộc vào
@@ -586,11 +530,8 @@ function Section({
       <View className="flex-row items-center gap-2 mb-3">
         {Icon && <Icon size={15} color={semantic.action.primaryDeep} strokeWidth={2.4} />}
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 14,
-          }}
+          variant="subtitle"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
         >
           {title}
         </Text>
@@ -630,11 +571,8 @@ function AmountInput({
         }}
       />
       <Text
-        style={{
-          color: semantic.text.secondary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 18,
-        }}
+        variant="h3"
+        style={{ color: semantic.text.secondary }}
       >
         đ
       </Text>
@@ -665,11 +603,10 @@ function PresetChip({
       }}
     >
       <Text
-        variant="body"
+        variant="caption"
         style={{
           color: active ? semantic.action.primaryDeep : semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
         }}
       >
         {label}
@@ -699,10 +636,10 @@ function MethodOption({
       }}
     >
       <Text
+        variant="caption"
         style={{
           color: active ? semantic.action.primaryDeep : semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
         }}
       >
         {title}
@@ -711,9 +648,7 @@ function MethodOption({
         variant="caption"
         style={{
           color: active ? semantic.action.primaryDeep : semantic.text.tertiary,
-          fontSize: 11,
           marginTop: 3,
-          lineHeight: 15,
           opacity: 0.85,
         }}
       >
@@ -738,19 +673,15 @@ function Info({
     <View>
       <Text
         variant="caption"
-        style={{
-          color: semantic.text.tertiary,
-          fontSize: 11,
-          textAlign: align,
-        }}
+        style={{ color: semantic.text.tertiary, textAlign: align }}
       >
         {label}
       </Text>
       <Text
+        variant="body"
         style={{
           color: accent ? palette.emerald[700] : semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 15,
           marginTop: 1,
           textAlign: align,
         }}
@@ -783,7 +714,6 @@ function Row({ row }: { row: AmortizationRow }) {
           width: 28,
           color: semantic.text.secondary,
           fontFamily: 'BeVietnamPro_600SemiBold',
-          fontSize: 12,
         }}
       >
         {row.month}
@@ -793,7 +723,6 @@ function Row({ row }: { row: AmortizationRow }) {
         style={{
           flex: 1,
           color: semantic.text.primary,
-          fontSize: 12,
           textAlign: 'right',
           fontVariant: ['tabular-nums'],
         }}
@@ -805,7 +734,6 @@ function Row({ row }: { row: AmortizationRow }) {
         style={{
           flex: 1,
           color: palette.sienna[700],
-          fontSize: 12,
           textAlign: 'right',
           fontVariant: ['tabular-nums'],
         }}
@@ -818,7 +746,6 @@ function Row({ row }: { row: AmortizationRow }) {
           flex: 1,
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 12,
           textAlign: 'right',
           fontVariant: ['tabular-nums'],
         }}

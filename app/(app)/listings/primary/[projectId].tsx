@@ -258,7 +258,7 @@ export default function PrimaryProjectDetail() {
             <ImagesIcon size={12} color={palette.white} strokeWidth={2.2} />
             <Text
               variant="caption"
-              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
             >
               {galleryIndex + 1}/{project.media.length}
             </Text>
@@ -271,7 +271,7 @@ export default function PrimaryProjectDetail() {
               <PlayCircle size={12} color={palette.white} strokeWidth={2.2} />
               <Text
                 variant="caption"
-                style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+                style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
               >
                 Có video
               </Text>
@@ -286,42 +286,23 @@ export default function PrimaryProjectDetail() {
               className="px-2.5 py-1 rounded-full"
               style={{ backgroundColor: semantic.action.primaryDeep }}
             >
-              <Text
-                variant="caption"
-                style={{
-                  color: palette.white,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 11,
-                  letterSpacing: 0.3,
-                }}
-              >
-                SƠ CẤP
+              <Text variant="badge" style={{ color: palette.white }}>
+                Sơ cấp
               </Text>
             </View>
             <View
               className="px-2.5 py-1 rounded-full"
               style={{ backgroundColor: status.bg }}
             >
-              <Text
-                variant="caption"
-                style={{
-                  color: status.fg,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 11,
-                }}
-              >
+              <Text variant="badge" style={{ color: status.fg }}>
                 {primaryStatusLabels[project.status]}
               </Text>
             </View>
           </View>
 
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 20,
-              lineHeight: 26,
-            }}
+            variant="h2"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {project.name}
           </Text>
@@ -335,20 +316,16 @@ export default function PrimaryProjectDetail() {
 
           <View className="mt-3">
             <Text
-              style={{
-                color: palette.emerald[700],
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 22,
-                lineHeight: 28,
-              }}
+              variant="h1"
+              style={{ color: palette.emerald[700] }}
             >
               {priceRange}
             </Text>
             <Text
+              variant="caption"
               style={{
                 color: palette.emerald[600],
                 fontFamily: 'BeVietnamPro_500Medium',
-                fontSize: 13,
                 marginTop: 2,
               }}
             >
@@ -387,11 +364,10 @@ export default function PrimaryProjectDetail() {
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="subtitle"
                     style={{
                       color: active ? semantic.action.primaryDeep : semantic.text.secondary,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
                     }}
                   >
                     {t.label}
@@ -445,7 +421,7 @@ export default function PrimaryProjectDetail() {
           className="flex-1 h-12 rounded-xl items-center justify-center border"
           style={{ borderColor: semantic.border.default, backgroundColor: palette.white }}
         >
-          <Text variant="body" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
+          <Text variant="button" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
             Liên hệ CĐT
           </Text>
         </Pressable>
@@ -466,7 +442,7 @@ export default function PrimaryProjectDetail() {
             elevation: 4,
           }}
         >
-          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+          <Text variant="button" style={{ color: palette.white }}>
             Booking giữ chỗ
           </Text>
         </Pressable>
@@ -525,16 +501,13 @@ function OverviewSection({ project }: { project: PrimaryProject }) {
         style={{ backgroundColor: semantic.action.primarySoft }}
       >
         <Text
-          variant="caption"
+          variant="badge"
           style={{
             color: semantic.action.primaryDeep,
-            fontFamily: 'BeVietnamPro_700Bold',
-            letterSpacing: 0.6,
-            fontSize: 11,
             marginBottom: 14,
           }}
         >
-          VỀ DỰ ÁN
+          Về dự án
         </Text>
         <DescriptionBlocks blocks={project.descriptionBlocks} />
       </View>
@@ -550,11 +523,9 @@ function DescriptionBlocks({ blocks }: { blocks: DescriptionBlock[] }) {
           return (
             <Text
               key={i}
+              variant="h3"
               style={{
                 color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 17,
-                lineHeight: 22,
                 marginTop: i === 0 ? 0 : 8,
               }}
             >
@@ -582,11 +553,10 @@ function DescriptionBlocks({ blocks }: { blocks: DescriptionBlock[] }) {
             >
               <Quote size={16} color={semantic.action.primary} strokeWidth={2.2} />
               <Text
+                variant="subtitle"
                 style={{
                   color: semantic.action.primaryDeep,
                   fontFamily: 'BeVietnamPro_600SemiBold',
-                  fontSize: 14,
-                  lineHeight: 22,
                   marginTop: 6,
                   fontStyle: 'italic',
                 }}
@@ -656,23 +626,16 @@ function HighlightCard({ highlight }: { highlight: OverviewHighlight }) {
         <Icon size={16} color={tint.fg} strokeWidth={2.4} />
       </View>
       <Text
-        variant="caption"
-        style={{
-          color: tint.fg,
-          fontFamily: 'BeVietnamPro_600SemiBold',
-          fontSize: 11,
-          letterSpacing: 0.3,
-          opacity: 0.85,
-        }}
+        variant="badge"
+        style={{ color: tint.fg, opacity: 0.85 }}
       >
         {highlight.label}
       </Text>
       <Text
+        variant="caption"
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
-          lineHeight: 17,
           marginTop: 2,
         }}
         numberOfLines={3}
@@ -731,7 +694,6 @@ function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
             style={{
               color: semantic.text.primary,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
               flex: 1,
             }}
             numberOfLines={1}
@@ -742,15 +704,7 @@ function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
             className="px-2 py-0.5 rounded-full"
             style={{ backgroundColor: badge.bg }}
           >
-            <Text
-              variant="caption"
-              style={{
-                color: badge.fg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 10,
-                letterSpacing: 0.3,
-              }}
-            >
+            <Text variant="badge" style={{ color: badge.fg }}>
               {towerStatusLabels[tower.status]}
             </Text>
           </View>
@@ -807,11 +761,10 @@ function UnitsSection({ project }: { project: PrimaryProject }) {
               }}
             >
               <Text
-                variant="body"
+                variant="caption"
                 style={{
                   color: active ? semantic.action.primaryDeep : semantic.text.secondary,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 13,
                 }}
               >
                 {f.label}
@@ -860,7 +813,7 @@ function UnitTypeCard({ unit, projectId }: { unit: UnitType; projectId: string }
           <ImagesIcon size={11} color={palette.white} strokeWidth={2.2} />
           <Text
             variant="caption"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium', fontSize: 11 }}
+            style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium' }}
           >
             {unit.photoCount}
           </Text>
@@ -868,11 +821,8 @@ function UnitTypeCard({ unit, projectId }: { unit: UnitType; projectId: string }
       </View>
       <View className="px-4 py-3">
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 16,
-          }}
+          variant="body-lg"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
         >
           {unit.name} ({unit.areaMin === unit.areaMax ? `${unit.areaMin}m²` : `${unit.areaMin} - ${unit.areaMax}m²`})
         </Text>
@@ -976,7 +926,7 @@ function HeroMediaFrame({ media }: { media: MediaItem }) {
         >
           <Text
             variant="caption"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+            style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
             numberOfLines={1}
           >
             {media.title}
@@ -992,12 +942,8 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle?: string })
   return (
     <View>
       <Text
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 18,
-          lineHeight: 24,
-        }}
+        variant="h3"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {title}
       </Text>

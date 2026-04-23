@@ -83,6 +83,7 @@ export default function Splash() {
           <KAgentLogo size={112} />
         </Animated.View>
 
+        {/* Splash brand wordmark: 34px — oversize intentional, only screen in app with this. */}
         <Text
           style={{
             color: palette.white,
@@ -121,7 +122,6 @@ export default function Splash() {
           style={{
             color: 'rgba(255,255,255,0.65)',
             fontFamily: 'BeVietnamPro_500Medium',
-            fontSize: 11,
           }}
         >
           v1.0.0 · Đang khởi động...

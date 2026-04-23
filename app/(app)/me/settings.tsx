@@ -337,10 +337,8 @@ function ActionRow({
       right={
         <View className="w-7 h-7 items-center justify-center">
           <Text
-            style={{
-              color: semantic.text.tertiary,
-              fontSize: 18,
-            }}
+            variant="h3"
+            style={{ color: semantic.text.tertiary }}
           >
             ›
           </Text>
@@ -395,11 +393,10 @@ function OptionGroupRow({
             }}
           >
             <Text
-              variant="body"
+              variant="caption"
               style={{
                 color: o.active ? palette.white : semantic.text.secondary,
                 fontFamily: 'BeVietnamPro_600SemiBold',
-                fontSize: 13,
               }}
             >
               {o.label}

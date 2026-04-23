@@ -123,9 +123,9 @@ export default function UnitTypeDetail() {
             <Maximize2 size={12} color={palette.white} strokeWidth={2.2} />
             <Text
               variant="caption"
-              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
             >
-              FLOORPLAN
+              Floorplan
             </Text>
           </View>
           <View
@@ -135,7 +135,7 @@ export default function UnitTypeDetail() {
             <ImagesIcon size={12} color={palette.white} strokeWidth={2.2} />
             <Text
               variant="caption"
-              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+              style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
             >
               {unit.photoCount}
             </Text>
@@ -145,42 +145,29 @@ export default function UnitTypeDetail() {
         {/* Metadata */}
         <View className="bg-white px-4 pt-4 pb-5">
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontFamily: 'BeVietnamPro_500Medium',
-              letterSpacing: 0.4,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.tertiary, fontFamily: 'BeVietnamPro_500Medium' }}
           >
-            {project.shortName.toUpperCase()} · {unit.towerName.toUpperCase()}
+            {project.shortName} · {unit.towerName}
           </Text>
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 22,
-              lineHeight: 28,
-              marginTop: 4,
-            }}
+            variant="h1"
+            style={{ color: semantic.text.primary, marginTop: 4 }}
           >
             {unit.name} · {unit.areaMin === unit.areaMax ? `${unit.areaMin}m²` : `${unit.areaMin}-${unit.areaMax}m²`}
           </Text>
 
           <Text
-            style={{
-              color: palette.emerald[700],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-              marginTop: 8,
-            }}
+            variant="body-lg"
+            style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold', marginTop: 8 }}
           >
             {priceRange}
           </Text>
           <Text
+            variant="caption"
             style={{
               color: semantic.text.secondary,
               fontFamily: 'BeVietnamPro_500Medium',
-              fontSize: 13,
               marginTop: 2,
             }}
           >
@@ -247,12 +234,9 @@ export default function UnitTypeDetail() {
                   <View className="flex-row items-center gap-1.5">
                     <Sparkles size={14} color={palette.white} strokeWidth={2.4} />
                     <Text
-                      variant="caption"
+                      variant="badge"
                       style={{
                         color: palette.white,
-                        fontFamily: 'BeVietnamPro_700Bold',
-                        letterSpacing: 0.6,
-                        fontSize: 11,
                         opacity: 0.92,
                       }}
                     >
@@ -260,11 +244,9 @@ export default function UnitTypeDetail() {
                     </Text>
                   </View>
                   <Text
+                    variant="display"
                     style={{
                       color: palette.white,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 30,
-                      lineHeight: 36,
                       marginTop: 6,
                     }}
                   >
@@ -284,7 +266,7 @@ export default function UnitTypeDetail() {
                   <TrendingUp size={14} color={palette.white} strokeWidth={2.4} />
                   <Text
                     variant="caption"
-                    style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold', fontSize: 13 }}
+                    style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
                   >
                     {commissionPct}%
                   </Text>
@@ -298,16 +280,16 @@ export default function UnitTypeDetail() {
               >
                 <View className="flex-1">
                   <Text
-                    variant="caption"
-                    style={{ color: palette.white, opacity: 0.82, letterSpacing: 0.3, fontSize: 11 }}
+                    variant="badge"
+                    style={{ color: palette.white, opacity: 0.82 }}
                   >
-                    GIÁ CĂN TRUNG BÌNH
+                    Giá căn trung bình
                   </Text>
                   <Text
+                    variant="body"
                     style={{
                       color: palette.white,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 15,
                       marginTop: 2,
                     }}
                   >
@@ -316,16 +298,16 @@ export default function UnitTypeDetail() {
                 </View>
                 <View className="flex-1">
                   <Text
-                    variant="caption"
-                    style={{ color: palette.white, opacity: 0.82, letterSpacing: 0.3, fontSize: 11 }}
+                    variant="badge"
+                    style={{ color: palette.white, opacity: 0.82 }}
                   >
-                    TỶ LỆ HH
+                    Tỷ lệ HH
                   </Text>
                   <Text
+                    variant="body"
                     style={{
                       color: palette.white,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 15,
                       marginTop: 2,
                     }}
                   >
@@ -369,11 +351,8 @@ export default function UnitTypeDetail() {
             </View>
             <View className="flex-1">
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                }}
+                variant="subtitle"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 Tính vay cho căn này
               </Text>
@@ -450,11 +429,8 @@ export default function UnitTypeDetail() {
                     <View className="flex-1">
                       <View className="flex-row items-center gap-2">
                         <Text
-                          style={{
-                            color: semantic.text.primary,
-                            fontFamily: 'BeVietnamPro_700Bold',
-                            fontSize: 15,
-                          }}
+                          variant="body"
+                          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                         >
                           {au.code}
                         </Text>
@@ -470,15 +446,7 @@ export default function UnitTypeDetail() {
                               backgroundColor: tint.dot,
                             }}
                           />
-                          <Text
-                            variant="caption"
-                            style={{
-                              color: tint.fg,
-                              fontFamily: 'BeVietnamPro_700Bold',
-                              fontSize: 10,
-                              letterSpacing: 0.3,
-                            }}
-                          >
+                          <Text variant="badge" style={{ color: tint.fg }}>
                             {availableUnitStatusLabels[au.status]}
                           </Text>
                         </View>
@@ -508,11 +476,8 @@ export default function UnitTypeDetail() {
                     </View>
                     <View className="items-end ml-2">
                       <Text
-                        style={{
-                          color: palette.emerald[700],
-                          fontFamily: 'BeVietnamPro_700Bold',
-                          fontSize: 15,
-                        }}
+                        variant="body"
+                        style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
                       >
                         {formatVNDCompact(au.priceVnd)}
                       </Text>
@@ -523,7 +488,6 @@ export default function UnitTypeDetail() {
                             style={{
                               color: semantic.action.primaryDeep,
                               fontFamily: 'BeVietnamPro_600SemiBold',
-                              fontSize: 11,
                             }}
                           >
                             Booking
@@ -550,11 +514,8 @@ export default function UnitTypeDetail() {
             Hoa hồng / căn
           </Text>
           <Text
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-            }}
+            variant="body-lg"
+            style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {formatVNDCompact(commissionAvg)}
           </Text>
@@ -577,7 +538,7 @@ export default function UnitTypeDetail() {
           }}
         >
           <Wallet size={18} color={palette.white} strokeWidth={2.4} />
-          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+          <Text variant="button" style={{ color: palette.white }}>
             Booking căn này
           </Text>
         </Pressable>
@@ -590,12 +551,8 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle?: string })
   return (
     <View>
       <Text
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 18,
-          lineHeight: 24,
-        }}
+        variant="h3"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {title}
       </Text>
@@ -641,23 +598,16 @@ function SpecCell({
         </View>
         <View className="flex-1">
           <Text
-            variant="caption"
-            style={{
-              color: t.fg,
-              fontFamily: 'BeVietnamPro_600SemiBold',
-              fontSize: 10,
-              letterSpacing: 0.4,
-              opacity: 0.85,
-            }}
+            variant="badge"
+            style={{ color: t.fg, opacity: 0.85 }}
           >
-            {label.toUpperCase()}
+            {label}
           </Text>
           <Text
+            variant="caption"
             style={{
               color: semantic.text.primary,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 13,
-              lineHeight: 16,
               marginTop: 1,
             }}
             numberOfLines={2}

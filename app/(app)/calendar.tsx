@@ -161,11 +161,10 @@ function SegButton({
       }}
     >
       <Text
-        variant="body"
+        variant="caption"
         style={{
           color: active ? semantic.text.primary : semantic.text.secondary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
         }}
       >
         {label}
@@ -227,11 +226,8 @@ function DayView({
         </Pressable>
         <View className="flex-1 items-center">
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
-            }}
+            variant="body"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {headerLabel}
           </Text>
@@ -326,15 +322,10 @@ function DayGrid({ events, isToday }: { events: CalendarEvent[]; isToday: boolea
           }}
         >
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.4,
-              fontSize: 10,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.tertiary }}
           >
-            NGOÀI GIỜ HÀNH CHÍNH
+            Ngoài giờ hành chính
           </Text>
           {outOfRange.map((ev) => (
             <TodoistEventCard key={ev.id} event={ev} />
@@ -414,7 +405,6 @@ function HourRow({
           variant="caption"
           style={{
             color: semantic.text.tertiary,
-            fontSize: 12,
             fontFamily: 'BeVietnamPro_600SemiBold',
             width: 44,
           }}
@@ -468,13 +458,8 @@ function NowLine({ time }: { time: Date }) {
         }}
       />
       <Text
-        variant="caption"
-        style={{
-          color: semantic.urgency.fg,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 11,
-          letterSpacing: 0.3,
-        }}
+        variant="badge"
+        style={{ color: semantic.urgency.fg }}
       >
         {label}
       </Text>
@@ -514,12 +499,8 @@ function EventBlockInline({ event }: { event: CalendarEvent }) {
           <PhoneCall size={13} color={fg} strokeWidth={2.4} />
         )}
         <Text
-          style={{
-            color: fg,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 12,
-            letterSpacing: 0.3,
-          }}
+          variant="badge"
+          style={{ color: fg }}
         >
           {timeLabel(event.scheduledAt)}
         </Text>
@@ -527,10 +508,10 @@ function EventBlockInline({ event }: { event: CalendarEvent }) {
 
       {/* Line 2: lead name */}
       <Text
+        variant="subtitle"
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 14,
           marginTop: 4,
         }}
         numberOfLines={1}
@@ -543,8 +524,6 @@ function EventBlockInline({ event }: { event: CalendarEvent }) {
         variant="caption"
         style={{
           color: semantic.text.secondary,
-          fontSize: 12,
-          lineHeight: 17,
           marginTop: 3,
         }}
         numberOfLines={3}
@@ -584,11 +563,8 @@ function AgendaView({
         </View>
         <View className="flex-1">
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
-            }}
+            variant="body"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             Hôm nay: {todayCount} cuộc hẹn
           </Text>
@@ -603,11 +579,7 @@ function AgendaView({
           >
             <Text
               variant="caption"
-              style={{
-                color: palette.red[600],
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-              }}
+              style={{ color: palette.red[600], fontFamily: 'BeVietnamPro_700Bold' }}
             >
               {overdueCount} trễ
             </Text>
@@ -628,16 +600,12 @@ function AgendaView({
           <View key={section.key} className="mt-6">
             <View className="px-4 mb-2 flex-row items-baseline gap-2">
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                  letterSpacing: 0.3,
-                }}
+                variant="label"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
               >
-                {section.label.toUpperCase()}
+                {section.label}
               </Text>
-              <Text variant="caption" style={{ color: semantic.text.tertiary, fontSize: 11 }}>
+              <Text variant="caption" style={{ color: semantic.text.tertiary }}>
                 {section.items.length} sự kiện
               </Text>
             </View>

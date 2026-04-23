@@ -64,13 +64,8 @@ export default function Maintenance() {
         </View>
 
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 26,
-            lineHeight: 34,
-            textAlign: 'center',
-          }}
+          variant="display"
+          style={{ color: semantic.text.primary, textAlign: 'center' }}
         >
           K-Agent đang bảo trì
         </Text>
@@ -156,12 +151,8 @@ export default function Maintenance() {
             style={retrying ? { transform: [{ rotate: '180deg' }] } : undefined}
           />
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-              letterSpacing: 0.3,
-            }}
+            variant="button"
+            style={{ color: palette.white, letterSpacing: 0.3 }}
           >
             {retrying ? 'Đang kiểm tra...' : 'Thử lại'}
           </Text>

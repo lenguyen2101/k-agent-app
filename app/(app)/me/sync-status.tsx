@@ -51,12 +51,7 @@ export default function SyncStatusScreen() {
         </Pressable>
         <Text
           variant="h3"
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            flex: 1,
-            textAlign: 'center',
-          }}
+          style={{ color: semantic.text.primary, flex: 1, textAlign: 'center' }}
         >
           Đồng bộ dữ liệu
         </Text>
@@ -101,7 +96,6 @@ export default function SyncStatusScreen() {
                     variant="h2"
                     style={{
                       color: allSynced ? palette.emerald[700] : semantic.action.primaryDeep,
-                      fontFamily: 'BeVietnamPro_700Bold',
                     }}
                   >
                     {allSynced ? 'Tất cả đã sync' : `${totalPending} mục đang chờ`}
@@ -164,15 +158,11 @@ export default function SyncStatusScreen() {
 
             {pendingMutations.length > 0 && (
               <Text
-                variant="caption"
+                variant="label"
                 className="px-4 mt-5 mb-2"
-                style={{
-                  color: semantic.text.secondary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.5,
-                }}
+                style={{ color: semantic.text.secondary }}
               >
-                CHI TIẾT ({pendingMutations.length})
+                Chi tiết ({pendingMutations.length})
               </Text>
             )}
           </View>
@@ -202,22 +192,10 @@ function StatChip({
       className="flex-row items-baseline gap-1 px-3 py-1.5 rounded-full"
       style={{ backgroundColor: bg }}
     >
-      <Text
-        style={{
-          color,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 15,
-        }}
-      >
+      <Text variant="body" style={{ color, fontFamily: 'BeVietnamPro_700Bold' }}>
         {count}
       </Text>
-      <Text
-        style={{
-          color,
-          fontFamily: 'BeVietnamPro_500Medium',
-          fontSize: 12,
-        }}
-      >
+      <Text variant="caption" style={{ color }}>
         {label}
       </Text>
     </View>
@@ -246,16 +224,8 @@ function MutationRow({ mutation }: { mutation: PendingMutation }) {
         </View>
         <View className="flex-1">
           <View className="flex-row items-center gap-2">
-            <Text
-              variant="caption"
-              style={{
-                color: meta.color,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.5,
-                fontSize: 11,
-              }}
-            >
-              {meta.label.toUpperCase()}
+            <Text variant="badge" style={{ color: meta.color }}>
+              {meta.label}
             </Text>
             <Text variant="caption" className="text-text-tertiary">·</Text>
             <Text variant="caption" className="text-text-secondary">
@@ -263,9 +233,8 @@ function MutationRow({ mutation }: { mutation: PendingMutation }) {
             </Text>
           </View>
           <Text
-            variant="body"
+            variant="subtitle"
             className="text-text-primary mt-1"
-            style={{ fontFamily: 'BeVietnamPro_500Medium' }}
             numberOfLines={2}
           >
             {mutation.targetLabel}
@@ -297,16 +266,10 @@ function MutationRow({ mutation }: { mutation: PendingMutation }) {
       {mutation.conflict && (
         <View className="mt-3">
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.secondary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.5,
-              fontSize: 11,
-              marginBottom: 8,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.secondary, marginBottom: 8 }}
           >
-            XUNG ĐỘT — CHỌN GIÁ TRỊ ĐÚNG
+            Xung đột — chọn giá trị đúng
           </Text>
           <ConflictOption
             label="Giá trị của bạn (local)"
@@ -346,8 +309,8 @@ function MutationRow({ mutation }: { mutation: PendingMutation }) {
             <RotateCw size={14} color={palette.white} />
           )}
           <Text
-            variant="body"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold', fontSize: 14 }}
+            variant="button"
+            style={{ color: palette.white }}
           >
             {mutation.status === 'CONFLICT' ? 'Resolve conflict' : 'Thử lại ngay'}
           </Text>
@@ -381,41 +344,21 @@ function ConflictOption({
     >
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
-          <Text
-            variant="caption"
-            style={{
-              color,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 11,
-              letterSpacing: 0.3,
-            }}
-          >
-            {label.toUpperCase()}
+          <Text variant="badge" style={{ color }}>
+            {label}
           </Text>
           {recommended && (
             <View
               className="px-1.5 py-0.5 rounded-full"
               style={{ backgroundColor: palette.white }}
             >
-              <Text
-                variant="caption"
-                style={{
-                  color,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 9,
-                  letterSpacing: 0.3,
-                }}
-              >
-                KHUYÊN DÙNG
+              <Text variant="badge" style={{ color }}>
+                Khuyên dùng
               </Text>
             </View>
           )}
         </View>
-        <Text
-          variant="body"
-          className="text-text-primary mt-0.5"
-          style={{ fontFamily: 'BeVietnamPro_500Medium' }}
-        >
+        <Text variant="subtitle" className="text-text-primary mt-0.5">
           {value}
         </Text>
       </View>

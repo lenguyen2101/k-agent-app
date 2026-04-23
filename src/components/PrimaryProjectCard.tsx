@@ -75,30 +75,15 @@ export const PrimaryProjectCard = memo(function PrimaryProjectCard({
             className="px-2.5 py-1 rounded-full"
             style={{ backgroundColor: semantic.action.primaryDeep }}
           >
-            <Text
-              variant="caption"
-              style={{
-                color: palette.white,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-                letterSpacing: 0.3,
-              }}
-            >
-              SƠ CẤP
+            <Text variant="badge" style={{ color: palette.white }}>
+              Sơ cấp
             </Text>
           </View>
           <View
             className="px-2.5 py-1 rounded-full"
             style={{ backgroundColor: status.bg }}
           >
-            <Text
-              variant="caption"
-              style={{
-                color: status.fg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-              }}
-            >
+            <Text variant="badge" style={{ color: status.fg }}>
               {primaryStatusLabels[project.status]}
             </Text>
           </View>
@@ -112,7 +97,7 @@ export const PrimaryProjectCard = memo(function PrimaryProjectCard({
           <Images size={12} color={palette.white} strokeWidth={2.2} />
           <Text
             variant="caption"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium', fontSize: 11 }}
+            style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium' }}
           >
             {project.gallery.length}
           </Text>
@@ -122,12 +107,8 @@ export const PrimaryProjectCard = memo(function PrimaryProjectCard({
       {/* Info */}
       <View className="px-4 pt-3 pb-4">
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 17,
-            lineHeight: 22,
-          }}
+          variant="h3"
+          style={{ color: semantic.text.primary }}
           numberOfLines={2}
         >
           {project.shortName}
@@ -146,18 +127,14 @@ export const PrimaryProjectCard = memo(function PrimaryProjectCard({
 
         <View className="mt-3">
           <Text
-            style={{
-              color: palette.emerald[700],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 18,
-              lineHeight: 24,
-            }}
+            variant="h3"
+            style={{ color: palette.emerald[700] }}
           >
             {priceRange}
           </Text>
           <Text
             variant="caption"
-            style={{ color: palette.emerald[600], fontSize: 12, marginTop: 1 }}
+            style={{ color: palette.emerald[600], marginTop: 1 }}
           >
             {pricePerM2}
           </Text>

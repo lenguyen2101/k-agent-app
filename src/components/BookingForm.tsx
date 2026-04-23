@@ -242,12 +242,8 @@ export function BookingForm({
 
           <View className="px-4 pt-2 pb-3">
             <Text
-              style={{
-                color: semantic.text.primary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 18,
-                lineHeight: 24,
-              }}
+              variant="h3"
+              style={{ color: semantic.text.primary }}
             >
               Chọn dự án muốn đặt chỗ
             </Text>
@@ -277,11 +273,8 @@ export function BookingForm({
                 />
                 <View className="flex-1">
                   <Text
-                    style={{
-                      color: semantic.text.primary,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 15,
-                    }}
+                    variant="body"
+                    style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                     numberOfLines={1}
                   >
                     {p.shortName}
@@ -330,14 +323,10 @@ export function BookingForm({
             >
               <ArrowLeft size={14} color={semantic.action.primaryDeep} strokeWidth={2.4} />
               <Text
-                variant="caption"
-                style={{
-                  color: semantic.action.primaryDeep,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.3,
-                }}
+                variant="badge"
+                style={{ color: semantic.action.primaryDeep }}
               >
-                ĐỔI DỰ ÁN
+                Đổi dự án
               </Text>
             </Pressable>
             <View className="flex-row items-center gap-3">
@@ -350,11 +339,8 @@ export function BookingForm({
               />
               <View className="flex-1">
                 <Text
-                  style={{
-                    color: semantic.text.primary,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 15,
-                  }}
+                  variant="body"
+                  style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                   numberOfLines={1}
                 >
                   {selectedProject.shortName}
@@ -374,16 +360,14 @@ export function BookingForm({
 
             {/* Tòa picker (optional) */}
             <Text
-              variant="caption"
+              variant="label"
               style={{
                 color: semantic.text.secondary,
-                fontFamily: 'BeVietnamPro_600SemiBold',
                 marginTop: 14,
                 marginBottom: 8,
-                letterSpacing: 0.3,
               }}
             >
-              TÒA (TÙY CHỌN)
+              Tòa (tùy chọn)
             </Text>
             <View className="flex-row flex-wrap gap-2">
               <ChipOption
@@ -403,16 +387,14 @@ export function BookingForm({
 
             {/* Unit type cards */}
             <Text
-              variant="caption"
+              variant="label"
               style={{
                 color: semantic.text.secondary,
-                fontFamily: 'BeVietnamPro_600SemiBold',
                 marginTop: 18,
                 marginBottom: 8,
-                letterSpacing: 0.3,
               }}
             >
-              LOẠI CĂN <Text style={{ color: palette.red[500] }}>*</Text>
+              Loại căn <Text style={{ color: palette.red[500] }}>*</Text>
             </Text>
             <View className="gap-2">
               {availableUnitTypes.map((u) => {
@@ -437,11 +419,8 @@ export function BookingForm({
                     />
                     <View className="flex-1">
                       <Text
-                        style={{
-                          color: semantic.text.primary,
-                          fontFamily: 'BeVietnamPro_700Bold',
-                          fontSize: 14,
-                        }}
+                        variant="subtitle"
+                        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                       >
                         {u.name} · {u.areaMin}-{u.areaMax}m²
                       </Text>
@@ -488,11 +467,7 @@ export function BookingForm({
                 <Ruler size={12} color={palette.emerald[700]} strokeWidth={2.4} />
                 <Text
                   variant="caption"
-                  style={{
-                    color: palette.emerald[700],
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 12,
-                  }}
+                  style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
                 >
                   Căn {selectedUnitCode}
                 </Text>
@@ -521,22 +496,14 @@ export function BookingForm({
                 <Link2 size={16} color={palette.emerald[700]} strokeWidth={2.4} />
               </View>
               <View className="flex-1">
-                <Text
-                  variant="caption"
-                  style={{
-                    color: palette.emerald[700],
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 10,
-                    letterSpacing: 0.4,
-                  }}
-                >
-                  ĐANG BOOKING CHO LEAD
+                <Text variant="badge" style={{ color: palette.emerald[700] }}>
+                  Đang booking cho lead
                 </Text>
                 <Text
+                  variant="subtitle"
                   style={{
                     color: semantic.text.primary,
                     fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 14,
                     marginTop: 1,
                   }}
                   numberOfLines={1}
@@ -575,11 +542,8 @@ export function BookingForm({
                 </View>
                 <View className="flex-1">
                   <Text
-                    style={{
-                      color: semantic.action.primaryDeep,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
-                    }}
+                    variant="subtitle"
+                    style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
                   >
                     Chọn từ lead
                   </Text>
@@ -634,11 +598,7 @@ export function BookingForm({
                   <ScanLine size={12} color={semantic.action.primaryDeep} strokeWidth={2.4} />
                   <Text
                     variant="caption"
-                    style={{
-                      color: semantic.action.primaryDeep,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 11,
-                    }}
+                    style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
                   >
                     Quét
                   </Text>
@@ -666,11 +626,10 @@ export function BookingForm({
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="subtitle"
                     style={{
                       color: active ? semantic.action.primaryDeep : semantic.text.primary,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
                     }}
                   >
                     {p.label}
@@ -685,14 +644,10 @@ export function BookingForm({
 
           <View className="mt-5">
             <Text
-              variant="caption"
-              style={{
-                color: semantic.text.secondary,
-                fontFamily: 'BeVietnamPro_600SemiBold',
-                marginBottom: 8,
-              }}
+              variant="label"
+              style={{ color: semantic.text.secondary, marginBottom: 8 }}
             >
-              PHƯƠNG THỨC THANH TOÁN
+              Phương thức thanh toán
             </Text>
             <View className="flex-row gap-2">
               <PaymentOption
@@ -818,11 +773,8 @@ export function BookingForm({
             Tiền đặt cọc
           </Text>
           <Text
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-            }}
+            variant="body-lg"
+            style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {formatVND(depositAmount)}
           </Text>
@@ -840,11 +792,8 @@ export function BookingForm({
           }}
         >
           <Text
-            variant="body"
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-            }}
+            variant="button"
+            style={{ color: palette.white }}
           >
             Gửi booking tới CĐT
           </Text>
@@ -974,10 +923,10 @@ function LeadPickerContent({
                   style={{ backgroundColor: semantic.leadGroup[statusToGroup[l.status]].bg }}
                 >
                   <Text
+                    variant="subtitle"
                     style={{
                       color: semantic.leadGroup[statusToGroup[l.status]].fg,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
                     }}
                   >
                     {initials(l.fullName)}
@@ -986,10 +935,10 @@ function LeadPickerContent({
                 <View className="flex-1">
                   <View className="flex-row items-center gap-2">
                     <Text
+                      variant="subtitle"
                       style={{
                         color: semantic.text.primary,
                         fontFamily: 'BeVietnamPro_700Bold',
-                        fontSize: 14,
                         flex: 1,
                       }}
                       numberOfLines={1}
@@ -1048,16 +997,8 @@ function StepProgress({
           />
         ))}
       </View>
-      <Text
-        variant="caption"
-        style={{
-          color: semantic.action.primaryDeep,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 11,
-          letterSpacing: 0.4,
-        }}
-      >
-        BƯỚC {current}/{total} · {label.toUpperCase()}
+      <Text variant="badge" style={{ color: semantic.action.primaryDeep }}>
+        Bước {current}/{total} · {label}
       </Text>
     </View>
   );
@@ -1072,21 +1013,14 @@ function SectionTitle({ step, title }: { step: string; title: string }) {
       >
         <Text
           variant="caption"
-          style={{
-            color: palette.white,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 12,
-          }}
+          style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
         >
           {step}
         </Text>
       </View>
       <Text
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 16,
-        }}
+        variant="body-lg"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {title}
       </Text>
@@ -1114,11 +1048,10 @@ function ChipOption({
     >
       {active && <CircleCheck size={12} color={semantic.action.primaryDeep} strokeWidth={2.4} />}
       <Text
-        variant="body"
+        variant="caption"
         style={{
           color: active ? semantic.action.primaryDeep : semantic.text.secondary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
         }}
       >
         {label}
@@ -1194,7 +1127,6 @@ function Field({
           style={{
             color: palette.red[600],
             fontFamily: 'BeVietnamPro_500Medium',
-            fontSize: 11,
             marginTop: 4,
           }}
         >
@@ -1227,11 +1159,10 @@ function PaymentOption({
     >
       {icon}
       <Text
-        variant="body"
+        variant="caption"
         style={{
           color: active ? semantic.action.primaryDeep : semantic.text.secondary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
         }}
       >
         {label}

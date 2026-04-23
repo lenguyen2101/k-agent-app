@@ -61,22 +61,15 @@ export function BookingTimeline({ history }: Props) {
             <View className="flex-1 ml-3" style={{ paddingBottom: isLast ? 0 : 16 }}>
               <View className="flex-row items-center gap-2">
                 <Text
-                  style={{
-                    color: semantic.text.primary,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 14,
-                    flex: 1,
-                  }}
+                  variant="subtitle"
+                  style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold', flex: 1 }}
                   numberOfLines={1}
                 >
                   {bookingStatusLabels[event.status]}
                 </Text>
                 <Text
                   variant="caption"
-                  style={{
-                    color: semantic.text.tertiary,
-                    fontSize: 11,
-                  }}
+                  style={{ color: semantic.text.tertiary }}
                 >
                   {formatRelativeTime(event.at)}
                 </Text>
@@ -98,8 +91,6 @@ export function BookingTimeline({ history }: Props) {
                     variant="caption"
                     style={{
                       color: semantic.text.secondary,
-                      fontSize: 12,
-                      lineHeight: 17,
                       flex: 1,
                     }}
                   >

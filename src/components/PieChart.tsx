@@ -86,10 +86,7 @@ export function PieChart({
           {centerLabel && (
             <Text
               variant="caption"
-              style={{
-                color: semantic.text.tertiary,
-                fontSize: 11,
-              }}
+              style={{ color: semantic.text.tertiary }}
             >
               {centerLabel}
             </Text>
@@ -138,19 +135,15 @@ export function PieLegend({
               }}
             />
             <Text
-              variant="body"
-              style={{ color: semantic.text.secondary, flex: 1, fontSize: 13 }}
+              variant="caption"
+              style={{ color: semantic.text.secondary, flex: 1 }}
               numberOfLines={1}
             >
               {seg.label}
             </Text>
             <Text
-              variant="body"
-              style={{
-                color: semantic.text.primary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 13,
-              }}
+              variant="caption"
+              style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
             >
               {pct.toFixed(1).replace('.', ',')}%
             </Text>

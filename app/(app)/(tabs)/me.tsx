@@ -107,7 +107,6 @@ export default function Me() {
                     style={{
                       color: semantic.action.primaryDeep,
                       fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 11,
                     }}
                   >
                     Tân binh
@@ -128,11 +127,7 @@ export default function Me() {
               <ShieldCheck size={13} color={palette.emerald[700]} />
               <Text
                 variant="caption"
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_600SemiBold',
-                  fontSize: 11,
-                }}
+                style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_600SemiBold' }}
               >
                 Đã chứng nhận NOXH K-CITY
               </Text>
@@ -178,16 +173,15 @@ export default function Me() {
           <View className="flex-1">
             <Text
               variant="caption"
-              style={{ color: palette.obsidian[200], fontSize: 11 }}
+              style={{ color: palette.obsidian[200] }}
             >
               Thu nhập của tôi
             </Text>
             <Text
+              variant="body-lg"
               style={{
                 color: palette.obsidian[50],
                 fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 16,
-                lineHeight: 22,
                 marginTop: 1,
               }}
             >
@@ -275,8 +269,8 @@ export default function Me() {
         >
           <LogOut size={17} color={palette.red[600]} />
           <Text
-            variant="body"
-            style={{ color: palette.red[600], fontFamily: 'BeVietnamPro_700Bold' }}
+            variant="button"
+            style={{ color: palette.red[600] }}
           >
             Đăng xuất
           </Text>
@@ -326,15 +320,11 @@ function MenuSection({ title, children }: { title: string; children: React.React
   return (
     <View className="mt-5">
       <Text
-        variant="caption"
+        variant="label"
         className="px-4 mb-2"
-        style={{
-          color: semantic.text.secondary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          letterSpacing: 0.5,
-        }}
+        style={{ color: semantic.text.secondary }}
       >
-        {title.toUpperCase()}
+        {title}
       </Text>
       <View
         className="mx-4 rounded-2xl overflow-hidden"
@@ -394,11 +384,7 @@ function MenuItem({
         >
           <Text
             variant="caption"
-            style={{
-              color: palette.red[600],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 11,
-            }}
+            style={{ color: palette.red[600], fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {detail}
           </Text>
@@ -416,11 +402,7 @@ function MenuItem({
         >
           <Text
             variant="caption"
-            style={{
-              color: palette.slate[600],
-              fontFamily: 'BeVietnamPro_600SemiBold',
-              fontSize: 11,
-            }}
+            style={{ color: palette.slate[600], fontFamily: 'BeVietnamPro_600SemiBold' }}
           >
             {badge}
           </Text>

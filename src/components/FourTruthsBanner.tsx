@@ -29,12 +29,8 @@ export function FourTruthsBanner({ truths }: Props) {
       }}
     >
       <Text
-        variant="body"
-        style={{
-          color: palette.white,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 14,
-        }}
+        variant="subtitle"
+        style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         Đạt {score}/4 thật
       </Text>
@@ -63,7 +59,6 @@ export function FourTruthsBanner({ truths }: Props) {
                 style={{
                   color: ok ? palette.white : 'rgba(247,243,237,0.55)',
                   fontFamily: 'BeVietnamPro_500Medium',
-                  fontSize: 12,
                   textDecorationLine: ok ? 'none' : 'line-through',
                 }}
               >
@@ -91,11 +86,7 @@ export function FourTruthsPill({ truths }: Props) {
       <Check size={11} color={palette.white} strokeWidth={3.5} />
       <Text
         variant="caption"
-        style={{
-          color: palette.white,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 11,
-        }}
+        style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {score}/4 thật
       </Text>

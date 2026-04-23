@@ -93,13 +93,8 @@ export default function IncomeDashboard() {
 
           <View className="flex-row items-end gap-3 mt-1">
             <Text
-              variant="h1"
-              style={{
-                color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 32,
-                lineHeight: 38,
-              }}
+              variant="display"
+              style={{ color: semantic.action.primaryDeep }}
             >
               {formatVND(incomeSummary.netTotal)}
             </Text>
@@ -113,11 +108,7 @@ export default function IncomeDashboard() {
               <ArrowUpRight size={12} color={palette.emerald[700]} strokeWidth={2.6} />
               <Text
                 variant="caption"
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 12,
-                }}
+                style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 +{incomeSummary.trendPct}%
               </Text>
@@ -291,7 +282,7 @@ export default function IncomeDashboard() {
           <View className="flex-1">
             <Text
               variant="caption"
-              style={{ color: palette.obsidian[200], fontSize: 12 }}
+              style={{ color: palette.obsidian[200] }}
             >
               Số dư BIC
             </Text>

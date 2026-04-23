@@ -521,11 +521,8 @@ function CitationSheet({
             </View>
             <View className="flex-1">
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                }}
+                variant="subtitle"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                 numberOfLines={2}
               >
                 {citation.title}
@@ -537,12 +534,10 @@ function CitationSheet({
           </View>
           {citation.excerpt && (
             <Text
-              variant="body"
+              variant="caption"
               style={{
                 color: semantic.text.primary,
                 marginTop: 12,
-                lineHeight: 20,
-                fontSize: 13,
               }}
             >
               {citation.excerpt}
@@ -568,11 +563,8 @@ function CitationSheet({
             </View>
             <View className="flex-1">
               <Text
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                }}
+                variant="subtitle"
+                style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 Đã lưu vào lead
               </Text>
@@ -585,17 +577,14 @@ function CitationSheet({
           <>
             {/* Save section header */}
             <Text
-              variant="caption"
+              variant="badge"
               style={{
                 color: semantic.text.secondary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.5,
-                fontSize: 11,
                 marginTop: 18,
                 marginBottom: 8,
               }}
             >
-              LƯU VÀO LEAD NÀO?
+              Lưu vào lead nào?
             </Text>
 
             <View
@@ -642,11 +631,8 @@ function CitationSheet({
                       style={{ backgroundColor: tint.bg }}
                     >
                       <Text
-                        style={{
-                          color: tint.fg,
-                          fontFamily: 'BeVietnamPro_700Bold',
-                          fontSize: 13,
-                        }}
+                        variant="caption"
+                        style={{ color: tint.fg, fontFamily: 'BeVietnamPro_700Bold' }}
                       >
                         {initials(l.fullName)}
                       </Text>
@@ -654,10 +640,10 @@ function CitationSheet({
                     <View className="flex-1">
                       <View className="flex-row items-center gap-2">
                         <Text
+                          variant="subtitle"
                           style={{
                             color: semantic.text.primary,
                             fontFamily: 'BeVietnamPro_700Bold',
-                            fontSize: 14,
                             flex: 1,
                           }}
                           numberOfLines={1}
@@ -780,15 +766,10 @@ function MessageBubble({
         {msg.citations && msg.citations.length > 0 && (
           <View className="mt-2 gap-1.5">
             <Text
-              variant="caption"
-              style={{
-                color: semantic.text.tertiary,
-                fontFamily: 'BeVietnamPro_600SemiBold',
-                letterSpacing: 0.5,
-                fontSize: 10,
-              }}
+              variant="badge"
+              style={{ color: semantic.text.tertiary, fontFamily: 'BeVietnamPro_600SemiBold' }}
             >
-              NGUỒN THAM KHẢO
+              Nguồn tham khảo
             </Text>
             {msg.citations.map((c) => (
               <Pressable
@@ -813,7 +794,6 @@ function MessageBubble({
                     style={{
                       color: semantic.text.primary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 12,
                     }}
                     numberOfLines={1}
                   >
@@ -874,12 +854,9 @@ function ComingSoonRow({
         style={{ backgroundColor: palette.sienna[100] }}
       >
         <Text
-          variant="caption"
+          variant="badge"
           style={{
             color: palette.sienna[700],
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 10,
-            letterSpacing: 0.3,
           }}
         >
           SẮP RA MẮT

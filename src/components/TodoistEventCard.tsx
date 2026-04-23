@@ -53,12 +53,8 @@ export const TodoistEventCard = memo(function TodoistEventCard({ event, flat = f
     >
       <View className="flex-1">
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 15,
-            lineHeight: 20,
-          }}
+          variant="body"
+          style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_500Medium' }}
           numberOfLines={1}
         >
           {event.leadName}
@@ -73,11 +69,7 @@ export const TodoistEventCard = memo(function TodoistEventCard({ event, flat = f
             <TimeIcon size={11} color={timeChipFg} strokeWidth={2.4} />
             <Text
               variant="caption"
-              style={{
-                color: timeChipFg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-              }}
+              style={{ color: timeChipFg, fontFamily: 'BeVietnamPro_700Bold' }}
             >
               {overdue ? `Trễ ${timeLabel(event.scheduledAt)}` : timeLabel(event.scheduledAt)}
             </Text>
@@ -91,11 +83,7 @@ export const TodoistEventCard = memo(function TodoistEventCard({ event, flat = f
             {typeMeta.icon}
             <Text
               variant="caption"
-              style={{
-                color: semantic.text.secondary,
-                fontFamily: 'BeVietnamPro_600SemiBold',
-                fontSize: 11,
-              }}
+              style={{ color: semantic.text.secondary, fontFamily: 'BeVietnamPro_600SemiBold' }}
             >
               {typeMeta.label}
             </Text>
@@ -104,11 +92,7 @@ export const TodoistEventCard = memo(function TodoistEventCard({ event, flat = f
           {/* Project name */}
           <Text
             variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontSize: 11,
-              flex: 1,
-            }}
+            style={{ color: semantic.text.tertiary, flex: 1 }}
             numberOfLines={1}
           >
             · {event.projectName}

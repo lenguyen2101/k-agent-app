@@ -108,16 +108,10 @@ export default function BookingsList() {
       {/* Pipeline summary — 4 tile grid */}
       <View className="px-4 pt-3 pb-2 bg-white border-b border-border-light">
         <Text
-          variant="caption"
-          style={{
-            color: semantic.text.tertiary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            letterSpacing: 0.4,
-            fontSize: 10,
-            marginBottom: 8,
-          }}
+          variant="badge"
+          style={{ color: semantic.text.tertiary, marginBottom: 8 }}
         >
-          PIPELINE HIỆN TẠI
+          Pipeline hiện tại
         </Text>
         <View className="flex-row gap-2">
           <PipelineStat
@@ -144,7 +138,6 @@ export default function BookingsList() {
         <Text
           variant="caption"
           className="text-text-tertiary mt-2"
-          style={{ fontSize: 11 }}
         >
           {totalActive} đang xử lý · {statusCounts.COMPLETED} hoàn tất ·{' '}
           {statusCounts.CANCELLED} đã huỷ
@@ -198,11 +191,10 @@ export default function BookingsList() {
                 }}
               >
                 <Text
-                  variant="body"
+                  variant="caption"
                   style={{
                     color: active ? palette.white : semantic.text.secondary,
                     fontFamily: 'BeVietnamPro_600SemiBold',
-                    fontSize: 13,
                   }}
                 >
                   {item.label}
@@ -271,22 +263,15 @@ function PipelineStat({
       style={{ backgroundColor: tint.bg }}
     >
       <Text
-        style={{
-          color: tint.fg,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 18,
-          lineHeight: 22,
-        }}
+        variant="h3"
+        style={{ color: tint.fg }}
       >
         {count}
       </Text>
       <Text
-        variant="caption"
+        variant="badge"
         style={{
           color: tint.fg,
-          fontSize: 10,
-          fontFamily: 'BeVietnamPro_600SemiBold',
-          letterSpacing: 0.2,
           opacity: 0.85,
           marginTop: 1,
         }}
@@ -319,15 +304,15 @@ function BookingCard({
         <View className="flex-1">
           <View className="flex-row items-center gap-2 mb-1">
             <BookingStatusBadge status={booking.status} withDot />
-            <Text variant="caption" className="text-text-tertiary" style={{ fontSize: 11 }}>
+            <Text variant="caption" className="text-text-tertiary">
               {formatRelativeTime(booking.updatedAt)}
             </Text>
           </View>
           <Text
+            variant="body"
             style={{
               color: semantic.text.primary,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
               marginTop: 2,
             }}
             numberOfLines={1}
@@ -339,7 +324,7 @@ function BookingCard({
               <Building2 size={12} color={semantic.text.tertiary} />
               <Text
                 variant="caption"
-                style={{ color: semantic.text.secondary, fontSize: 12 }}
+                style={{ color: semantic.text.secondary }}
                 numberOfLines={1}
               >
                 {booking.projectName}
@@ -352,7 +337,7 @@ function BookingCard({
                   <Ruler size={12} color={semantic.text.tertiary} />
                   <Text
                     variant="caption"
-                    style={{ color: semantic.text.secondary, fontSize: 12 }}
+                    style={{ color: semantic.text.secondary }}
                   >
                     {booking.unitTypeName}
                     {booking.unitCode ? ` · ${booking.unitCode}` : ''}
@@ -365,11 +350,7 @@ function BookingCard({
             <Banknote size={12} color={palette.emerald[700]} />
             <Text
               variant="caption"
-              style={{
-                color: palette.emerald[700],
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 12,
-              }}
+              style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
             >
               Cọc {formatVNDCompact(booking.depositVnd)}
             </Text>

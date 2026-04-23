@@ -168,12 +168,8 @@ export default function Onboarding() {
           }}
         >
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-              letterSpacing: 0.3,
-            }}
+            variant="button"
+            style={{ color: palette.white, letterSpacing: 0.3 }}
           >
             {isLast ? 'Bắt đầu với K-Agent' : 'Tiếp tục'}
           </Text>
@@ -232,13 +228,8 @@ function SlideView({ slide }: { slide: Slide }) {
       >
         <ShieldCheck size={12} color={slide.iconColor} strokeWidth={2.4} />
         <Text
-          variant="caption"
-          style={{
-            color: slide.iconColor,
-            fontFamily: 'BeVietnamPro_700Bold',
-            letterSpacing: 0.6,
-            fontSize: 11,
-          }}
+          variant="badge"
+          style={{ color: slide.iconColor }}
         >
           {slide.highlight}
         </Text>
@@ -246,14 +237,8 @@ function SlideView({ slide }: { slide: Slide }) {
 
       {/* Title */}
       <Text
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 24,
-          lineHeight: 32,
-          textAlign: 'center',
-          marginBottom: 12,
-        }}
+        variant="stat"
+        style={{ color: semantic.text.primary, textAlign: 'center', marginBottom: 12 }}
       >
         {slide.title}
       </Text>

@@ -46,13 +46,8 @@ export default function ForceUpdate() {
 
         {/* Title + body */}
         <Text
-          style={{
-            color: semantic.text.primary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 26,
-            lineHeight: 34,
-            textAlign: 'center',
-          }}
+          variant="display"
+          style={{ color: semantic.text.primary, textAlign: 'center' }}
         >
           Cần cập nhật K-Agent
         </Text>
@@ -158,12 +153,8 @@ export default function ForceUpdate() {
           }}
         >
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 16,
-              letterSpacing: 0.3,
-            }}
+            variant="button"
+            style={{ color: palette.white, letterSpacing: 0.3 }}
           >
             Cập nhật ngay
           </Text>

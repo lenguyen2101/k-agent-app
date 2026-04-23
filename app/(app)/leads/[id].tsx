@@ -207,12 +207,8 @@ export default function LeadDetail() {
           <View className="flex-row items-start justify-between gap-3">
             <View className="flex-1">
               <Text
-                style={{
-                  color: semantic.action.primaryDeep,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 18,
-                  lineHeight: 24,
-                }}
+                variant="h3"
+                style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 {lead.fullName}
               </Text>
@@ -237,11 +233,7 @@ export default function LeadDetail() {
               <ShieldCheck size={13} color={palette.emerald[700]} />
               <Text
                 variant="caption"
-                style={{
-                  color: palette.emerald[700],
-                  fontFamily: 'BeVietnamPro_600SemiBold',
-                  fontSize: 11,
-                }}
+                style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_600SemiBold' }}
               >
                 eKYC noxh.net · {lead.noxhProfile.cccdMasked}
               </Text>
@@ -322,14 +314,10 @@ export default function LeadDetail() {
             <View className="flex-row items-center gap-2 mb-2">
               <StickyNote size={14} color={semantic.action.primaryDeep} />
               <Text
-                variant="caption"
-                style={{
-                  color: semantic.action.primaryDeep,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.5,
-                }}
+                variant="badge"
+                style={{ color: semantic.action.primaryDeep }}
               >
-                GHI CHÚ
+                Ghi chú
               </Text>
             </View>
             <Text variant="body" className="text-text-primary">
@@ -393,11 +381,8 @@ export default function LeadDetail() {
                     </View>
                     <View className="flex-1">
                       <Text
-                        style={{
-                          color: semantic.text.primary,
-                          fontFamily: 'BeVietnamPro_700Bold',
-                          fontSize: 14,
-                        }}
+                        variant="subtitle"
+                        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                         numberOfLines={1}
                       >
                         {b.projectName}
@@ -505,7 +490,6 @@ export default function LeadDetail() {
                               style={{
                                 color: outcomeMeta.color,
                                 fontFamily: 'BeVietnamPro_600SemiBold',
-                                fontSize: 11,
                               }}
                             >
                               {outcomeMeta.label}
@@ -555,7 +539,7 @@ export default function LeadDetail() {
             elevation: 4,
           }}
         >
-          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+          <Text variant="button" style={{ color: palette.white }}>
             + Thêm hoạt động
           </Text>
         </Pressable>
@@ -658,7 +642,6 @@ function SubAction({
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_600SemiBold',
-          fontSize: 11,
           marginTop: 4,
         }}
       >
@@ -717,13 +700,8 @@ function MoreMenuRow({
           style={{ backgroundColor: palette.sienna[100] }}
         >
           <Text
-            variant="caption"
-            style={{
-              color: palette.sienna[700],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 10,
-              letterSpacing: 0.3,
-            }}
+            variant="badge"
+            style={{ color: palette.sienna[700] }}
           >
             SẮP RA MẮT
           </Text>
@@ -742,7 +720,7 @@ function InfoChip({ icon, label }: { icon?: React.ReactNode; label: string }) {
       {icon}
       <Text
         variant="caption"
-        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_500Medium', fontSize: 12 }}
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_500Medium' }}
       >
         {label}
       </Text>

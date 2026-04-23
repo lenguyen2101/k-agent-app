@@ -243,11 +243,7 @@ export default function RequestCooperation() {
                 <ShieldCheck size={11} color={palette.emerald[700]} />
                 <Text
                   variant="caption"
-                  style={{
-                    color: palette.emerald[700],
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 11,
-                  }}
+                  style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_700Bold' }}
                 >
                   Cert
                 </Text>
@@ -300,11 +296,10 @@ export default function RequestCooperation() {
                   />
                   <View>
                     <Text
-                      variant="body"
+                      variant="caption"
                       style={{
                         color: active ? semantic.action.primaryDeep : semantic.text.primary,
                         fontFamily: 'BeVietnamPro_600SemiBold',
-                        fontSize: 13,
                       }}
                     >
                       {s.label}
@@ -313,7 +308,6 @@ export default function RequestCooperation() {
                       variant="caption"
                       style={{
                         color: active ? semantic.action.primaryDeep : semantic.text.tertiary,
-                        fontSize: 10,
                       }}
                     >
                       {s.sub}
@@ -436,7 +430,6 @@ function FieldWrap({
           style={{
             color: semantic.text.primary,
             fontFamily: 'BeVietnamPro_600SemiBold',
-            fontSize: 13,
           }}
         >
           {label}

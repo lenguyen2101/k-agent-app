@@ -96,12 +96,7 @@ export function HeroStatsCard({ title, stats, pipeline }: Props) {
               <View key={i} className="flex-1">
                 <Text
                   variant="display"
-                  style={{
-                    color: toneColor[s.tone ?? 'default'],
-                    fontSize: 28,
-                    lineHeight: 34,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                  }}
+                  style={{ color: toneColor[s.tone ?? 'default'] }}
                 >
                   {s.value}
                 </Text>

@@ -77,12 +77,8 @@ export function SalesProfileHeader({ name, team, unreadCount = 0, onBellPress }:
             }}
           >
             <Text
-              style={{
-                color: palette.white,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-                lineHeight: 14,
-              }}
+              variant="badge"
+              style={{ color: palette.white }}
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Text>

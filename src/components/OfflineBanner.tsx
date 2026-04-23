@@ -88,22 +88,17 @@ export function OfflineBanner() {
         </View>
         <View className="flex-1">
           <Text
-            variant="body"
-            style={{
-              color: palette.obsidian[50],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 13,
-            }}
+            variant="caption"
+            style={{ color: palette.obsidian[50], fontFamily: 'BeVietnamPro_700Bold' }}
             numberOfLines={1}
           >
             Đang offline
           </Text>
           <Text
+            variant="caption"
             style={{
               color: palette.obsidian[200],
               fontFamily: 'BeVietnamPro_500Medium',
-              fontSize: 11,
-              lineHeight: 14,
               marginTop: 1,
             }}
             numberOfLines={1}

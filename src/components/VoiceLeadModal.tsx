@@ -266,6 +266,7 @@ export function VoiceLeadModal({ visible, onClose, onCreated }: Props) {
               </View>
             </Animated.View>
 
+            {/* Timer hero 36px — intentional oversize, only for voice recording phase. */}
             <Text
               variant="display"
               style={{
@@ -273,7 +274,6 @@ export function VoiceLeadModal({ visible, onClose, onCreated }: Props) {
                 fontSize: 36,
                 lineHeight: 44,
                 marginTop: 32,
-                fontFamily: 'BeVietnamPro_700Bold',
               }}
             >
               {formatDuration(elapsedMs)}

@@ -109,15 +109,14 @@ export default function LeadOfferModal() {
             }}
           >
             <Text
-              variant="caption"
+              variant="badge"
               style={{
                 color: 'rgba(247,243,237,0.75)',
                 fontFamily: 'BeVietnamPro_600SemiBold',
-                fontSize: 11,
                 letterSpacing: 1,
               }}
             >
-              CÒN LẠI
+              Còn lại
             </Text>
             <Text
               style={{
@@ -181,12 +180,8 @@ export default function LeadOfferModal() {
               </View>
               <View className="flex-1">
                 <Text
-                  style={{
-                    color: semantic.text.primary,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 18,
-                    lineHeight: 24,
-                  }}
+                  variant="h3"
+                  style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                 >
                   {offer.lead.fullName}
                 </Text>
@@ -199,14 +194,10 @@ export default function LeadOfferModal() {
                 style={{ backgroundColor: palette.red[50] }}
               >
                 <Text
-                  variant="caption"
-                  style={{
-                    color: palette.red[600],
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 11,
-                  }}
+                  variant="badge"
+                  style={{ color: palette.red[600] }}
                 >
-                  MỚI
+                  Mới
                 </Text>
               </View>
             </View>
@@ -219,11 +210,7 @@ export default function LeadOfferModal() {
                 <ShieldCheck size={13} color={palette.emerald[700]} />
                 <Text
                   variant="caption"
-                  style={{
-                    color: palette.emerald[700],
-                    fontFamily: 'BeVietnamPro_600SemiBold',
-                    fontSize: 11,
-                  }}
+                  style={{ color: palette.emerald[700], fontFamily: 'BeVietnamPro_600SemiBold' }}
                 >
                   eKYC từ noxh.net · {offer.lead.noxhProfile.province}
                 </Text>
@@ -314,14 +301,10 @@ export default function LeadOfferModal() {
           }}
         >
           <Text
-            style={{
-              color: semantic.action.primaryDeep,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 17,
-              letterSpacing: 0.3,
-            }}
+            variant="h3"
+            style={{ color: semantic.action.primaryDeep, letterSpacing: 0.3 }}
           >
-            NHẬN LEAD
+            Nhận lead
           </Text>
           <ChevronRight size={20} color={semantic.action.primaryDeep} strokeWidth={2.5} />
         </Pressable>

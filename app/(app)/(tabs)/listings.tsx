@@ -103,11 +103,10 @@ export default function Listings() {
                 }}
               >
                 <Text
-                  variant="body"
+                  variant="caption"
                   style={{
                     color: active ? semantic.action.primaryDeep : semantic.text.secondary,
                     fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 13,
                   }}
                 >
                   {m === 'primary' ? 'Sơ cấp' : 'Thứ cấp'}
@@ -146,12 +145,8 @@ export default function Listings() {
                 style={{ backgroundColor: semantic.action.primary }}
               >
                 <Text
-                  style={{
-                    color: palette.white,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 10,
-                    lineHeight: 12,
-                  }}
+                  variant="badge"
+                  style={{ color: palette.white }}
                 >
                   {savedCount}
                 </Text>
@@ -182,11 +177,10 @@ export default function Listings() {
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="caption"
                     style={{
                       color: active ? palette.white : semantic.text.secondary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 13,
                     }}
                   >
                     {item.label}

@@ -271,11 +271,10 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="caption"
                     style={{
                       color: active ? palette.white : semantic.text.primary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 13,
                     }}
                   >
                     {p.shortName}
@@ -303,11 +302,10 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="caption"
                     style={{
                       color: active ? semantic.action.primaryDeep : semantic.text.primary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 13,
                     }}
                   >
                     {u}
@@ -333,11 +331,10 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
                   }}
                 >
                   <Text
-                    variant="body"
+                    variant="caption"
                     style={{
                       color: active ? palette.white : semantic.text.primary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 13,
                     }}
                   >
                     {s.label}
@@ -389,11 +386,10 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
                     />
                   )}
                   <Text
-                    variant="body"
+                    variant="caption"
                     style={{
                       color: active ? palette.obsidian[50] : semantic.text.primary,
                       fontFamily: 'BeVietnamPro_600SemiBold',
-                      fontSize: 13,
                     }}
                   >
                     {f.label}
@@ -489,7 +485,6 @@ function FieldWrap({
           style={{
             color: semantic.text.primary,
             fontFamily: 'BeVietnamPro_600SemiBold',
-            fontSize: 13,
           }}
         >
           {label}
@@ -507,7 +502,6 @@ function FieldWrap({
           style={{
             color: palette.red[600],
             fontFamily: 'BeVietnamPro_500Medium',
-            fontSize: 11,
             marginTop: 4,
           }}
         >

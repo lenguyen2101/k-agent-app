@@ -28,14 +28,7 @@ function StatusPill({ status }: { status: ListingStatus }) {
       className="px-2.5 py-1 rounded-full"
       style={{ backgroundColor: s.bg }}
     >
-      <Text
-        variant="caption"
-        style={{
-          color: s.fg,
-          fontFamily: 'BeVietnamPro_600SemiBold',
-          fontSize: 11,
-        }}
-      >
+      <Text variant="badge" style={{ color: s.fg }}>
         {listingStatusLabels[status]}
       </Text>
     </View>
@@ -102,7 +95,7 @@ export const ListingCard = memo(function ListingCard({
             <Eye size={12} color={palette.white} strokeWidth={2} />
             <Text
               variant="caption"
-              style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium', fontSize: 11 }}
+              style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium' }}
             >
               {listing.viewCount.toLocaleString('vi-VN')}
             </Text>
@@ -117,7 +110,7 @@ export const ListingCard = memo(function ListingCard({
                 <Orbit size={12} color={palette.white} strokeWidth={2.2} />
                 <Text
                   variant="caption"
-                  style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium', fontSize: 11 }}
+                  style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium' }}
                 >
                   VR
                 </Text>
@@ -130,7 +123,7 @@ export const ListingCard = memo(function ListingCard({
               <Images size={12} color={palette.white} strokeWidth={2.2} />
               <Text
                 variant="caption"
-                style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium', fontSize: 11 }}
+                style={{ color: palette.white, fontFamily: 'BeVietnamPro_500Medium' }}
               >
                 {listing.gallery.length}
               </Text>
@@ -198,15 +191,14 @@ export const ListingCard = memo(function ListingCard({
           <TrendingUp size={14} color={palette.white} strokeWidth={2.5} />
         </View>
         <View className="flex-1">
-          <Text variant="caption" className="text-text-secondary" style={{ fontSize: 11 }}>
+          <Text variant="caption" className="text-text-secondary">
             Hoa hồng của bạn
           </Text>
           <Text
-            variant="body"
+            variant="subtitle"
             style={{
               color: semantic.action.primaryDeep,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 14,
               marginTop: -1,
             }}
           >

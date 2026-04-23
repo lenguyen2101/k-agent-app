@@ -46,7 +46,7 @@ export default function Home() {
   const pipelineConfig = [
     { group: 'new',       label: 'Mới',            color: palette.sienna[300], pattern: 'stripes' as const },
     { group: 'engaged',   label: 'Đang trao đổi',  color: palette.sienna[500], pattern: 'solid' as const },
-    { group: 'midfunnel', label: 'Hẹn/Xem',        color: palette.sienna[700], pattern: 'dots' as const },
+    { group: 'midfunnel', label: 'Hẹn/Xem',        color: palette.sienna[700], pattern: 'solid' as const },
   ] as const;
 
   const pipeline: PipelineSegment[] = pipelineConfig.map((cfg) => ({
@@ -186,24 +186,15 @@ export default function Home() {
                 <View className="flex-1">
                   <View className="flex-row items-center gap-1.5">
                     <Text
-                      variant="caption"
-                      style={{
-                        color: palette.red[600],
-                        fontFamily: 'BeVietnamPro_700Bold',
-                        fontSize: 10,
-                        letterSpacing: 0.4,
-                      }}
+                      variant="badge"
+                      style={{ color: palette.red[600] }}
                     >
-                      DEMO · LEAD MỚI
+                      Demo · Lead mới
                     </Text>
                   </View>
                   <Text
-                    style={{
-                      color: semantic.text.primary,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
-                      marginTop: 1,
-                    }}
+                    variant="subtitle"
+                    style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold', marginTop: 1 }}
                   >
                     Có 1 khách tiềm năng · tap để xem
                   </Text>
@@ -267,11 +258,8 @@ export default function Home() {
                 <CalendarDays size={22} color={palette.emerald[700]} strokeWidth={1.8} />
               </View>
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
-                }}
+                variant="subtitle"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 Không có cuộc hẹn hôm nay
               </Text>

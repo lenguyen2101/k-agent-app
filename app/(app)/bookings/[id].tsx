@@ -117,37 +117,20 @@ export default function BookingDetail() {
                 backgroundColor: tint.dot,
               }}
             />
-            <Text
-              variant="caption"
-              style={{
-                color: tint.fg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.5,
-                fontSize: 11,
-              }}
-            >
-              TRẠNG THÁI HIỆN TẠI
+            <Text variant="badge" style={{ color: tint.fg }}>
+              Trạng thái hiện tại
             </Text>
           </View>
           <Text
-            style={{
-              color: tint.fg,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 26,
-              lineHeight: 32,
-            }}
+            variant="display"
+            style={{ color: tint.fg }}
           >
             {bookingStatusLabels[booking.status]}
           </Text>
           {!isTerminal && possibleNext.length > 0 && (
             <Text
-              variant="body"
-              style={{
-                color: tint.fg,
-                opacity: 0.85,
-                marginTop: 6,
-                fontSize: 13,
-              }}
+              variant="caption"
+              style={{ color: tint.fg, opacity: 0.85, marginTop: 6 }}
             >
               Bước tiếp theo: {bookingStatusLabels[possibleNext[0]]}
             </Text>
@@ -164,24 +147,18 @@ export default function BookingDetail() {
           }}
         >
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.4,
-              fontSize: 10,
-              marginBottom: 6,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.tertiary, marginBottom: 6 }}
           >
-            DỰ ÁN & CĂN
+            Dự án & căn
           </Text>
           <View className="flex-row items-center gap-2 mb-1">
             <Building2 size={16} color={semantic.action.primaryDeep} strokeWidth={2.2} />
             <Text
+              variant="body"
               style={{
                 color: semantic.text.primary,
                 fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 15,
                 flex: 1,
               }}
               numberOfLines={1}
@@ -210,16 +187,10 @@ export default function BookingDetail() {
           }}
         >
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.4,
-              fontSize: 10,
-              marginBottom: 10,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.tertiary, marginBottom: 10 }}
           >
-            KHÁCH HÀNG
+            Khách hàng
           </Text>
           <View className="flex-row items-center gap-3">
             <View
@@ -227,22 +198,16 @@ export default function BookingDetail() {
               style={{ backgroundColor: semantic.action.primarySoft }}
             >
               <Text
-                style={{
-                  color: semantic.action.primaryDeep,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 15,
-                }}
+                variant="body"
+                style={{ color: semantic.action.primaryDeep, fontFamily: 'BeVietnamPro_700Bold' }}
               >
                 {initials(booking.customerName)}
               </Text>
             </View>
             <View className="flex-1">
               <Text
-                style={{
-                  color: semantic.text.primary,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 15,
-                }}
+                variant="body"
+                style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                 numberOfLines={1}
               >
                 {booking.customerName}
@@ -283,7 +248,7 @@ export default function BookingDetail() {
               style={{ borderTopWidth: 1, borderTopColor: semantic.border.light }}
             >
               <ScanLine size={13} color={semantic.text.tertiary} />
-              <Text variant="caption" className="text-text-secondary" style={{ fontSize: 12 }}>
+              <Text variant="caption" className="text-text-secondary">
                 CCCD: {booking.customerCccd}
               </Text>
             </View>
@@ -294,7 +259,7 @@ export default function BookingDetail() {
               style={{ borderTopWidth: 1, borderTopColor: semantic.border.light }}
             >
               <Mail size={13} color={semantic.text.tertiary} />
-              <Text variant="caption" className="text-text-secondary" style={{ fontSize: 12 }}>
+              <Text variant="caption" className="text-text-secondary">
                 {booking.customerEmail}
               </Text>
             </View>
@@ -320,21 +285,16 @@ export default function BookingDetail() {
             </View>
             <View className="flex-1">
               <Text
-                variant="caption"
-                style={{
-                  color: semantic.leadGroup[statusToGroup[linkedLead.status]].fg,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                  letterSpacing: 0.4,
-                  fontSize: 10,
-                }}
+                variant="badge"
+                style={{ color: semantic.leadGroup[statusToGroup[linkedLead.status]].fg }}
               >
-                LEAD LIÊN KẾT
+                Lead liên kết
               </Text>
               <Text
+                variant="subtitle"
                 style={{
                   color: semantic.text.primary,
                   fontFamily: 'BeVietnamPro_700Bold',
-                  fontSize: 14,
                   marginTop: 1,
                 }}
                 numberOfLines={1}
@@ -356,27 +316,18 @@ export default function BookingDetail() {
           }}
         >
           <Text
-            variant="caption"
-            style={{
-              color: semantic.text.tertiary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              letterSpacing: 0.4,
-              fontSize: 10,
-              marginBottom: 10,
-            }}
+            variant="badge"
+            style={{ color: semantic.text.tertiary, marginBottom: 10 }}
           >
-            TIỀN ĐẶT CỌC
+            Tiền đặt cọc
           </Text>
           <Text
-            style={{
-              color: palette.emerald[700],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 22,
-            }}
+            variant="stat"
+            style={{ color: palette.emerald[700] }}
           >
             {formatVND(booking.depositVnd)}
           </Text>
-          <Text variant="caption" className="text-text-tertiary mt-1" style={{ fontSize: 12 }}>
+          <Text variant="caption" className="text-text-tertiary mt-1">
             Phương thức: {booking.paymentMethod === 'TRANSFER' ? 'Chuyển khoản' : 'Tiền mặt'}
           </Text>
         </View>
@@ -392,24 +343,14 @@ export default function BookingDetail() {
             }}
           >
             <Text
-              variant="caption"
-              style={{
-                color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.4,
-                fontSize: 10,
-                marginBottom: 6,
-              }}
+              variant="badge"
+              style={{ color: semantic.action.primaryDeep, marginBottom: 6 }}
             >
-              GHI CHÚ
+              Ghi chú
             </Text>
             <Text
-              variant="body"
-              style={{
-                color: semantic.text.primary,
-                fontSize: 13,
-                lineHeight: 19,
-              }}
+              variant="caption"
+              style={{ color: semantic.text.primary }}
             >
               {booking.notes}
             </Text>
@@ -419,10 +360,10 @@ export default function BookingDetail() {
         {/* Timeline */}
         <View className="mx-4 mt-4 p-4 rounded-2xl" style={{ backgroundColor: palette.white, borderWidth: 1, borderColor: semantic.border.light }}>
           <Text
+            variant="body"
             style={{
               color: semantic.text.primary,
               fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 15,
               marginBottom: 14,
             }}
           >
@@ -455,10 +396,7 @@ export default function BookingDetail() {
             }}
           >
             <ArrowRight size={18} color={palette.white} strokeWidth={2.4} />
-            <Text
-              variant="body"
-              style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-            >
+            <Text variant="button" style={{ color: palette.white }}>
               Chuyển bước
             </Text>
           </Pressable>
@@ -500,12 +438,8 @@ function ContactAction({
     >
       {icon}
       <Text
-        variant="body"
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 13,
-        }}
+        variant="caption"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {label}
       </Text>
@@ -558,16 +492,10 @@ function StatusUpdateSheet({
 
       <ScrollView style={{ flex: 1 }} className="mt-4" contentContainerStyle={{ paddingBottom: 16 }}>
         <Text
-          variant="caption"
-          style={{
-            color: semantic.text.tertiary,
-            fontFamily: 'BeVietnamPro_700Bold',
-            letterSpacing: 0.4,
-            fontSize: 10,
-            marginBottom: 8,
-          }}
+          variant="badge"
+          style={{ color: semantic.text.tertiary, marginBottom: 8 }}
         >
-          CHỌN BƯỚC TIẾP THEO
+          Chọn bước tiếp theo
         </Text>
         <View className="gap-2">
           {options.map((opt) => {
@@ -597,15 +525,12 @@ function StatusUpdateSheet({
                 </View>
                 <View className="flex-1">
                   <Text
-                    style={{
-                      color: semantic.text.primary,
-                      fontFamily: 'BeVietnamPro_700Bold',
-                      fontSize: 14,
-                    }}
+                    variant="subtitle"
+                    style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                   >
                     {bookingStatusLabels[opt]}
                   </Text>
-                  <Text variant="caption" className="text-text-tertiary" style={{ fontSize: 11 }}>
+                  <Text variant="caption" className="text-text-tertiary">
                     {isCancel
                       ? 'Dừng booking vĩnh viễn'
                       : 'Tiến sang bước kế tiếp trong pipeline'}
@@ -622,17 +547,14 @@ function StatusUpdateSheet({
         {pickedStatus && (
           <>
             <Text
-              variant="caption"
+              variant="badge"
               style={{
                 color: semantic.text.tertiary,
-                fontFamily: 'BeVietnamPro_700Bold',
-                letterSpacing: 0.4,
-                fontSize: 10,
                 marginTop: 18,
                 marginBottom: 6,
               }}
             >
-              GHI CHÚ (TUỲ CHỌN)
+              Ghi chú (tuỳ chọn)
             </Text>
             <TextInput
               value={note}
@@ -672,7 +594,7 @@ function StatusUpdateSheet({
           }}
         >
           <Text
-            variant="body"
+            variant="button"
             style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}
           >
             Huỷ
@@ -686,10 +608,7 @@ function StatusUpdateSheet({
             backgroundColor: pickedStatus ? semantic.action.primary : palette.slate[300],
           }}
         >
-          <Text
-            variant="body"
-            style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
-          >
+          <Text variant="button" style={{ color: palette.white }}>
             Xác nhận
           </Text>
         </Pressable>

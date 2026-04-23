@@ -99,11 +99,10 @@ export default function IncomeTransactions() {
                 }}
               >
                 <Text
-                  variant="body"
+                  variant="caption"
                   style={{
                     color: active ? semantic.action.primaryDeep : semantic.text.secondary,
                     fontFamily: 'BeVietnamPro_600SemiBold',
-                    fontSize: 13,
                   }}
                 >
                   {item.label}
@@ -207,11 +206,7 @@ function TransactionRow({ tx, onPress }: { tx: IncomeTransaction; onPress?: () =
             >
               <Text
                 variant="caption"
-                style={{
-                  color: statusS.fg,
-                  fontFamily: 'BeVietnamPro_600SemiBold',
-                  fontSize: 11,
-                }}
+                style={{ color: statusS.fg, fontFamily: 'BeVietnamPro_600SemiBold' }}
               >
                 {transactionStatusLabels[tx.status]}
               </Text>
@@ -269,11 +264,7 @@ function SourcePill({ source }: { source: IncomeSource }) {
       <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: color }} />
       <Text
         variant="caption"
-        style={{
-          color,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 11,
-        }}
+        style={{ color, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {incomeSourceLabels[source]}
       </Text>

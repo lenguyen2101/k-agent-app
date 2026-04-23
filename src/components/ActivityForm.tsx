@@ -132,11 +132,10 @@ export function ActivityForm({
                   strokeWidth={2}
                 />
                 <Text
-                  variant="body"
+                  variant="caption"
                   style={{
                     color: active ? palette.white : semantic.text.primary,
                     fontFamily: 'BeVietnamPro_600SemiBold',
-                    fontSize: 13,
                   }}
                 >
                   {t.label}
@@ -165,11 +164,10 @@ export function ActivityForm({
                     }}
                   >
                     <Text
-                      variant="body"
+                      variant="caption"
                       style={{
                         color: active ? semantic.action.primaryDeep : semantic.text.primary,
                         fontFamily: 'BeVietnamPro_600SemiBold',
-                        fontSize: 13,
                       }}
                     >
                       {o.label}
@@ -227,11 +225,10 @@ export function ActivityForm({
                   />
                 )}
                 <Text
-                  variant="body"
+                  variant="caption"
                   style={{
                     color: active ? palette.obsidian[50] : semantic.text.primary,
                     fontFamily: 'BeVietnamPro_600SemiBold',
-                    fontSize: 13,
                   }}
                 >
                   {f.label}

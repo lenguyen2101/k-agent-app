@@ -123,12 +123,8 @@ export default function ListingDetail() {
         {/* Title + meta */}
         <View className="px-4 pt-4">
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 18,
-              lineHeight: 24,
-            }}
+            variant="h3"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {listing.title}
           </Text>
@@ -170,11 +166,7 @@ export default function ListingDetail() {
               >
                 <Text
                   variant="caption"
-                  style={{
-                    color: palette.sienna[700],
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 11,
-                  }}
+                  style={{ color: palette.sienna[700], fontFamily: 'BeVietnamPro_700Bold' }}
                 >
                   {listing.agent.score}/100
                 </Text>
@@ -210,7 +202,7 @@ export default function ListingDetail() {
             >
               <Text
                 variant="caption"
-                style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold', fontSize: 11 }}
+                style={{ color: palette.white, fontFamily: 'BeVietnamPro_600SemiBold' }}
               >
                 1/{listing.gallery.length}
               </Text>
@@ -283,12 +275,8 @@ export default function ListingDetail() {
           </Text>
           <View className="flex-row items-baseline gap-2 mt-1">
             <Text
-              variant="h1"
-              style={{
-                color: semantic.action.primaryDeep,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 24,
-              }}
+              variant="stat"
+              style={{ color: semantic.action.primaryDeep }}
             >
               {formatVND(listing.listPrice)}
             </Text>
@@ -431,7 +419,7 @@ export default function ListingDetail() {
           className="flex-1 h-12 rounded-xl items-center justify-center border"
           style={{ borderColor: semantic.border.default, backgroundColor: palette.white }}
         >
-          <Text variant="body" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
+          <Text variant="button" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
             Liên hệ chủ
           </Text>
         </Pressable>
@@ -447,7 +435,7 @@ export default function ListingDetail() {
             elevation: 4,
           }}
         >
-          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+          <Text variant="button" style={{ color: palette.white }}>
             Yêu cầu hợp tác
           </Text>
         </Pressable>

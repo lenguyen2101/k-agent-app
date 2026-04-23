@@ -27,21 +27,21 @@ type VariantConfig = {
 const CONFIG: Record<FrameVariant, VariantConfig> = {
   priority: {
     icon: Sparkles,
-    label: 'ƯU TIÊN',
+    label: 'Ưu tiên',
     frameColors: [palette.sienna[400], palette.sienna[300], palette.sienna[200], palette.sienna[400]],
     ribbonColors: [palette.sienna[500], palette.sienna[700]],
     shadowColor: palette.sienna[500],
   },
   offer: {
     icon: Home,
-    label: 'ĐỀ NGHỊ XEM NHÀ',
+    label: 'Đề nghị xem nhà',
     frameColors: [palette.emerald[400], palette.emerald[300], palette.emerald[200], palette.emerald[400]],
     ribbonColors: [palette.emerald[600], palette.emerald[700]],
     shadowColor: palette.emerald[500],
   },
   deal: {
     icon: Handshake,
-    label: 'GIAO DỊCH',
+    label: 'Giao dịch',
     frameColors: [palette.violet[500], palette.violet[400], palette.violet[300], palette.violet[500]],
     ribbonColors: [palette.violet[600], palette.violet[700]],
     shadowColor: palette.violet[600],
@@ -114,13 +114,8 @@ export function PriorityFrame({ children, variant = 'priority' }: Props) {
         >
           <Icon size={11} color={palette.white} strokeWidth={2.4} />
           <Text
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 10,
-              lineHeight: 14,
-              letterSpacing: 0.8,
-            }}
+            variant="badge"
+            style={{ color: palette.white, letterSpacing: 0.3, textTransform: 'none' }}
           >
             {cfg.label}
           </Text>

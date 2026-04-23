@@ -110,15 +110,7 @@ export default function TowerDetail() {
             className="absolute top-3 right-3 flex-row items-center gap-1 px-2.5 py-1 rounded-full"
             style={{ backgroundColor: badge.bg }}
           >
-            <Text
-              variant="caption"
-              style={{
-                color: badge.fg,
-                fontFamily: 'BeVietnamPro_700Bold',
-                fontSize: 11,
-                letterSpacing: 0.3,
-              }}
-            >
+            <Text variant="badge" style={{ color: badge.fg }}>
               {towerStatusLabels[tower.status]}
             </Text>
           </View>
@@ -127,31 +119,24 @@ export default function TowerDetail() {
         {/* Metadata */}
         <View className="bg-white px-4 pt-4 pb-5">
           <Text
-            variant="caption"
+            variant="badge"
             style={{
               color: semantic.text.tertiary,
               fontFamily: 'BeVietnamPro_500Medium',
-              letterSpacing: 0.4,
             }}
           >
-            {project.shortName.toUpperCase()}
+            {project.shortName}
           </Text>
           <Text
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 20,
-              lineHeight: 26,
-              marginTop: 4,
-            }}
+            variant="h2"
+            style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold', marginTop: 4 }}
           >
             {tower.name}
           </Text>
           <Text
+            variant="h3"
             style={{
               color: palette.emerald[700],
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 17,
               marginTop: 8,
             }}
           >
@@ -190,22 +175,14 @@ export default function TowerDetail() {
             >
               <View className="flex-row items-baseline justify-between mb-3">
                 <Text
-                  variant="caption"
-                  style={{
-                    color: semantic.action.primaryDeep,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    letterSpacing: 0.6,
-                    fontSize: 11,
-                  }}
+                  variant="badge"
+                  style={{ color: semantic.action.primaryDeep }}
                 >
-                  TIẾN ĐỘ HIỆN TẠI
+                  Tiến độ hiện tại
                 </Text>
                 <Text
-                  style={{
-                    color: semantic.action.primaryDeep,
-                    fontFamily: 'BeVietnamPro_700Bold',
-                    fontSize: 22,
-                  }}
+                  variant="h1"
+                  style={{ color: semantic.action.primaryDeep }}
                 >
                   {tower.progressPct}%
                 </Text>
@@ -383,11 +360,8 @@ export default function TowerDetail() {
                   />
                   <View className="flex-1">
                     <Text
-                      style={{
-                        color: semantic.text.primary,
-                        fontFamily: 'BeVietnamPro_700Bold',
-                        fontSize: 15,
-                      }}
+                      variant="body"
+                      style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
                     >
                       {u.name} · {u.areaMin}-{u.areaMax}m²
                     </Text>
@@ -416,10 +390,10 @@ export default function TowerDetail() {
                       )}
                     </View>
                     <Text
+                      variant="caption"
                       style={{
                         color: palette.emerald[700],
                         fontFamily: 'BeVietnamPro_700Bold',
-                        fontSize: 13,
                         marginTop: 4,
                       }}
                     >
@@ -444,7 +418,7 @@ export default function TowerDetail() {
           className="flex-1 h-12 rounded-xl items-center justify-center border"
           style={{ borderColor: semantic.border.default, backgroundColor: palette.white }}
         >
-          <Text variant="body" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
+          <Text variant="button" style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_600SemiBold' }}>
             Xem toàn dự án
           </Text>
         </Pressable>
@@ -465,7 +439,7 @@ export default function TowerDetail() {
             elevation: 4,
           }}
         >
-          <Text variant="body" style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}>
+          <Text variant="button" style={{ color: palette.white }}>
             Booking toà này
           </Text>
         </Pressable>
@@ -478,12 +452,8 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle?: string })
   return (
     <View>
       <Text
-        style={{
-          color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 18,
-          lineHeight: 24,
-        }}
+        variant="h3"
+        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
       >
         {title}
       </Text>
@@ -521,22 +491,16 @@ function StatPill({
       {icon}
       <View className="flex-1">
         <Text
-          variant="caption"
-          style={{
-            color: t.fg,
-            fontFamily: 'BeVietnamPro_600SemiBold',
-            fontSize: 10,
-            letterSpacing: 0.4,
-            opacity: 0.85,
-          }}
+          variant="badge"
+          style={{ color: t.fg, opacity: 0.85 }}
         >
-          {label.toUpperCase()}
+          {label}
         </Text>
         <Text
+          variant="body"
           style={{
             color: semantic.text.primary,
             fontFamily: 'BeVietnamPro_700Bold',
-            fontSize: 15,
             marginTop: 1,
           }}
         >

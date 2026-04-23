@@ -51,10 +51,10 @@ export function EmptyState({
         <Icon size={28} color={v.iconFg} strokeWidth={1.8} />
       </View>
       <Text
+        variant="body"
         style={{
           color: semantic.text.primary,
           fontFamily: 'BeVietnamPro_700Bold',
-          fontSize: 15,
           marginTop: 14,
           textAlign: 'center',
         }}
@@ -82,12 +82,8 @@ export function EmptyState({
           style={{ backgroundColor: semantic.action.primary }}
         >
           <Text
-            variant="body"
-            style={{
-              color: palette.white,
-              fontFamily: 'BeVietnamPro_700Bold',
-              fontSize: 13,
-            }}
+            variant="caption"
+            style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
           >
             {ctaLabel}
           </Text>
