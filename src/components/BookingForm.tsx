@@ -153,15 +153,30 @@ export function BookingForm({
   const [notes, setNotes] = useState('');
   const [agreed, setAgreed] = useState(false);
 
+  // Submit-triggered validation — chỉ hiện lỗi sau khi user bấm Submit
+  // (tránh hiển thị đỏ ngay khi user mới mở form, chưa kịp điền).
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const fieldErrors = {
+    fullName: fullName.trim().length === 0 ? 'Vui lòng nhập họ tên khách' : undefined,
+    phone:
+      phone.trim().length === 0
+        ? 'Vui lòng nhập số điện thoại'
+        : phone.trim().length < 9
+        ? 'Số điện thoại không hợp lệ'
+        : undefined,
+  };
+
   const canSubmit =
     !!selectedProject &&
     !!selectedUnit &&
-    fullName.trim().length > 0 &&
-    phone.trim().length >= 9 &&
+    !fieldErrors.fullName &&
+    !fieldErrors.phone &&
     depositAmount > 0 &&
     agreed;
 
   const handleSubmit = () => {
+    setSubmitAttempted(true);
     if (!canSubmit || !selectedProject || !selectedUnit) return;
 
     const booking = createBooking({
@@ -577,6 +592,7 @@ export function BookingForm({
               value={fullName}
               onChangeText={setFullName}
               placeholder="Nguyễn Văn A"
+              error={submitAttempted ? fieldErrors.fullName : undefined}
             />
             <Field
               icon={<Phone size={15} color={semantic.text.tertiary} />}
@@ -586,6 +602,7 @@ export function BookingForm({
               onChangeText={setPhone}
               keyboardType="phone-pad"
               placeholder="0901 234 567"
+              error={submitAttempted ? fieldErrors.phone : undefined}
             />
             <Field
               label="Email"
@@ -804,11 +821,10 @@ export function BookingForm({
           </Text>
         </View>
         <Pressable
-          disabled={!canSubmit}
           onPress={handleSubmit}
           className="h-12 rounded-xl items-center justify-center"
           style={{
-            backgroundColor: canSubmit ? semantic.action.primary : palette.slate[200],
+            backgroundColor: canSubmit ? semantic.action.primary : palette.slate[300],
             shadowColor: semantic.action.primaryDeep,
             shadowOpacity: canSubmit ? 0.25 : 0,
             shadowRadius: 10,
@@ -819,7 +835,7 @@ export function BookingForm({
           <Text
             variant="body"
             style={{
-              color: canSubmit ? palette.white : semantic.text.tertiary,
+              color: palette.white,
               fontFamily: 'BeVietnamPro_700Bold',
             }}
           >
@@ -1113,6 +1129,7 @@ function Field({
   keyboardType,
   icon,
   rightSlot,
+  error,
 }: {
   label: string;
   required?: boolean;
@@ -1122,6 +1139,8 @@ function Field({
   keyboardType?: 'default' | 'phone-pad' | 'email-address' | 'number-pad';
   icon?: React.ReactNode;
   rightSlot?: React.ReactNode;
+  /** Error message — khi có, field đổi border đỏ + hiển thị helper text bên dưới. */
+  error?: string;
 }) {
   return (
     <View>
@@ -1140,8 +1159,8 @@ function Field({
         className="flex-row items-center px-3 rounded-xl"
         style={{
           borderWidth: 1,
-          borderColor: semantic.border.default,
-          backgroundColor: palette.white,
+          borderColor: error ? palette.red[500] : semantic.border.default,
+          backgroundColor: error ? palette.red[50] : palette.white,
           minHeight: 46,
         }}
       >
@@ -1162,6 +1181,19 @@ function Field({
         />
         {rightSlot}
       </View>
+      {error && (
+        <Text
+          variant="caption"
+          style={{
+            color: palette.red[600],
+            fontFamily: 'BeVietnamPro_500Medium',
+            fontSize: 11,
+            marginTop: 4,
+          }}
+        >
+          {error}
+        </Text>
+      )}
     </View>
   );
 }

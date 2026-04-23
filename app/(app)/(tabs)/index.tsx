@@ -1,7 +1,7 @@
 import { Pressable, RefreshControl, ScrollView, Switch, View } from 'react-native';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
+  CalendarDays,
   ChevronRight,
   MessageSquare,
   PhoneCall,
@@ -11,13 +11,14 @@ import {
 } from 'lucide-react-native';
 import { useAuth } from '@/store/auth';
 import { leads } from '@/mock/leads';
-import { LeadCard } from '@/components/LeadCard';
 import { HeroStatsCard, type PipelineSegment } from '@/components/HeroStatsCard';
 import { QuickActionRow, type QuickAction } from '@/components/QuickActionRow';
 import { SalesProfileHeader } from '@/components/SalesProfileHeader';
 import { Screen } from '@/components/Screen';
+import { TodoistEventCard } from '@/components/TodoistEventCard';
 import { Text } from '@/components/ui/Text';
 import { usePullToRefresh } from '@/hooks/usePullToRefresh';
+import { collectEvents, eventsToday } from '@/lib/calendar';
 import { isOverdue } from '@/lib/format';
 import { statusToGroup } from '@/types/lead';
 import { palette, semantic } from '@/theme';
@@ -32,24 +33,23 @@ export default function Home() {
     (l) => isOverdue(l.nextFollowupAt) && l.status !== 'CLOSED_WON' && l.status !== 'CLOSED_LOST'
   );
   const newLeads = leads.filter((l) => l.status === 'NEW');
-  const dealsThisMonth = leads.filter(
-    (l) => l.status === 'DEPOSITED' || l.status === 'CONTRACTED' || l.status === 'CLOSED_WON'
-  );
+  const todayEvents = eventsToday(collectEvents(leads));
 
-  const pipeline: PipelineSegment[] = (['new', 'engaged', 'midfunnel', 'closing', 'won'] as const).map(
-    (group) => {
-      const count = leads.filter((l) => statusToGroup[l.status] === group).length;
-      const color = semantic.leadGroup[group].dot;
-      const labelMap = {
-        new: 'Mới',
-        engaged: 'Đang trao đổi',
-        midfunnel: 'Hẹn/Xem',
-        closing: 'Chốt',
-        won: 'Thành công',
-      } as const;
-      return { key: group, label: labelMap[group], count, color };
-    }
-  );
+  // Pipeline bar — 3 segment đầu funnel (Mới/Đang trao đổi/Hẹn-Xem) cho Home.
+  // Stage Chốt + Thành công xem ở Thu nhập tab. Tone sienna + pattern distinct.
+  const pipelineConfig = [
+    { group: 'new',       label: 'Mới',            color: palette.sienna[300], pattern: 'stripes' as const },
+    { group: 'engaged',   label: 'Đang trao đổi',  color: palette.sienna[500], pattern: 'solid' as const },
+    { group: 'midfunnel', label: 'Hẹn/Xem',        color: palette.sienna[700], pattern: 'dots' as const },
+  ] as const;
+
+  const pipeline: PipelineSegment[] = pipelineConfig.map((cfg) => ({
+    key: cfg.group,
+    label: cfg.label,
+    count: leads.filter((l) => statusToGroup[l.status] === cfg.group).length,
+    color: cfg.color,
+    pattern: cfg.pattern,
+  }));
 
   const quickActions: QuickAction[] = [
     {
@@ -109,33 +109,24 @@ export default function Home() {
           <HeroStatsCard
             title="Tổng quan hoạt động hôm nay"
             pipeline={pipeline}
-            stats={[
-              { label: 'Lead mới', value: newLeads.length, tone: 'accent' },
-              { label: 'Quá hạn FU', value: overdueLeads.length, tone: 'urgent' },
-              { label: 'Đã chốt', value: dealsThisMonth.length, tone: 'success' },
-            ]}
           />
         </View>
 
-        {/* Combined receiving-lead card — toggle + demo offer banner trong 1 section */}
+        {/* Combined receiving-lead card — bg đổi theo state để phân biệt rõ:
+            online = emerald soft · offline = slate soft */}
         <View
-          className="mx-4 mt-4 rounded-2xl overflow-hidden"
+          className="mx-4 mt-8 rounded-2xl overflow-hidden"
           style={{
-            backgroundColor: semantic.surface.card,
+            backgroundColor: isOnline ? palette.emerald[50] : palette.slate[100],
             borderWidth: 1,
-            borderColor: semantic.border.light,
-            shadowColor: palette.obsidian[900],
-            shadowOpacity: 0.04,
-            shadowRadius: 8,
-            shadowOffset: { width: 0, height: 2 },
-            elevation: 2,
+            borderColor: isOnline ? palette.emerald[100] : palette.slate[200],
           }}
         >
           {/* Top row — status + toggle */}
           <View className="p-4 flex-row items-center gap-3">
             <View
               className="w-10 h-10 rounded-full items-center justify-center"
-              style={{ backgroundColor: isOnline ? palette.emerald[100] : semantic.surface.alt }}
+              style={{ backgroundColor: palette.white }}
             >
               <View
                 className="w-2.5 h-2.5 rounded-full"
@@ -159,78 +150,156 @@ export default function Home() {
             />
           </View>
 
-          {/* Bottom row — demo offer, chỉ hiện khi online */}
+          {/* Divider + inline alert row — chỉ hiện khi online */}
           {isOnline && (
-            <Pressable onPress={() => router.push('/(modal)/lead-offer')}>
-              <LinearGradient
-                colors={[...semantic.gradient.heroBrand]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={{ padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}
+            <>
+              <View style={{ height: 1, backgroundColor: palette.emerald[100] }} />
+              <Pressable
+                onPress={() => router.push('/(modal)/lead-offer')}
+                className="px-4 py-3 flex-row items-center gap-3"
               >
                 <View
-                  className="w-10 h-10 rounded-full items-center justify-center"
-                  style={{ backgroundColor: 'rgba(247,243,237,0.18)' }}
+                  className="w-9 h-9 rounded-xl items-center justify-center"
+                  style={{ backgroundColor: palette.white }}
                 >
-                  <Sparkles size={20} color={palette.white} strokeWidth={2} />
+                  <Sparkles size={16} color={semantic.action.primary} strokeWidth={2.4} />
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: palette.red[500],
+                      borderWidth: 1.5,
+                      borderColor: palette.white,
+                    }}
+                  />
                 </View>
                 <View className="flex-1">
+                  <View className="flex-row items-center gap-1.5">
+                    <Text
+                      variant="caption"
+                      style={{
+                        color: palette.red[600],
+                        fontFamily: 'BeVietnamPro_700Bold',
+                        fontSize: 10,
+                        letterSpacing: 0.4,
+                      }}
+                    >
+                      DEMO · LEAD MỚI
+                    </Text>
+                  </View>
                   <Text
-                    variant="body"
-                    style={{ color: palette.white, fontFamily: 'BeVietnamPro_700Bold' }}
+                    style={{
+                      color: semantic.text.primary,
+                      fontFamily: 'BeVietnamPro_700Bold',
+                      fontSize: 14,
+                      marginTop: 1,
+                    }}
                   >
-                    Demo: Lead mới đến!
-                  </Text>
-                  <Text
-                    variant="caption"
-                    style={{ color: 'rgba(247,243,237,0.85)', marginTop: 2, fontSize: 11 }}
-                  >
-                    Tap để xem màn hình nhận lead
+                    Có 1 khách tiềm năng · tap để xem
                   </Text>
                 </View>
-                <ChevronRight size={18} color={palette.white} />
-              </LinearGradient>
-            </Pressable>
+                <ChevronRight size={18} color={semantic.action.primaryDeep} strokeWidth={2.2} />
+              </Pressable>
+            </>
           )}
         </View>
 
-        <View className="mt-6 px-4">
+        {/* Lịch hôm nay — Todoist-style card list */}
+        <View className="mt-8 px-4">
           <View className="flex-row items-center justify-between mb-3">
-            <Text variant="h3" style={{ color: semantic.text.primary }}>
-              Cần follow up hôm nay
-            </Text>
-            {overdueLeads.length > 0 && (
-              <Pressable onPress={() => router.push('/(app)/(tabs)/leads')}>
-                <Text variant="caption" style={{ color: semantic.action.primary, fontFamily: 'BeVietnamPro_500Medium' }}>
-                  Xem tất cả
-                </Text>
-              </Pressable>
-            )}
-          </View>
-          <View className="gap-3">
-            {overdueLeads.length === 0 ? (
+            <View className="flex-row items-center gap-2">
               <View
-                className="rounded-2xl p-6 items-center"
+                className="w-7 h-7 rounded-lg items-center justify-center"
+                style={{ backgroundColor: palette.blue[50] }}
+              >
+                <CalendarDays size={15} color={palette.blue[700]} strokeWidth={2.4} />
+              </View>
+              <Text variant="h3" style={{ color: semantic.text.primary }}>
+                Lịch hôm nay
+              </Text>
+              {todayEvents.length > 0 && (
+                <Text variant="caption" className="text-text-tertiary">
+                  {todayEvents.length} cuộc hẹn
+                </Text>
+              )}
+            </View>
+            <Pressable
+              onPress={() => router.push('/(app)/calendar')}
+              className="flex-row items-center gap-0.5"
+              hitSlop={4}
+            >
+              <Text
+                variant="caption"
                 style={{
-                  backgroundColor: semantic.surface.card,
-                  borderWidth: 1,
-                  borderColor: semantic.border.light,
+                  color: semantic.action.primary,
+                  fontFamily: 'BeVietnamPro_600SemiBold',
                 }}
               >
-                <Text variant="body" style={{ color: semantic.text.secondary }}>
-                  Chưa có lead nào quá hạn
-                </Text>
-              </View>
-            ) : (
-              overdueLeads.map((lead) => (
-                <LeadCard
-                  key={lead.id}
-                  lead={lead}
-                  onPress={() => router.push(`/(app)/leads/${lead.id}`)}
-                />
-              ))
-            )}
+                Xem lịch
+              </Text>
+              <ChevronRight size={14} color={semantic.action.primary} strokeWidth={2.4} />
+            </Pressable>
           </View>
+
+          {todayEvents.length === 0 ? (
+            <View
+              className="p-5 rounded-2xl items-center"
+              style={{
+                backgroundColor: palette.white,
+                borderWidth: 1,
+                borderColor: semantic.border.light,
+              }}
+            >
+              <View
+                className="w-12 h-12 rounded-2xl items-center justify-center mb-2"
+                style={{ backgroundColor: palette.emerald[50] }}
+              >
+                <CalendarDays size={22} color={palette.emerald[700]} strokeWidth={1.8} />
+              </View>
+              <Text
+                style={{
+                  color: semantic.text.primary,
+                  fontFamily: 'BeVietnamPro_700Bold',
+                  fontSize: 14,
+                }}
+              >
+                Không có cuộc hẹn hôm nay
+              </Text>
+              <Text
+                variant="caption"
+                className="text-text-secondary mt-0.5 text-center"
+              >
+                Tận hưởng ngày nhẹ nhàng hoặc chủ động gọi lead!
+              </Text>
+            </View>
+          ) : (
+            <View className="gap-2.5">
+              {todayEvents.slice(0, 4).map((ev) => (
+                <TodoistEventCard key={ev.id} event={ev} />
+              ))}
+              {todayEvents.length > 4 && (
+                <Pressable
+                  onPress={() => router.push('/(app)/calendar')}
+                  className="flex-row items-center justify-center gap-1 py-2"
+                >
+                  <Text
+                    variant="caption"
+                    style={{
+                      color: semantic.action.primary,
+                      fontFamily: 'BeVietnamPro_700Bold',
+                    }}
+                  >
+                    Xem thêm {todayEvents.length - 4} cuộc hẹn
+                  </Text>
+                  <ChevronRight size={14} color={semantic.action.primary} strokeWidth={2.4} />
+                </Pressable>
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
     </Screen>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Calendar, ChevronRight, ScanLine, ShieldCheck } from 'lucide-react-native';
@@ -110,22 +110,29 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
     setCccdMasked(`****${data.idNumber.slice(-4)}`);
   }, [pendingScan, consumeScan]);
 
-  const canSave = useMemo(
-    () => fullName.trim().length > 0 && /^0\d{9}$/.test(phone.trim()) && !!project,
+  // Submit-triggered inline validation — chỉ hiện lỗi sau khi user bấm Lưu
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const fieldErrors = useMemo(
+    () => ({
+      fullName: fullName.trim().length === 0 ? 'Vui lòng nhập họ tên khách hàng' : undefined,
+      phone:
+        phone.trim().length === 0
+          ? 'Vui lòng nhập số điện thoại'
+          : !/^0\d{9}$/.test(phone.trim())
+          ? 'SĐT phải 10 số, bắt đầu bằng 0'
+          : undefined,
+      project: !project ? 'Vui lòng chọn dự án khách quan tâm' : undefined,
+    }),
     [fullName, phone, project]
   );
 
+  const canSave =
+    !fieldErrors.fullName && !fieldErrors.phone && !fieldErrors.project;
+
   const handleSubmit = () => {
-    if (!canSave) {
-      if (!fullName.trim()) {
-        Alert.alert('Thiếu tên', 'Vui lòng nhập họ tên khách hàng.');
-      } else if (!/^0\d{9}$/.test(phone.trim())) {
-        Alert.alert('SĐT không hợp lệ', 'SĐT phải 10 số, bắt đầu bằng 0.');
-      } else if (!project) {
-        Alert.alert('Thiếu dự án', 'Vui lòng chọn dự án khách quan tâm.');
-      }
-      return;
-    }
+    setSubmitAttempted(true);
+    if (!canSave) return;
 
     const preset = FOLLOWUPS.find((f) => f.key === followupKey);
     const nextFollowupAt =
@@ -204,30 +211,52 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
         </Pressable>
 
         <SectionLabel>Thông tin khách</SectionLabel>
-        <FieldWrap label="Họ và tên" required>
+        <FieldWrap
+          label="Họ và tên"
+          required
+          error={submitAttempted ? fieldErrors.fullName : undefined}
+        >
           <TextInput
             value={fullName}
             onChangeText={setFullName}
             placeholder="Nguyễn Văn A"
             placeholderTextColor={semantic.text.tertiary}
             autoCapitalize="words"
-            style={inputStyle}
+            style={[
+              ...inputStyle,
+              submitAttempted && fieldErrors.fullName
+                ? { borderColor: palette.red[500], backgroundColor: palette.red[50] }
+                : null,
+            ]}
           />
         </FieldWrap>
 
-        <FieldWrap label="Số điện thoại" required>
+        <FieldWrap
+          label="Số điện thoại"
+          required
+          error={submitAttempted ? fieldErrors.phone : undefined}
+        >
           <TextInput
             value={phone}
             onChangeText={setPhone}
             placeholder="0901234567"
             placeholderTextColor={semantic.text.tertiary}
             keyboardType="phone-pad"
-            style={inputStyle}
+            style={[
+              ...inputStyle,
+              submitAttempted && fieldErrors.phone
+                ? { borderColor: palette.red[500], backgroundColor: palette.red[50] }
+                : null,
+            ]}
           />
         </FieldWrap>
 
         <SectionLabel className="mt-5">Nhu cầu</SectionLabel>
-        <FieldWrap label="Dự án quan tâm" required>
+        <FieldWrap
+          label="Dự án quan tâm"
+          required
+          error={submitAttempted ? fieldErrors.project : undefined}
+        >
           <View className="flex-row flex-wrap gap-2">
             {projects.map((p) => {
               const active = project?.id === p.id;
@@ -386,10 +415,9 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
       >
         <Pressable
           onPress={handleSubmit}
-          disabled={!canSave}
           className="h-12 rounded-xl items-center justify-center"
           style={{
-            backgroundColor: canSave ? semantic.action.primary : semantic.border.default,
+            backgroundColor: canSave ? semantic.action.primary : palette.slate[300],
             shadowColor: semantic.action.primaryDeep,
             shadowOpacity: canSave ? 0.25 : 0,
             shadowRadius: 10,
@@ -400,7 +428,7 @@ export function LeadForm({ initial, submitLabel = 'Lưu', onSubmit, stickyBottom
           <Text
             variant="body"
             style={{
-              color: canSave ? palette.white : semantic.text.tertiary,
+              color: palette.white,
               fontFamily: 'BeVietnamPro_700Bold',
             }}
           >
@@ -446,10 +474,12 @@ function FieldWrap({
   label,
   required,
   children,
+  error,
 }: {
   label: string;
   required?: boolean;
   children: React.ReactNode;
+  error?: string;
 }) {
   return (
     <View className="mb-4">
@@ -471,6 +501,19 @@ function FieldWrap({
         )}
       </View>
       {children}
+      {error && (
+        <Text
+          variant="caption"
+          style={{
+            color: palette.red[600],
+            fontFamily: 'BeVietnamPro_500Medium',
+            fontSize: 11,
+            marginTop: 4,
+          }}
+        >
+          {error}
+        </Text>
+      )}
     </View>
   );
 }

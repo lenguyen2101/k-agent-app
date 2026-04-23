@@ -29,6 +29,9 @@ type Props = {
   visible: boolean;
   onClose: () => void;
   children: ReactNode;
+  /** @deprecated — backdrop tap mặc định KHÔNG dismiss (user dễ lỡ tay trong form).
+   * Đóng sheet qua tap handle bar ở top hoặc CTA bên trong. Prop giữ lại cho
+   * backward compat nhưng effectively no-op. */
   dismissOnBackdrop?: boolean;
   heightPercent?: number;
 };
@@ -37,7 +40,6 @@ export function BottomSheetModal({
   visible,
   onClose,
   children,
-  dismissOnBackdrop = true,
   heightPercent,
 }: Props) {
   const { height: screenHeight } = useWindowDimensions();
@@ -75,17 +77,16 @@ export function BottomSheetModal({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <Pressable
+        {/* Backdrop = View thường (không Pressable) → tap vùng ngoài sheet không
+            dismiss. User phải chủ động tap handle bar hoặc CTA trong content để
+            đóng. An toàn hơn khi đang điền form dở. */}
+        <View
           className="flex-1 justify-end"
           style={{ backgroundColor: semantic.surface.overlay }}
-          onPress={dismissOnBackdrop ? onClose : undefined}
         >
           <Animated.View entering={SlideInDown.duration(280)} exiting={SlideOutDown.duration(220)}>
             {/* KHÔNG dùng Pressable hoặc onStartShouldSetResponder ở sheet wrapper —
-                sẽ steal touch responder từ ScrollView bên trong (user bấm empty/gap
-                area → wrapper claim → ScrollView mất cơ hội capture Move gesture →
-                scroll bị stuck). Backdrop-tap dismiss vẫn hoạt động cho empty area
-                vì Pressable children bên trong chỉ claim khi tap trúng actual control. */}
+                sẽ steal touch responder từ ScrollView bên trong, gây scroll stuck. */}
             <View
               className="bg-surface rounded-t-2xl overflow-hidden"
               style={{
@@ -98,20 +99,26 @@ export function BottomSheetModal({
                 elevation: 12,
               }}
             >
-              <View className="items-center pt-2.5 pb-1">
+              {/* Handle bar = Pressable → tap để đóng. Hit area nới rộng qua
+                  padding top/bottom + hitSlop cho dễ chạm. */}
+              <Pressable
+                onPress={onClose}
+                hitSlop={10}
+                className="items-center pt-3 pb-2"
+              >
                 <View
                   style={{
-                    width: 40,
-                    height: 4,
-                    borderRadius: 2,
+                    width: 44,
+                    height: 5,
+                    borderRadius: 3,
                     backgroundColor: semantic.border.strong,
                   }}
                 />
-              </View>
+              </Pressable>
               {children}
             </View>
           </Animated.View>
-        </Pressable>
+        </View>
       </KeyboardAvoidingView>
     </Modal>
   );

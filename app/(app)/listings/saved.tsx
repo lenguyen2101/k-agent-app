@@ -3,6 +3,7 @@ import { Alert, FlatList, Pressable, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, BookmarkX, Heart } from 'lucide-react-native';
+import { EmptyState } from '@/components/EmptyState';
 import { ListingCard } from '@/components/ListingCard';
 import { Text } from '@/components/ui/Text';
 import { listings } from '@/mock/listings';
@@ -88,38 +89,14 @@ export default function SavedListings() {
           </View>
         )}
         ListEmptyComponent={
-          <View className="items-center justify-center py-20 px-8">
-            <View
-              className="w-16 h-16 rounded-3xl items-center justify-center mb-3"
-              style={{
-                backgroundColor: semantic.surface.alt,
-                borderWidth: 1,
-                borderColor: semantic.border.light,
-              }}
-            >
-              <Heart size={28} color={semantic.text.tertiary} strokeWidth={1.8} />
-            </View>
-            <Text variant="h3" className="text-text-primary">
-              Chưa có sản phẩm lưu
-            </Text>
-            <Text variant="body" className="text-text-secondary text-center mt-1">
-              Tap ♥ ở chi tiết sản phẩm để ghim và quay lại nhanh.
-            </Text>
-            <Pressable
-              onPress={() => router.back()}
-              className="mt-5 px-5 h-11 rounded-full items-center justify-center"
-              style={{ backgroundColor: semantic.action.primary }}
-            >
-              <Text
-                variant="body"
-                style={{
-                  color: palette.white,
-                  fontFamily: 'BeVietnamPro_700Bold',
-                }}
-              >
-                Khám phá rổ hàng
-              </Text>
-            </Pressable>
+          <View className="px-4 pt-10">
+            <EmptyState
+              icon={Heart}
+              title="Chưa có sản phẩm lưu"
+              description="Tap ♥ ở chi tiết sản phẩm để ghim và quay lại nhanh."
+              ctaLabel="Khám phá rổ hàng"
+              onCtaPress={() => router.back()}
+            />
           </View>
         }
       />

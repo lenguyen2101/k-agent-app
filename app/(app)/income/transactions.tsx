@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   TrendingUp,
 } from 'lucide-react-native';
+import { EmptyState } from '@/components/EmptyState';
 import { Text } from '@/components/ui/Text';
 import { incomeSourceColors } from '@/components/PieChart';
 import { transactions } from '@/mock/income';
@@ -152,11 +153,11 @@ export default function IncomeTransactions() {
           />
         )}
         ListEmptyComponent={
-          <View className="items-center py-16">
-            <Text variant="body" className="text-text-secondary">
-              Không có khoản thu nhập
-            </Text>
-          </View>
+          <EmptyState
+            icon={TrendingUp}
+            title="Chưa có khoản thu nhập"
+            description="Khi giao dịch được chốt, chi tiết hoa hồng sẽ xuất hiện tại đây."
+          />
         }
       />
     </View>

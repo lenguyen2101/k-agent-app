@@ -58,6 +58,7 @@ export const palette = {
   // Status / urgency
   blue: {
     50: '#eff6ff',
+    100: '#dbeafe',
     600: '#2563eb',
     700: '#1d4ed8',
   },

@@ -10,6 +10,7 @@ import {
   Sparkles,
   UserPlus,
 } from 'lucide-react-native';
+import { EmptyState } from '@/components/EmptyState';
 import { Text } from '@/components/ui/Text';
 import { palette, semantic } from '@/theme';
 
@@ -169,23 +170,12 @@ export default function Notifications() {
         })}
 
         {items.length === 0 && (
-          <View className="items-center py-20 px-8">
-            <View
-              className="w-16 h-16 rounded-3xl items-center justify-center mb-3"
-              style={{
-                backgroundColor: semantic.surface.alt,
-                borderWidth: 1,
-                borderColor: semantic.border.light,
-              }}
-            >
-              <Bell size={28} color={semantic.text.tertiary} strokeWidth={1.8} />
-            </View>
-            <Text variant="h3" className="text-text-primary">
-              Chưa có thông báo
-            </Text>
-            <Text variant="body" className="text-text-secondary text-center mt-1">
-              Khi có lead mới hoặc cập nhật, thông báo sẽ xuất hiện ở đây.
-            </Text>
+          <View className="px-4 pt-6">
+            <EmptyState
+              icon={Bell}
+              title="Chưa có thông báo"
+              description="Khi có lead mới hoặc cập nhật, thông báo sẽ xuất hiện ở đây."
+            />
           </View>
         )}
       </ScrollView>

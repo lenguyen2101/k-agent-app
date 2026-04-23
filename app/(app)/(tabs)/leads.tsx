@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { Plus, Search } from 'lucide-react-native';
+import { Plus, Search, Users } from 'lucide-react-native';
 import { useLeads } from '@/store/leads';
 import type { LeadStatus } from '@/types/lead';
 import { LeadCard } from '@/components/LeadCard';
 import { CreateLeadMenu } from '@/components/CreateLeadMenu';
+import { EmptyState } from '@/components/EmptyState';
 import { VoiceLeadModal } from '@/components/VoiceLeadModal';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/ui/Text';
@@ -122,11 +123,25 @@ export default function LeadsList() {
           <LeadCard lead={item} onPress={() => router.push(`/(app)/leads/${item.id}`)} />
         )}
         ListEmptyComponent={
-          <View className="items-center py-12">
-            <Text variant="body" style={{ color: semantic.text.secondary }}>
-              Không tìm thấy lead phù hợp
-            </Text>
-          </View>
+          <EmptyState
+            icon={Users}
+            title={search || filter !== 'all' ? 'Không tìm thấy lead phù hợp' : 'Chưa có lead nào'}
+            description={
+              search || filter !== 'all'
+                ? 'Thử bỏ bộ lọc hoặc thay từ khoá tìm kiếm.'
+                : 'Tạo lead mới hoặc bật nhận lead từ hệ thống để bắt đầu.'
+            }
+            variant={search || filter !== 'all' ? 'filter' : 'info'}
+            ctaLabel={search || filter !== 'all' ? 'Xoá bộ lọc' : undefined}
+            onCtaPress={
+              search || filter !== 'all'
+                ? () => {
+                    setSearch('');
+                    setFilter('all');
+                  }
+                : undefined
+            }
+          />
         }
       />
 

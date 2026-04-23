@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { Heart, Search } from 'lucide-react-native';
+import { Building2, Heart, PackageSearch, Search } from 'lucide-react-native';
+import { EmptyState } from '@/components/EmptyState';
 import { ListingCard } from '@/components/ListingCard';
 import { PrimaryProjectCard } from '@/components/PrimaryProjectCard';
 import { Screen } from '@/components/Screen';
@@ -212,11 +213,14 @@ export default function Listings() {
             />
           )}
           ListEmptyComponent={
-            <View className="items-center py-16">
-              <Text variant="body" className="text-text-secondary">
-                Không có dự án phù hợp
-              </Text>
-            </View>
+            <EmptyState
+              icon={Building2}
+              title="Không có dự án phù hợp"
+              description="Thử đổi từ khoá tìm kiếm hoặc xem tất cả dự án."
+              variant={search ? 'filter' : 'info'}
+              ctaLabel={search ? 'Xoá tìm kiếm' : undefined}
+              onCtaPress={search ? () => setSearch('') : undefined}
+            />
           }
         />
       ) : (
@@ -233,11 +237,25 @@ export default function Listings() {
             />
           )}
           ListEmptyComponent={
-            <View className="items-center py-16">
-              <Text variant="body" className="text-text-secondary">
-                Không có sản phẩm phù hợp
-              </Text>
-            </View>
+            <EmptyState
+              icon={PackageSearch}
+              title="Không có sản phẩm phù hợp"
+              description={
+                filter !== 'all' || search
+                  ? 'Thử bỏ bộ lọc hoặc thay từ khoá tìm kiếm.'
+                  : 'Chưa có căn thứ cấp nào trong rổ hàng.'
+              }
+              variant={filter !== 'all' || search ? 'filter' : 'info'}
+              ctaLabel={filter !== 'all' || search ? 'Xoá bộ lọc' : undefined}
+              onCtaPress={
+                filter !== 'all' || search
+                  ? () => {
+                      setFilter('all');
+                      setSearch('');
+                    }
+                  : undefined
+              }
+            />
           }
         />
       )}
