@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Pressable, View } from 'react-native';
 import { Building2, Clock, Phone } from 'lucide-react-native';
 import { statusToGroup, type Lead } from '@/types/lead';
@@ -25,7 +26,13 @@ function actionChipFor(lead: Lead): { kind: 'priority' | 'offer' | 'deal'; label
   return null;
 }
 
-export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }) {
+export const LeadCard = memo(function LeadCard({
+  lead,
+  onPress,
+}: {
+  lead: Lead;
+  onPress?: () => void;
+}) {
   const overdue = isOverdue(lead.nextFollowupAt);
   const chip = actionChipFor(lead);
   const frameVariant: FrameVariant | null = chip
@@ -126,4 +133,4 @@ export function LeadCard({ lead, onPress }: { lead: Lead; onPress?: () => void }
 
   if (frameVariant) return <PriorityFrame variant={frameVariant}>{cardContent}</PriorityFrame>;
   return cardContent;
-}
+});

@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { memo, useState } from 'react';
+import { Pressable, View } from 'react-native';
+import { Image } from 'expo-image';
 import { Building2, ChevronRight, Eye, Images, Orbit, TrendingUp } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { formatPricePerM2, formatVNDCompact } from '@/lib/format';
 import { palette, semantic } from '@/theme';
 import {
@@ -40,7 +42,13 @@ function StatusPill({ status }: { status: ListingStatus }) {
   );
 }
 
-export function ListingCard({ listing, onPress }: { listing: Listing; onPress?: () => void }) {
+export const ListingCard = memo(function ListingCard({
+  listing,
+  onPress,
+}: {
+  listing: Listing;
+  onPress?: () => void;
+}) {
   const pricePerM2 = listing.listPricePerM2 ?? listing.listPrice / listing.areaM2;
   const isSold = listing.status === 'SOLD';
   const [imgFailed, setImgFailed] = useState(false);
@@ -71,9 +79,11 @@ export function ListingCard({ listing, onPress }: { listing: Listing; onPress?: 
           </View>
         ) : (
           <Image
-            source={{ uri: listing.coverImage }}
+            source={{ uri: cdnImage(listing.coverImage, IMG_SIZE.card) }}
             style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
+            contentFit="cover"
+            transition={150}
+            cachePolicy="memory-disk"
             onError={() => setImgFailed(true)}
           />
         )}
@@ -213,4 +223,4 @@ export function ListingCard({ listing, onPress }: { listing: Listing; onPress?: 
       </View>
     </Pressable>
   );
-}
+});

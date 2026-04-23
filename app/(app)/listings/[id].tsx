@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { Image, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Image } from 'expo-image';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -196,9 +198,11 @@ export default function ListingDetail() {
         >
           <View style={{ position: 'relative', aspectRatio: 16 / 10 }}>
             <Image
-              source={{ uri: listing.coverImage }}
+              source={{ uri: cdnImage(listing.coverImage, IMG_SIZE.fullWidth) }}
               style={{ width: '100%', height: '100%' }}
-              resizeMode="cover"
+              contentFit="cover"
+              transition={200}
+              cachePolicy="memory-disk"
             />
             <View
               className="absolute top-3 right-3 px-2.5 py-1 rounded-full"

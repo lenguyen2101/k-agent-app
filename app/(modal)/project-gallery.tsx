@@ -2,17 +2,18 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
   Pressable,
   StatusBar,
   View,
   type ViewToken,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { ChevronLeft, ChevronRight, PlayCircle, Share2, X } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
+import { cdnImage } from '@/lib/img';
 import { primaryProjects } from '@/mock/primaryProjects';
 import { palette } from '@/theme';
 import type { MediaItem } from '@/types/primaryProject';
@@ -205,9 +206,11 @@ export default function ProjectGallery() {
                   }}
                 >
                   <Image
-                    source={{ uri: thumbUri }}
+                    source={{ uri: cdnImage(thumbUri, 60) }}
                     style={{ width: '100%', height: '100%' }}
-                    resizeMode="cover"
+                    contentFit="cover"
+                    transition={100}
+                    cachePolicy="memory-disk"
                   />
                   {item.type === 'youtube' && (
                     <View
@@ -240,9 +243,11 @@ function MediaFullFrame({ media }: { media: MediaItem }) {
     return (
       <View style={{ width: SCREEN_W, justifyContent: 'center', alignItems: 'center' }}>
         <Image
-          source={{ uri: media.url }}
+          source={{ uri: cdnImage(media.url, SCREEN_W) }}
           style={{ width: SCREEN_W, aspectRatio: 3 / 4, maxHeight: '100%' }}
-          resizeMode="contain"
+          contentFit="contain"
+          transition={200}
+          cachePolicy="memory-disk"
         />
       </View>
     );

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { Building2, ChevronRight, Clock, Phone } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
@@ -24,7 +25,7 @@ function leadInitials(name: string): string {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export function FollowUpRow({ lead, onPress, showDivider }: Props) {
+export const FollowUpRow = memo(function FollowUpRow({ lead, onPress, showDivider }: Props) {
   const overdue = isOverdue(lead.nextFollowupAt);
   const groupTint = semantic.leadGroup[statusToGroup[lead.status]];
 
@@ -133,4 +134,4 @@ export function FollowUpRow({ lead, onPress, showDivider }: Props) {
       <ChevronRight size={16} color={semantic.text.tertiary} strokeWidth={2} />
     </Pressable>
   );
-}
+});

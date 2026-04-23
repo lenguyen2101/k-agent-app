@@ -35,6 +35,10 @@ type Props = {
    * backward compat nhưng effectively no-op. */
   dismissOnBackdrop?: boolean;
   heightPercent?: number;
+  /** Fires khi exit animation hoàn tất + Modal unmount. Dùng để serialize
+   * mở Modal kế tiếp — tránh stack 2 Modal native (iOS chỉ 1 UIViewController
+   * present tại một lúc, stack gây freeze). */
+  onClosed?: () => void;
 };
 
 // Exit animation duration — match với Reanimated SlideOutDown để Modal không
@@ -46,22 +50,27 @@ export function BottomSheetModal({
   onClose,
   children,
   heightPercent,
+  onClosed,
 }: Props) {
   const { height: screenHeight } = useWindowDimensions();
   const { top: safeTop } = useSafeAreaInsets();
   const [kbHeight, setKbHeight] = useState(0);
 
   // Delayed unmount — khi visible=false, giữ Modal mounted đủ lâu để Reanimated
-  // SlideOutDown chạy xong. Nếu unmount ngay → exit animation bị cut.
+  // SlideOutDown chạy xong. Nếu unmount ngay → exit animation bị cut. Khi
+  // unmount xong fire onClosed để parent serialize action kế tiếp.
   const [mounted, setMounted] = useState(visible);
   useEffect(() => {
     if (visible) {
       setMounted(true);
     } else if (mounted) {
-      const t = setTimeout(() => setMounted(false), EXIT_DURATION_MS);
+      const t = setTimeout(() => {
+        setMounted(false);
+        onClosed?.();
+      }, EXIT_DURATION_MS);
       return () => clearTimeout(t);
     }
-  }, [visible, mounted]);
+  }, [visible, mounted, onClosed]);
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';

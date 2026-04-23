@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { Image, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Image } from 'expo-image';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -98,9 +100,11 @@ export default function TowerDetail() {
         {/* Hero image */}
         <View style={{ aspectRatio: 16 / 10, position: 'relative' }}>
           <Image
-            source={{ uri: tower.thumbnail }}
+            source={{ uri: cdnImage(tower.thumbnail, IMG_SIZE.fullWidth) }}
             style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
+            contentFit="cover"
+            transition={200}
+            cachePolicy="memory-disk"
           />
           <View
             className="absolute top-3 right-3 flex-row items-center gap-1 px-2.5 py-1 rounded-full"
@@ -332,9 +336,11 @@ export default function TowerDetail() {
               {tower.gallery.map((img, i) => (
                 <Image
                   key={i}
-                  source={{ uri: img }}
+                  source={{ uri: cdnImage(img, IMG_SIZE.card) }}
                   style={{ width: 240, aspectRatio: 4 / 3, borderRadius: 14 }}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  transition={150}
+                  cachePolicy="memory-disk"
                 />
               ))}
             </ScrollView>
@@ -369,9 +375,11 @@ export default function TowerDetail() {
                   }}
                 >
                   <Image
-                    source={{ uri: u.floorplanImage }}
+                    source={{ uri: cdnImage(u.floorplanImage, IMG_SIZE.thumb) }}
                     style={{ width: 84, height: 84, borderRadius: 12 }}
-                    resizeMode="cover"
+                    contentFit="cover"
+                    transition={150}
+                    cachePolicy="memory-disk"
                   />
                   <View className="flex-1">
                     <Text

@@ -57,7 +57,10 @@ export function LoanCalculator({ initialPrincipal }: Props) {
   const [termYears, setTermYears] = useState(15);
   const [ratePct, setRatePct] = useState(8.5);
   const [method, setMethod] = useState<LoanMethod>('declining');
-  const [showFullSchedule, setShowFullSchedule] = useState(false);
+  // Pagination: null = preview mode (12 đầu + 3 cuối). Number = show first N
+  // rows với "Tải thêm 60 tháng" button. Tránh render full 360 rows ngay.
+  const [visibleCount, setVisibleCount] = useState<number | null>(null);
+  const BATCH_SIZE = 60;
 
   const loanAmount = useMemo(
     () => Math.round(principal * (1 - downPct / 100)),
@@ -69,16 +72,29 @@ export function LoanCalculator({ initialPrincipal }: Props) {
     [loanAmount, ratePct, termYears, method]
   );
 
-  // Preview: 12 tháng đầu + 3 tháng cuối cho user thấy shape của lịch trả
-  const previewRows = useMemo(() => {
-    if (showFullSchedule) return result.schedule;
-    const first = result.schedule.slice(0, 12);
-    const last = result.schedule.slice(-3);
-    if (result.schedule.length <= 15) return result.schedule;
-    return [...first, ...last];
-  }, [result.schedule, showFullSchedule]);
+  // Reset pagination khi loan params thay đổi → schedule mới → start lại preview
+  useMemo(() => {
+    setVisibleCount(null);
+  }, [result.schedule.length]);
 
-  const needsEllipsis = !showFullSchedule && result.schedule.length > 15;
+  // Preview: 12 tháng đầu + 3 tháng cuối cho user thấy shape của lịch trả.
+  // Khi expand: show first N rows batched, không last-3 vì user đã commit scroll.
+  const previewRows = useMemo(() => {
+    if (visibleCount === null) {
+      if (result.schedule.length <= 15) return result.schedule;
+      const first = result.schedule.slice(0, 12);
+      const last = result.schedule.slice(-3);
+      return [...first, ...last];
+    }
+    return result.schedule.slice(0, Math.min(visibleCount, result.schedule.length));
+  }, [result.schedule, visibleCount]);
+
+  const isCollapsed = visibleCount === null;
+  const needsEllipsis = isCollapsed && result.schedule.length > 15;
+  const remainingRows =
+    visibleCount !== null && visibleCount < result.schedule.length
+      ? result.schedule.length - visibleCount
+      : 0;
 
   return (
     <ScrollView
@@ -493,7 +509,20 @@ export function LoanCalculator({ initialPrincipal }: Props) {
 
           {result.schedule.length > 15 && (
             <Pressable
-              onPress={() => setShowFullSchedule((v) => !v)}
+              onPress={() => {
+                if (isCollapsed) {
+                  // Mở lần đầu → show BATCH_SIZE rows
+                  setVisibleCount(Math.min(BATCH_SIZE, result.schedule.length));
+                } else if (remainingRows > 0) {
+                  // Tải thêm 60 (hoặc phần còn lại)
+                  setVisibleCount((v) =>
+                    v === null ? BATCH_SIZE : Math.min(v + BATCH_SIZE, result.schedule.length)
+                  );
+                } else {
+                  // Đã load full → rút gọn về preview
+                  setVisibleCount(null);
+                }
+              }}
               className="flex-row items-center justify-center gap-1 py-3"
               style={{ borderTopWidth: 1, borderTopColor: semantic.border.light }}
             >
@@ -505,12 +534,18 @@ export function LoanCalculator({ initialPrincipal }: Props) {
                   fontSize: 13,
                 }}
               >
-                {showFullSchedule ? 'Rút gọn' : `Xem toàn bộ ${result.schedule.length} tháng`}
+                {isCollapsed
+                  ? `Xem toàn bộ ${result.schedule.length} tháng`
+                  : remainingRows > 0
+                  ? `Tải thêm ${Math.min(BATCH_SIZE, remainingRows)} tháng`
+                  : 'Rút gọn'}
               </Text>
-              {showFullSchedule ? (
-                <ChevronUp size={14} color={semantic.action.primary} strokeWidth={2.4} />
-              ) : (
+              {isCollapsed ? (
                 <ChevronDown size={14} color={semantic.action.primary} strokeWidth={2.4} />
+              ) : remainingRows > 0 ? (
+                <ChevronDown size={14} color={semantic.action.primary} strokeWidth={2.4} />
+              ) : (
+                <ChevronUp size={14} color={semantic.action.primary} strokeWidth={2.4} />
               )}
             </Pressable>
           )}

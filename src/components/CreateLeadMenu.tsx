@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronRight, Mic, PencilLine } from 'lucide-react-native';
 import { BottomSheetModal } from '@/components/BottomSheetModal';
@@ -12,8 +13,25 @@ type Props = {
 };
 
 export function CreateLeadMenu({ visible, onClose, onPickVoice, onPickForm }: Props) {
+  // Pending action — lưu lựa chọn của user, fire sau khi sheet fully closed
+  // qua onClosed callback. Tránh stack 2 Modal native trên iOS (VoiceLeadModal
+  // là presentationStyle="pageSheet") → freeze screen.
+  const pendingRef = useRef<'voice' | 'form' | null>(null);
+
+  const pick = (action: 'voice' | 'form') => {
+    pendingRef.current = action;
+    onClose();
+  };
+
+  const handleClosed = () => {
+    const action = pendingRef.current;
+    pendingRef.current = null;
+    if (action === 'voice') onPickVoice();
+    else if (action === 'form') onPickForm();
+  };
+
   return (
-    <BottomSheetModal visible={visible} onClose={onClose}>
+    <BottomSheetModal visible={visible} onClose={onClose} onClosed={handleClosed}>
       <View className="px-4 pt-2 pb-1">
         <Text variant="h3" className="text-text-primary">
           Tạo lead mới
@@ -30,20 +48,14 @@ export function CreateLeadMenu({ visible, onClose, onPickVoice, onPickForm }: Pr
           title="Tạo bằng voice"
           subtitle="Nói tự nhiên, AI tự điền form"
           badge="AI"
-          onPress={() => {
-            onClose();
-            setTimeout(onPickVoice, 200);
-          }}
+          onPress={() => pick('voice')}
         />
         <LeadMenuItem
           icon={<PencilLine size={22} color={semantic.text.primary} strokeWidth={2} />}
           iconBg={semantic.surface.alt}
           title="Điền form"
           subtitle="Nhập từng thông tin thủ công"
-          onPress={() => {
-            onClose();
-            setTimeout(onPickForm, 200);
-          }}
+          onPress={() => pick('form')}
         />
       </View>
 

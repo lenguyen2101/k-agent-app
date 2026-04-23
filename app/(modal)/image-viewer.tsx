@@ -2,12 +2,13 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
   Pressable,
   StatusBar,
   View,
   type ViewToken,
 } from 'react-native';
+import { Image } from 'expo-image';
+import { cdnImage } from '@/lib/img';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Share2, X } from 'lucide-react-native';
@@ -125,9 +126,11 @@ export default function ImageViewer() {
           renderItem={({ item }) => (
             <View style={{ width: SCREEN_W, justifyContent: 'center', alignItems: 'center' }}>
               <Image
-                source={{ uri: item }}
+                source={{ uri: cdnImage(item, SCREEN_W) }}
                 style={{ width: SCREEN_W, aspectRatio: 3 / 4, maxHeight: '100%' }}
-                resizeMode="contain"
+                contentFit="contain"
+                transition={200}
+                cachePolicy="memory-disk"
               />
             </View>
           )}
@@ -186,7 +189,7 @@ export default function ImageViewer() {
             return (
               <Pressable onPress={() => goto(i)}>
                 <Image
-                  source={{ uri: item }}
+                  source={{ uri: cdnImage(item, 60) }}
                   style={{
                     width: 60,
                     height: 60,
@@ -195,6 +198,9 @@ export default function ImageViewer() {
                     borderColor: active ? palette.white : 'rgba(255,255,255,0.25)',
                     opacity: active ? 1 : 0.65,
                   }}
+                  contentFit="cover"
+                  transition={100}
+                  cachePolicy="memory-disk"
                 />
               </Pressable>
             );

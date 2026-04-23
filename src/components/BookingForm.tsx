@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -9,8 +8,10 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import {
   ArrowLeft,
   Banknote,
@@ -268,9 +269,11 @@ export function BookingForm({
                 }}
               >
                 <Image
-                  source={{ uri: p.gallery[0] }}
+                  source={{ uri: cdnImage(p.gallery[0], IMG_SIZE.rowThumb) }}
                   style={{ width: 64, height: 64, borderRadius: 12 }}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  transition={150}
+                  cachePolicy="memory-disk"
                 />
                 <View className="flex-1">
                   <Text
@@ -339,9 +342,11 @@ export function BookingForm({
             </Pressable>
             <View className="flex-row items-center gap-3">
               <Image
-                source={{ uri: selectedProject.gallery[0] }}
+                source={{ uri: cdnImage(selectedProject.gallery[0], IMG_SIZE.avatar) }}
                 style={{ width: 44, height: 44, borderRadius: 10 }}
-                resizeMode="cover"
+                contentFit="cover"
+                transition={150}
+                cachePolicy="memory-disk"
               />
               <View className="flex-1">
                 <Text
@@ -424,9 +429,11 @@ export function BookingForm({
                     }}
                   >
                     <Image
-                      source={{ uri: u.floorplanImage }}
+                      source={{ uri: cdnImage(u.floorplanImage, IMG_SIZE.rowThumb) }}
                       style={{ width: 56, height: 56, borderRadius: 10 }}
-                      resizeMode="cover"
+                      contentFit="cover"
+                      transition={150}
+                      cachePolicy="memory-disk"
                     />
                     <View className="flex-1">
                       <Text

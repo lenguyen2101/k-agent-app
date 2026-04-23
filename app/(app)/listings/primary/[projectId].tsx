@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
   Pressable,
   ScrollView,
   View,
@@ -10,6 +9,8 @@ import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import { Image } from 'expo-image';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -717,9 +718,11 @@ function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
       }}
     >
       <Image
-        source={{ uri: tower.thumbnail }}
+        source={{ uri: cdnImage(tower.thumbnail, IMG_SIZE.rowThumb) }}
         style={{ width: 72, height: 72, borderRadius: 12 }}
-        resizeMode="cover"
+        contentFit="cover"
+        transition={150}
+        cachePolicy="memory-disk"
       />
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
@@ -844,9 +847,11 @@ function UnitTypeCard({ unit, projectId }: { unit: UnitType; projectId: string }
     >
       <View style={{ position: 'relative', aspectRatio: 16 / 9 }}>
         <Image
-          source={{ uri: unit.floorplanImage }}
+          source={{ uri: cdnImage(unit.floorplanImage, IMG_SIZE.card) }}
           style={{ width: '100%', height: '100%' }}
-          resizeMode="cover"
+          contentFit="cover"
+          transition={150}
+          cachePolicy="memory-disk"
         />
         <View
           className="absolute bottom-3 right-3 flex-row items-center gap-1 px-2 py-1 rounded-full"
@@ -921,18 +926,22 @@ function HeroMediaFrame({ media }: { media: MediaItem }) {
   if (media.type === 'image') {
     return (
       <Image
-        source={{ uri: media.url }}
+        source={{ uri: cdnImage(media.url, SCREEN_W) }}
         style={{ width: SCREEN_W, aspectRatio: 16 / 10 }}
-        resizeMode="cover"
+        contentFit="cover"
+        transition={200}
+        cachePolicy="memory-disk"
       />
     );
   }
   return (
     <View style={{ width: SCREEN_W, aspectRatio: 16 / 10, position: 'relative' }}>
       <Image
-        source={{ uri: media.thumbnail }}
+        source={{ uri: cdnImage(media.thumbnail, SCREEN_W) }}
         style={{ width: '100%', height: '100%' }}
-        resizeMode="cover"
+        contentFit="cover"
+        transition={200}
+        cachePolicy="memory-disk"
       />
       <View
         style={{

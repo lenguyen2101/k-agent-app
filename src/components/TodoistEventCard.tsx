@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { router } from 'expo-router';
 import { Clock, Handshake, MapPin, Phone, PhoneCall } from 'lucide-react-native';
@@ -14,7 +15,7 @@ type Props = {
   flat?: boolean;
 };
 
-export function TodoistEventCard({ event, flat = false }: Props) {
+export const TodoistEventCard = memo(function TodoistEventCard({ event, flat = false }: Props) {
   const now = Date.now();
   const scheduled = new Date(event.scheduledAt).getTime();
   const overdue = scheduled < now;
@@ -129,4 +130,4 @@ export function TodoistEventCard({ event, flat = false }: Props) {
       </Pressable>
     </Pressable>
   );
-}
+});

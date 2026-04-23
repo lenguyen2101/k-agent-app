@@ -1,5 +1,7 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import {
   Briefcase,
   Dumbbell,
@@ -106,9 +108,11 @@ function HeroBlock({
   return (
     <View style={{ position: 'relative' }}>
       <Image
-        source={{ uri: image }}
+        source={{ uri: cdnImage(image, IMG_SIZE.fullWidth) }}
         style={{ width: '100%', aspectRatio: 16 / 9 }}
-        resizeMode="cover"
+        contentFit="cover"
+        transition={200}
+        cachePolicy="memory-disk"
       />
       <LinearGradient
         colors={['transparent', 'rgba(10,9,8,0.1)', 'rgba(10,9,8,0.82)']}
@@ -256,9 +260,11 @@ function ItemRow({
           <Icon size={32} color={tint.fg} strokeWidth={1.8} />
         </View>
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: cdnImage(item.image, IMG_SIZE.thumb) }}
           style={StyleSheet.absoluteFillObject}
-          resizeMode="cover"
+          contentFit="cover"
+          transition={150}
+          cachePolicy="memory-disk"
         />
       </View>
       <View className="flex-1">

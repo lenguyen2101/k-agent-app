@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { Dimensions, Image, Pressable, ScrollView, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, View } from 'react-native';
+import { Image } from 'expo-image';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -108,9 +110,11 @@ export default function UnitTypeDetail() {
         {/* Hero floorplan */}
         <View style={{ position: 'relative', backgroundColor: palette.slate[50] }}>
           <Image
-            source={{ uri: unit.floorplanImage }}
+            source={{ uri: cdnImage(unit.floorplanImage, SCREEN_W) }}
             style={{ width: SCREEN_W, aspectRatio: 4 / 3 }}
-            resizeMode="cover"
+            contentFit="cover"
+            transition={200}
+            cachePolicy="memory-disk"
           />
           <View
             className="absolute top-3 left-3 flex-row items-center gap-1 px-2.5 py-1 rounded-full"
@@ -396,9 +400,11 @@ export default function UnitTypeDetail() {
               {interior.map((img, i) => (
                 <Image
                   key={i}
-                  source={{ uri: img }}
+                  source={{ uri: cdnImage(img, IMG_SIZE.card) }}
                   style={{ width: 240, aspectRatio: 4 / 3, borderRadius: 14 }}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  transition={150}
+                  cachePolicy="memory-disk"
                 />
               ))}
             </ScrollView>

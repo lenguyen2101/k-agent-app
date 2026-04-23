@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { memo, useState } from 'react';
+import { Pressable, View } from 'react-native';
+import { Image } from 'expo-image';
 import { Building2, Images, MapPin } from 'lucide-react-native';
+import { cdnImage, IMG_SIZE } from '@/lib/img';
 import { Text } from '@/components/ui/Text';
 import { formatVNDCompact, formatPricePerM2 } from '@/lib/format';
 import { palette, semantic } from '@/theme';
@@ -20,7 +22,7 @@ const statusStyle: Record<PrimaryProjectStatus, { bg: string; fg: string }> = {
   SOLD_OUT:    { bg: palette.slate[200],  fg: palette.slate[700] },
 };
 
-export function PrimaryProjectCard({
+export const PrimaryProjectCard = memo(function PrimaryProjectCard({
   project,
   onPress,
 }: {
@@ -58,9 +60,11 @@ export function PrimaryProjectCard({
           </View>
         ) : (
           <Image
-            source={{ uri: project.gallery[0] }}
+            source={{ uri: cdnImage(project.gallery[0], IMG_SIZE.card) }}
             style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
+            contentFit="cover"
+            transition={150}
+            cachePolicy="memory-disk"
             onError={() => setImgFailed(true)}
           />
         )}
@@ -181,4 +185,4 @@ export function PrimaryProjectCard({
       </View>
     </Pressable>
   );
-}
+});
