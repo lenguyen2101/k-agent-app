@@ -70,13 +70,6 @@ export function AmenitySection({ data, title, subtitle }: Props) {
       />
 
       <View className="px-4 pt-6 pb-4">
-        <Text
-          variant="label"
-          style={{ color: semantic.text.secondary, marginBottom: 16 }}
-        >
-          Danh sách tiện ích
-        </Text>
-
         <View className="gap-6">
           {data.categories.map((cat) => (
             <CategoryBlock key={cat.key} category={cat} />

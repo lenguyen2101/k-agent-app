@@ -24,6 +24,7 @@ import {
   TrendingUp,
   Wallet,
 } from 'lucide-react-native';
+import { SectionTitle } from '@/components/SectionTitle';
 import { Text } from '@/components/ui/Text';
 import { primaryProjects } from '@/mock/primaryProjects';
 import { formatPricePerM2, formatVND, formatVNDCompact } from '@/lib/format';
@@ -543,24 +544,6 @@ export default function UnitTypeDetail() {
           </Text>
         </Pressable>
       </View>
-    </View>
-  );
-}
-
-function SectionTitle({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <View>
-      <Text
-        variant="h3"
-        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
-      >
-        {title}
-      </Text>
-      {subtitle && (
-        <Text variant="body" style={{ color: semantic.text.secondary, marginTop: 4, lineHeight: 20 }}>
-          {subtitle}
-        </Text>
-      )}
     </View>
   );
 }

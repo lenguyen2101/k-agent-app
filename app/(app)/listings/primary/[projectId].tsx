@@ -40,6 +40,7 @@ import {
   type LucideIcon,
 } from 'lucide-react-native';
 import { AmenitySection } from '@/components/AmenitySection';
+import { SectionTitle } from '@/components/SectionTitle';
 import { Text } from '@/components/ui/Text';
 import { primaryProjects } from '@/mock/primaryProjects';
 import { formatVNDCompact, formatPricePerM2 } from '@/lib/format';
@@ -304,7 +305,7 @@ export default function PrimaryProjectDetail() {
             variant="h2"
             style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
           >
-            {project.name}
+            {project.shortName}
           </Text>
 
           <View className="flex-row items-center gap-1.5 mt-2">
@@ -367,7 +368,7 @@ export default function PrimaryProjectDetail() {
                     variant="subtitle"
                     style={{
                       color: active ? semantic.action.primaryDeep : semantic.text.secondary,
-                      fontFamily: 'BeVietnamPro_700Bold',
+                      fontFamily: active ? 'BeVietnamPro_600SemiBold' : 'BeVietnamPro_500Medium',
                     }}
                   >
                     {t.label}
@@ -480,7 +481,7 @@ function OverviewSection({ project }: { project: PrimaryProject }) {
           overflow: 'hidden',
         }}
       >
-        <InfoRow label="Tên dự án" value={project.name} />
+        <InfoRow label="Tên dự án" value={project.shortName} />
         <InfoRow label="Chủ đầu tư" value={project.developer} />
         <InfoRow label="Đơn vị phát triển" value={project.builder} />
         <InfoRow label="Quy mô" value={`${project.scaleUnits.toLocaleString('vi-VN')} căn hộ`} />
@@ -537,8 +538,8 @@ function DescriptionBlocks({ blocks }: { blocks: DescriptionBlock[] }) {
           return (
             <Text
               key={i}
-              variant="body"
-              style={{ color: semantic.text.primary, lineHeight: 22 }}
+              variant="paragraph"
+              style={{ color: semantic.text.primary }}
             >
               {b.text}
             </Text>
@@ -587,11 +588,11 @@ function DescriptionBlocks({ blocks }: { blocks: DescriptionBlock[] }) {
                     size={14}
                     color={semantic.action.primary}
                     strokeWidth={2.4}
-                    style={{ marginTop: 3 }}
+                    style={{ marginTop: 5 }}
                   />
                   <Text
-                    variant="body"
-                    style={{ color: semantic.text.primary, flex: 1, lineHeight: 22 }}
+                    variant="paragraph"
+                    style={{ color: semantic.text.primary, flex: 1 }}
                   >
                     {it}
                   </Text>
@@ -613,10 +614,11 @@ function HighlightCard({ highlight }: { highlight: OverviewHighlight }) {
     <View
       className="p-3 rounded-2xl"
       style={{
+        flex: 1,
         backgroundColor: tint.bg,
         borderWidth: 1,
         borderColor: tint.border,
-        minHeight: 100,
+        minHeight: 108,
       }}
     >
       <View
@@ -635,7 +637,7 @@ function HighlightCard({ highlight }: { highlight: OverviewHighlight }) {
         variant="caption"
         style={{
           color: semantic.text.primary,
-          fontFamily: 'BeVietnamPro_700Bold',
+          fontFamily: 'BeVietnamPro_500Medium',
           marginTop: 2,
         }}
         numberOfLines={3}
@@ -661,10 +663,6 @@ function TowersSection({ project }: { project: PrimaryProject }) {
 
 function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
   const badge = towerStatusBadge[tower.status];
-  const priceText =
-    tower.pricePerM2Min && tower.pricePerM2Max
-      ? `${formatPricePerM2(tower.pricePerM2Min).replace('~', '')} - ${formatPricePerM2(tower.pricePerM2Max).replace('~', '')}`
-      : 'Giá đang cập nhật';
   return (
     <Pressable
       onPress={() =>
@@ -673,7 +671,7 @@ function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
           params: { projectId, towerId: tower.id },
         })
       }
-      className="flex-row items-center gap-3 p-3 rounded-2xl"
+      className="flex-row items-start gap-3 p-3 rounded-2xl"
       style={{
         backgroundColor: palette.white,
         borderWidth: 1,
@@ -688,30 +686,23 @@ function TowerRow({ tower, projectId }: { tower: Tower; projectId: string }) {
         cachePolicy="memory-disk"
       />
       <View className="flex-1">
-        <View className="flex-row items-center gap-2">
-          <Text
-            variant="body"
-            style={{
-              color: semantic.text.primary,
-              fontFamily: 'BeVietnamPro_700Bold',
-              flex: 1,
-            }}
-            numberOfLines={1}
-          >
-            {tower.name}
-          </Text>
-          <View
-            className="px-2 py-0.5 rounded-full"
-            style={{ backgroundColor: badge.bg }}
-          >
-            <Text variant="badge" style={{ color: badge.fg }}>
-              {towerStatusLabels[tower.status]}
-            </Text>
-          </View>
-        </View>
-        <Text variant="caption" className="text-text-secondary mt-1">
-          {priceText}
+        <Text
+          variant="body"
+          style={{
+            color: semantic.text.primary,
+            fontFamily: 'BeVietnamPro_700Bold',
+          }}
+        >
+          {tower.name}
         </Text>
+        <View
+          className="self-start px-2 py-0.5 rounded-full mt-1.5"
+          style={{ backgroundColor: badge.bg }}
+        >
+          <Text variant="badge" style={{ color: badge.fg }}>
+            {towerStatusLabels[tower.status]}
+          </Text>
+        </View>
         <View className="flex-row items-center gap-3 mt-1.5">
           <View className="flex-row items-center gap-1">
             <Layers size={12} color={semantic.text.tertiary} />
@@ -938,27 +929,6 @@ function HeroMediaFrame({ media }: { media: MediaItem }) {
 }
 
 
-function SectionTitle({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <View>
-      <Text
-        variant="h3"
-        style={{ color: semantic.text.primary, fontFamily: 'BeVietnamPro_700Bold' }}
-      >
-        {title}
-      </Text>
-      {subtitle && (
-        <Text
-          variant="body"
-          style={{ color: semantic.text.secondary, marginTop: 4, lineHeight: 20 }}
-        >
-          {subtitle}
-        </Text>
-      )}
-    </View>
-  );
-}
-
 function InfoRow({
   label,
   value,
@@ -974,18 +944,19 @@ function InfoRow({
     <View
       className="flex-row items-start px-4"
       style={{
-        paddingVertical: 16,
+        paddingVertical: 14,
         borderBottomWidth: last ? 0 : 1,
         borderBottomColor: semantic.border.light,
       }}
     >
       <Text
-        variant="body"
+        variant="caption"
         style={{
-          color: semantic.text.secondary,
-          width: 140,
+          color: semantic.text.tertiary,
+          width: 130,
           flexShrink: 0,
           marginRight: 16,
+          marginTop: 1,
         }}
       >
         {label}
@@ -994,7 +965,6 @@ function InfoRow({
         variant="body"
         style={{
           color: valueTone === 'tertiary' ? semantic.text.tertiary : semantic.text.primary,
-          fontFamily: valueTone === 'tertiary' ? 'BeVietnamPro_400Regular' : 'BeVietnamPro_600SemiBold',
           flex: 1,
         }}
       >
